@@ -65,7 +65,6 @@
   .field input:focus,.field select:focus{outline:none;border-color:var(--blue)}
   .field .hint{font-size:12px;color:var(--muted-2)}
   .onboard .btn{width:100%;margin-top:24px;padding:14px;font-size:15.5px}
-  .demo-link{display:block;text-align:center;margin-top:14px;color:var(--blue);font-size:13.5px;font-weight:600;text-decoration:underline;cursor:pointer}
 
   /* ===== Dashboard layout ===== */
   .dash{display:grid;grid-template-columns:280px 1fr 360px;gap:20px;align-items:start}
@@ -583,7 +582,7 @@
     <h1>👋 안녕하세요, 집지킴이에요</h1>
     <p class="sub">계약 정보를 알려주시면 <b>해야 할 일 · 위험 점검 · 지원 제도</b>를 맞춤으로 챙겨드려요. 1분이면 끝나요.</p>
     <div class="form-grid">
-      <div class="field"><label>이름 (별명도 좋아요)</label><input id="fName" placeholder="예: 지은"></div>
+      <div class="field"><label>이름 (별명도 좋아요)</label><input id="fName" placeholder="이름 또는 닉네임"></div>
       <div class="field"><label>나이 (만)</label><input type="number" id="fAge" placeholder="예: 26"></div>
       <div class="field"><label>지역</label>
         <select id="fRegion">
@@ -606,10 +605,10 @@
         </select>
       </div>
       <div class="field"><label>잔금일 / 입주 예정일</label><input type="date" id="fMoveDate"></div>
-      <div class="field full"><label>집 주소 (동까지만 적어도 돼요)</label><input id="fAddress" placeholder="예: 마포구 성산동 어울림빌 302호"></div>
+      <div class="field full"><label>집 주소 · 별칭 (동까지만 적어도 돼요)</label><input id="fAddress" placeholder="예: ○○구 ○○동 원룸 / 아직 못 정했으면 비워두세요"></div>
     </div>
     <button class="btn btn-primary" onclick="submitOnboarding()">맞춤 대시보드 만들기</button>
-    <span class="demo-link" onclick="loadDemo()">일단 예시 프로필(지은님)로 둘러볼게요</span>
+    <p style="text-align:center;margin-top:14px;font-size:12.5px;color:var(--muted-2)">입력한 정보는 서버로 전송되지 않고 내 브라우저에만 저장돼요 🔒</p>
   </div>
 </div>
 
@@ -640,11 +639,17 @@ const daysUntil = d => Math.ceil((new Date(d+'T00:00:00') - new Date(new Date().
 const toast = msg => { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove('show'),2400); };
 
 /* ---------- state ---------- */
-function defaultState(user){
-  return { user, todos: buildTodos(user), diag: null, chat: [] };
-}
 function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
-function load(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)); }catch(e){ return null; } }
+function load(){
+  try{
+    const s = JSON.parse(localStorage.getItem(LS_KEY));
+    // 과거 버전의 예시 프로필(지은)이 남아 있으면 초기화
+    if(s && s.user && s.user.name==='지은' && s.user.address==='마포구 성산동 어울림빌 302호'){
+      localStorage.removeItem(LS_KEY); return null;
+    }
+    return s;
+  }catch(e){ return null; }
+}
 
 /* ---------- todo generation (personalized) ---------- */
 function buildTodos(u){
@@ -743,7 +748,8 @@ function supportEligibility(sp, u){
 function renderAll(){
   const u = state.user;
   // header chip
-  document.getElementById('chipInfo').textContent = `${u.address.split(' ').slice(0,2).join(' ')} · ${u.type}`;
+  const shortAddr = u.address === `${u.region} 나의 집` ? u.region : u.address.split(' ').slice(0,2).join(' ');
+  document.getElementById('chipInfo').textContent = `${shortAddr} · ${u.type}`;
   document.getElementById('chipAvatar').textContent = u.name.slice(0,2);
   renderDashboard();
   renderSupport();
@@ -1239,9 +1245,10 @@ function submitOnboarding(){
     stage: fStage.value, moveDate: fMoveDate.value || null,
     address: fAddress.value.trim() || `${fRegion.value} 나의 집`,
   };
-  const keepTodos = state && JSON.stringify(state.user) !== JSON.stringify(user);
-  state = state && !keepTodos ? state : { user, todos: buildTodos(user), diag: state?state.diag:null, chat: [] };
-  state.user = user;
+  // 할 일 목록은 새 정보 기준으로 다시 만들되, 이미 체크한 항목은 유지
+  const doneMap = state ? Object.fromEntries(state.todos.map(t=>[t.id, t.done])) : {};
+  const todos = buildTodos(user).map(t=>({...t, done: doneMap[t.id] !== undefined ? doneMap[t.id] : t.done}));
+  state = { user, todos, diag: state ? state.diag : null, chat: [] };
   save();
   document.getElementById('onboardOverlay').style.display='none';
   document.getElementById('chatBody').innerHTML='';
@@ -1249,21 +1256,6 @@ function submitOnboarding(){
   renderAll();
   toast(`${name}님 맞춤 대시보드가 준비됐어요 🏠`);
 }
-function loadDemo(){
-  const move = new Date(Date.now() + 9*86400000).toISOString().slice(0,10);
-  const user = { name:'지은', age:26, region:'서울', type:'전세', deposit:18000, rent:0, income:3200,
-    stage:'1', moveDate:move, address:'마포구 성산동 어울림빌 302호' };
-  state = defaultState(user);
-  save();
-  document.getElementById('onboardOverlay').style.display='none';
-  renderAll();
-  // preload demo diagnosis
-  loadSampleDiag();
-  runDiagnosis();
-  switchView('dashboard');
-  toast('지은님 예시 프로필로 시작해요 — 내 정보 수정에서 바꿀 수 있어요');
-}
-
 /* ---------- boot ---------- */
 (function(){
   state = load();
