@@ -323,6 +323,44 @@
     .guide-card{padding:18px}
   }
 
+  /* ===== Landing ===== */
+  .landing{max-width:920px;margin:0 auto;text-align:center;padding:48px 0 20px}
+  .landing .badge-lg{display:inline-flex;align-items:center;gap:6px;background:var(--blue-light);color:var(--blue);font-size:13px;font-weight:700;padding:7px 16px;border-radius:99px;margin-bottom:22px}
+  .landing h1{font-size:clamp(28px,5vw,44px);line-height:1.25;letter-spacing:-.03em;color:var(--navy)}
+  .landing h1 em{font-style:normal;color:var(--blue)}
+  .landing .lead{font-size:clamp(14.5px,2vw,17px);color:var(--muted);margin:18px auto 30px;max-width:560px;line-height:1.7;word-break:keep-all}
+  .landing .cta-row{display:flex;gap:11px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+  .landing .cta-row .btn{padding:15px 30px;font-size:16px;border-radius:12px}
+  .landing .trust{font-size:12.5px;color:var(--muted-2)}
+  .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:44px 0 10px;text-align:left}
+  @media(max-width:768px){.feature-grid{grid-template-columns:1fr}.landing{padding:28px 0 10px}}
+  .feature-card{padding:24px}
+  .feature-card .fic{width:44px;height:44px;border-radius:12px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:14px}
+  .feature-card b{font-size:15.5px;display:block;margin-bottom:6px}
+  .feature-card p{font-size:13.5px;color:var(--muted);line-height:1.65;word-break:keep-all}
+  .landing .flow-strip{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:34px;font-size:13px;color:var(--muted);font-weight:600}
+  .landing .flow-strip .step-pill{background:#fff;border:1px solid var(--line);border-radius:99px;padding:7px 15px}
+  .landing .flow-strip .arr{color:var(--muted-2)}
+
+  /* ===== PDF dropzone ===== */
+  .dropzone{border:2px dashed #c3cede;border-radius:12px;padding:20px 16px;text-align:center;cursor:pointer;transition:.15s;margin-bottom:16px;background:#fafbfd}
+  .dropzone:hover,.dropzone.drag{border-color:var(--blue);background:var(--blue-light)}
+  .dropzone b{font-size:14px;display:block;margin-bottom:4px}
+  .dropzone span{font-size:12.5px;color:var(--muted)}
+  .dropzone.busy{pointer-events:none;opacity:.6}
+
+  /* ===== 등기부 입력 가이드 ===== */
+  .guide-toggle{margin-bottom:16px}
+  .sample-doc{border:1px solid var(--line);border-radius:10px;background:#fff;padding:14px;font-size:12px;margin-top:10px}
+  .sample-doc .sd-title{text-align:center;font-weight:700;font-size:12.5px;letter-spacing:3px;margin-bottom:8px}
+  .sample-doc .sd-sec{background:#f4f6fa;font-weight:700;padding:4px 8px;border-radius:4px;margin:8px 0 5px;font-size:11.5px}
+  .sample-doc .sd-row{display:flex;gap:6px;padding:5px 4px;border-bottom:1px dashed #e8ecf2;align-items:center;flex-wrap:wrap}
+  .sample-doc mark{border-radius:4px;padding:1px 5px;font-weight:700}
+  .sample-doc mark.m1{background:var(--green-bg);color:var(--green)}
+  .sample-doc mark.m2{background:var(--amber-bg);color:var(--amber)}
+  .sample-doc mark.m3{background:var(--red-bg);color:var(--red)}
+  .num-chip{display:inline-flex;width:17px;height:17px;border-radius:50%;background:var(--navy);color:#fff;font-size:10.5px;font-weight:800;align-items:center;justify-content:center;flex-shrink:0}
+
   /* toast */
   #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 22px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.25)}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -351,6 +389,30 @@
 </header>
 
 <main>
+  <!-- ============ LANDING ============ -->
+  <section class="view" id="view-landing">
+    <div class="landing">
+      <span class="badge-lg">🛡️ 사회초년생을 위한 AI 부동산 계약 비서</span>
+      <h1>전세사기, 몰라서<br><em>당하지 않게</em></h1>
+      <p class="lead">등기부등본이 뭔지 몰라도 괜찮아요. 계약 전 위험 진단부터 전입신고·확정일자까지, 첫 계약의 모든 순간을 집지킴이 옆에서 챙겨드려요.</p>
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="startService()">무료로 시작하기 →</button>
+        <button class="btn btn-ghost" onclick="startService(); openOnboarding()">1분 맞춤 설정</button>
+      </div>
+      <p class="trust">회원가입 없음 · 입력 정보는 내 브라우저에만 저장 🔒</p>
+      <div class="feature-grid">
+        <div class="card feature-card"><div class="fic">🔍</div><b>등기부등본 AI 진단</b><p>PDF를 끌어다 놓거나 숫자만 입력하면 깡통전세·근저당 위험을 점수로 알려주고, 계약서에 넣을 특약 문구까지 만들어줘요.</p></div>
+        <div class="card feature-card"><div class="fic">✅</div><b>계약 전·중·후 체크리스트</b><p>잔금일 기준 D-day에 맞춰 등기부 재열람, 전입신고, 확정일자, 보증보험까지 놓치지 않게 순서대로 알려줘요.</p></div>
+        <div class="card feature-card"><div class="fic">🎁</div><b>지원 제도 자동 매칭</b><p>버팀목 대출, 청년 월세지원, 이사비 지원… 나이·지역·소득 기준으로 받을 수 있는 제도를 자동 판정해요.</p></div>
+      </div>
+      <div class="flow-strip">
+        <span class="step-pill">① 집 정하기 전 — AI 진단</span><span class="arr">→</span>
+        <span class="step-pill">② 계약할 때 — 특약·체크리스트</span><span class="arr">→</span>
+        <span class="step-pill">③ 이사 후 — 전입신고·보증보험</span>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ DASHBOARD ============ -->
   <section class="view active" id="view-dashboard">
     <div class="dash">
@@ -439,6 +501,29 @@
         <div class="card diag-form">
           <h3>등기부등본 정보 입력</h3>
           <p class="sub">인터넷등기소(700원)에서 발급한 등기부등본의 갑구·을구 내용을 입력하면 AI가 위험도를 분석해요. 아직 발급 전이라면 <b style="color:var(--blue);cursor:pointer" onclick="loadSampleDiag()">예시 데이터</b>로 체험해 보세요.</p>
+
+          <div class="dropzone" id="pdfDrop" onclick="document.getElementById('pdfFile').click()">
+            <b>📎 등기부등본 PDF를 여기에 끌어다 놓으세요</b>
+            <span>글자를 자동 인식해서 아래 칸을 채워드려요 · 클릭해서 파일 선택도 가능 · 파일은 서버로 전송되지 않아요</span>
+            <input type="file" id="pdfFile" accept="application/pdf,.pdf" hidden>
+          </div>
+
+          <details class="acc guide-toggle">
+            <summary>📄 등기부등본 어디를 보면 되나요? — 샘플로 확인하기</summary>
+            <div class="acc-body">
+              직접 입력할 때는 아래 색칠된 위치의 값을 찾으면 돼요.
+              <div class="sample-doc">
+                <div class="sd-title">등기사항전부증명서 (샘플)</div>
+                <div class="sd-sec">【 갑구 】 소유권에 관한 사항</div>
+                <div class="sd-row"><span>2 · 소유권이전 · 소유자</span> <mark class="m1">홍○동 900101-*******</mark> <span class="num-chip">1</span> <span>→ 계약서의 임대인과 같은 사람인지 확인 후 체크</span></div>
+                <div class="sd-row"><span>3 ·</span> <mark class="m3">가압류 · 압류 · 경매개시결정</mark> <span class="num-chip">3</span> <span>→ 이런 단어가 보이면 해당 체크박스에 표시</span></div>
+                <div class="sd-sec">【 을구 】 소유권 이외의 권리에 관한 사항</div>
+                <div class="sd-row"><span>1 · 근저당권설정 ·</span> <mark class="m2">채권최고액 금 240,000,000원</mark> <span class="num-chip">2</span> <span>→ 이 금액을 만원 단위로 입력 (예: 24000)</span></div>
+                <div class="sd-row" style="border-bottom:none"><span>💡 시세는 등기부가 아니라 <b>네이버부동산·국토부 실거래가</b>에서 같은 건물·면적으로 확인해요</span></div>
+              </div>
+            </div>
+          </details>
+
           <div class="form-grid">
             <div class="field"><label>주택 가액 (시세, 만원)</label><input type="number" id="dPrice" placeholder="예: 32000"><span class="hint">국토부 실거래가·KB시세 기준</span></div>
             <div class="field"><label>내 보증금 (만원)</label><input type="number" id="dDeposit" placeholder="예: 18000"></div>
@@ -1236,9 +1321,89 @@ function clauseExtra(c){
 }
 
 /* =========================================================
+   PDF 자동 추출 (pdf.js — 파일은 브라우저 안에서만 처리)
+   ========================================================= */
+let pdfjsReady = null;
+function loadPdfJs(){
+  if(pdfjsReady) return pdfjsReady;
+  pdfjsReady = new Promise((res, rej)=>{
+    const sc = document.createElement('script');
+    sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    sc.onload = ()=>{ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(); };
+    sc.onerror = ()=>rej(new Error('pdf.js load fail'));
+    document.head.appendChild(sc);
+  });
+  return pdfjsReady;
+}
+async function extractPdfText(file){
+  await loadPdfJs();
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({data: buf}).promise;
+  let text = '';
+  for(let i=1; i<=Math.min(pdf.numPages, 20); i++){
+    const page = await pdf.getPage(i);
+    const tc = await page.getTextContent();
+    text += tc.items.map(it=>it.str).join(' ') + '\n';
+  }
+  return text;
+}
+function parseRegistry(text){
+  const t = text.replace(/\s+/g,' ');
+  const amounts = [...t.matchAll(/채권최고액\s*금?\s*([\d,]+)\s*원/g)].map(m=>Number(m[1].replace(/,/g,'')));
+  const totalWon = amounts.reduce((a,b)=>a+b,0);
+  return {
+    isRegistry: /등기사항전부증명서|등기부등본|갑\s*구|을\s*구/.test(t),
+    mortgageMan: Math.round(totalWon/10000),
+    mortgageCount: amounts.length,
+    seizure: /(가압류|압류|경매개시결정|강제경매)/.test(t),
+    trust: /신탁원부|신탁등기|수탁자/.test(t),
+  };
+}
+async function handleRegistryPdf(file){
+  const dz = document.getElementById('pdfDrop');
+  if(!file || !/pdf$/i.test(file.name.split('.').pop())){ toast('PDF 파일만 넣을 수 있어요'); return; }
+  dz.classList.add('busy');
+  dz.querySelector('b').textContent = '⏳ 글자를 읽고 있어요…';
+  try{
+    const text = await extractPdfText(file);
+    const r = parseRegistry(text);
+    if(!r.isRegistry){ toast('등기부등본 PDF가 아닌 것 같아요 — 내용을 확인해 주세요'); }
+    document.getElementById('dMortgage').value = r.mortgageMan || 0;
+    document.getElementById('dSeizure').checked = r.seizure;
+    document.getElementById('dTrust').checked = r.trust;
+    const found = [];
+    if(r.mortgageCount) found.push(`근저당 ${r.mortgageCount}건 · 채권최고액 합계 ${fmtMan(r.mortgageMan)}원`);
+    else found.push('근저당 없음');
+    if(r.seizure) found.push('압류·가압류 의심 단어 발견');
+    if(r.trust) found.push('신탁 관련 단어 발견');
+    toast(`자동 입력 완료 — ${found.join(' · ')}`);
+    dz.querySelector('b').textContent = `✅ ${file.name} 인식 완료`;
+    dz.querySelector('span').textContent = '말소(빨간 줄)된 항목이 섞여 있을 수 있어요 — 원본과 값을 꼭 대조하고, 시세·보증금을 채운 뒤 진단하세요';
+  }catch(e){
+    toast('PDF를 읽지 못했어요 — 아래에 직접 입력해 주세요');
+    dz.querySelector('b').textContent = '📎 등기부등본 PDF를 여기에 끌어다 놓으세요';
+  }
+  dz.classList.remove('busy');
+}
+function setupPdfDrop(){
+  const dz = document.getElementById('pdfDrop');
+  const fi = document.getElementById('pdfFile');
+  fi.addEventListener('change', e=>{ if(e.target.files[0]) handleRegistryPdf(e.target.files[0]); fi.value=''; });
+  ['dragover','dragenter'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.remove('drag'); }));
+  dz.addEventListener('drop', e=>{ const f = e.dataTransfer.files[0]; if(f) handleRegistryPdf(f); });
+}
+
+/* =========================================================
    NAV / ONBOARDING
    ========================================================= */
 const isMobile = () => window.matchMedia('(max-width:768px)').matches;
+function startService(){
+  save(); // 랜딩은 최초 1회만
+  switchView('dashboard');
+}
+document.querySelector('.logo').style.cursor='pointer';
+document.querySelector('.logo').addEventListener('click', ()=>switchView('landing'));
 function switchView(v){
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
   document.getElementById('view-'+v).classList.add('active');
@@ -1293,11 +1458,14 @@ function submitOnboarding(){
 /* ---------- boot ---------- */
 (function(){
   state = load();
-  if(!state || !state.user){
+  const firstVisit = !state || !state.user;
+  if(firstVisit){
     // 첫 방문: 입력 없이 바로 둘러보기 (맞춤 설정은 선택)
     state = { user: {...GUEST_USER}, todos: buildTodos(GUEST_USER), diag: null, chat: [] };
   }
   renderAll();
+  if(firstVisit) switchView('landing');
+  setupPdfDrop();
   const body = document.getElementById('chatBody');
   if(state.chat.length){
     body.innerHTML='';
