@@ -325,7 +325,34 @@
   }
 
   /* ===== Landing ===== */
-  .landing{max-width:920px;margin:0 auto;text-align:center;padding:48px 0 20px}
+  .landing{max-width:1180px;margin:0 auto;text-align:center;padding:40px 0 20px}
+  .hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:56px;align-items:center;text-align:left}
+  .hero-copy .lead{margin:18px 0 28px;max-width:530px}
+  .hero-copy .cta-row{justify-content:flex-start}
+  .hero-visual{position:relative}
+  .hero-visual::before{content:"";position:absolute;inset:-12%;background:radial-gradient(closest-side, rgba(37,99,235,.16), transparent 72%);z-index:0}
+  .hero-visual img{position:relative;width:100%;border-radius:22px;box-shadow:0 30px 70px -18px rgba(15,34,71,.38);display:block;z-index:1}
+  .hero-chip{position:absolute;z-index:2;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.93);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.75);border-radius:14px;padding:11px 15px;box-shadow:0 12px 32px rgba(15,34,71,.20);font-size:13px;white-space:nowrap;animation:chipFloat 5.5s ease-in-out infinite}
+  .hero-chip b{display:block;font-size:13px;line-height:1.35}
+  .hero-chip small{display:block;color:var(--muted);font-size:11.5px;font-weight:500}
+  .hero-chip .hc-num{width:42px;height:42px;border-radius:50%;background:var(--green-bg);color:var(--green);font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;border:2.5px solid #35c169;flex-shrink:0}
+  .hero-chip.c1{top:-20px;left:-28px}
+  .hero-chip.c2{bottom:24%;right:-22px;animation-delay:1.4s}
+  .hero-chip.c3{bottom:-20px;left:7%;animation-delay:2.8s}
+  @keyframes chipFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .feature-card{transition:transform .2s, box-shadow .2s}
+  .feature-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(15,34,71,.10)}
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:38px;text-align:center}
+    .hero-copy .lead{margin:16px auto 24px}
+    .hero-copy .cta-row{justify-content:center}
+    .hero-chip{padding:9px 12px;font-size:12px}
+    .hero-chip small{display:none}
+    .hero-chip .hc-num{width:34px;height:34px;font-size:13px}
+    .hero-chip.c1{top:-14px;left:-4px}
+    .hero-chip.c2{right:-4px;bottom:20%}
+    .hero-chip.c3{bottom:-14px;left:4%}
+  }
   .landing .badge-lg{display:inline-flex;align-items:center;gap:6px;background:var(--blue-light);color:var(--blue);font-size:13px;font-weight:700;padding:7px 16px;border-radius:99px;margin-bottom:22px}
   .landing h1{font-size:clamp(28px,5vw,44px);line-height:1.25;letter-spacing:-.03em;color:var(--navy)}
   .landing h1 em{font-style:normal;color:var(--blue)}
@@ -420,14 +447,24 @@
   <!-- ============ LANDING ============ -->
   <section class="view" id="view-landing">
     <div class="landing">
-      <span class="badge-lg">🛡️ 사회초년생을 위한 AI 부동산 계약 비서</span>
-      <h1>전세사기, 몰라서<br><em>당하지 않게</em></h1>
-      <p class="lead">등기부등본이 뭔지 몰라도 괜찮아요. 계약 전 위험 진단부터 전입신고·확정일자까지, 첫 계약의 모든 순간을 집지킴이 옆에서 챙겨드려요.</p>
-      <div class="cta-row">
-        <button class="btn btn-primary" onclick="startService()">무료로 시작하기 →</button>
-        <button class="btn btn-ghost" onclick="startService(); openOnboarding()">1분 맞춤 설정</button>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="badge-lg">🛡️ 사회초년생을 위한 AI 부동산 계약 비서</span>
+          <h1>전세사기, 몰라서<br><em>당하지 않게</em></h1>
+          <p class="lead">등기부등본이 뭔지 몰라도 괜찮아요. 계약 전 위험 진단부터 전입신고·확정일자까지, 첫 계약의 모든 순간을 집지킴이 옆에서 챙겨드려요.</p>
+          <div class="cta-row">
+            <button class="btn btn-primary" onclick="startService()">무료로 시작하기 →</button>
+            <button class="btn btn-ghost" onclick="startService(); openOnboarding()">1분 맞춤 설정</button>
+          </div>
+          <p class="trust">회원가입 없음 · 입력 정보는 내 브라우저에만 저장 🔒 · <span id="verLanding"></span></p>
+        </div>
+        <div class="hero-visual">
+          <img src="assets/hero.jpg" alt="설계 도면 위에 세워진 안전한 집 — 집지킴이 계약의 설계도를 그려드려요">
+          <div class="hero-chip c1"><span class="hc-num">92</span><span><b>종합 안전도 — 안전</b><small>등기부등본 AI 진단</small></span></div>
+          <div class="hero-chip c2">✍️ <span><b>근저당 말소 특약 생성</b><small>복사해서 계약서에 바로</small></span></div>
+          <div class="hero-chip c3">⏰ <span><b>D-9 · 잔금일 등기부 재열람</b><small>놓치지 않게 챙겨드려요</small></span></div>
+        </div>
       </div>
-      <p class="trust">회원가입 없음 · 입력 정보는 내 브라우저에만 저장 🔒 · <span id="verLanding"></span></p>
       <div class="feature-grid">
         <div class="card feature-card"><div class="fic">🔍</div><b>등기부등본 AI 진단</b><p>PDF를 끌어다 놓거나 숫자만 입력하면 깡통전세·근저당 위험을 점수로 알려주고, 계약서에 넣을 특약 문구까지 만들어줘요.</p></div>
         <div class="card feature-card"><div class="fic">✅</div><b>계약 전·중·후 체크리스트</b><p>잔금일 기준 D-day에 맞춰 등기부 재열람, 전입신고, 확정일자, 보증보험까지 놓치지 않게 순서대로 알려줘요.</p></div>
@@ -754,7 +791,7 @@
 /* =========================================================
    집지킴 — AI 부동산 계약 비서 (client-side prototype)
    ========================================================= */
-const APP_VERSION = 'v1.7 (2026-07-06)';
+const APP_VERSION = 'v1.8 (2026-07-06)';
 const LS_KEY = 'jibjikim_v1';
 let state = null;
 const GUEST_USER = { name:null, age:null, region:null, type:null, deposit:null, rent:0, income:null, stage:'0', moveDate:null, address:null };
