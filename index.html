@@ -1545,6 +1545,10 @@ function submitOnboarding(){
   if(firstVisit){
     // 첫 방문: 입력 없이 바로 둘러보기 (맞춤 설정은 선택)
     state = { user: {...GUEST_USER}, todos: buildTodos(GUEST_USER), diag: null, chat: [] };
+  } else {
+    // 저장된 할 일을 최신 정의(링크·문구)로 갱신 — 완료 체크는 유지
+    const doneMap = Object.fromEntries((state.todos||[]).map(t=>[t.id, t.done]));
+    state.todos = buildTodos(state.user).map(t=>({...t, done: doneMap[t.id] !== undefined ? doneMap[t.id] : t.done}));
   }
   renderAll();
   if(firstVisit) switchView('landing');
