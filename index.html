@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f2247">
 <title>집지킴 — 사회초년생을 위한 AI 부동산 계약 비서</title>
 <style>
   :root{
@@ -68,7 +69,7 @@
 
   /* ===== Dashboard layout ===== */
   .dash{display:grid;grid-template-columns:280px 1fr 360px;gap:20px;align-items:start}
-  @media(max-width:1100px){.dash{grid-template-columns:1fr}.chat-panel{position:static!important;height:520px!important}}
+  @media(max-width:1100px) and (min-width:769px){.dash{grid-template-columns:1fr}.chat-panel{position:static!important;height:520px!important}}
 
   /* left column */
   .contract-card{background:var(--navy);color:#fff;border-radius:var(--radius);padding:22px}
@@ -258,6 +259,70 @@
   .timeline-item b{font-size:14px;display:block}
   .timeline-item p{font-size:13px;color:var(--muted);margin-top:2px}
 
+  /* ===== Mobile (bottom tab bar + chat overlay) ===== */
+  .tabbar{display:none}
+  #chatFab{display:none}
+  .chat-close{display:none}
+  @media(max-width:768px){
+    body{font-size:14.5px}
+    .header-inner{padding:0 16px;height:54px;gap:12px}
+    nav{display:none}
+    #chipInfo{display:none}
+    .settings-link{display:none}
+    .logo{font-size:17px}
+    main{padding:16px 14px calc(86px + env(safe-area-inset-bottom))}
+
+    .tabbar{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:60;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 16px rgba(15,34,71,.06)}
+    .tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 9px;font-size:10.5px;font-weight:700;color:var(--muted-2)}
+    .tabbar button .ic{font-size:20px;line-height:1.2}
+    .tabbar button.active{color:var(--blue)}
+
+    /* dashboard: D-day/할일 먼저, 계약카드 다음 */
+    .dash{grid-template-columns:1fr;gap:16px}
+    .dash>div:nth-child(1){order:2}
+    .dash>div:nth-child(2){order:1}
+    .dash>div:nth-child(3){order:3}
+
+    /* chat: FAB → fullscreen overlay */
+    .chat-panel{display:none}
+    body.chat-open .chat-panel{display:flex;position:fixed!important;inset:0;z-index:80;height:100%!important;min-height:0;border-radius:0;border:none}
+    body.chat-open .chat-panel .chat-input{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+    body.chat-open{overflow:hidden}
+    #chatFab{display:flex;position:fixed;right:16px;bottom:calc(70px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:var(--blue);color:#fff;font-size:23px;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(37,99,235,.45);z-index:59}
+    body.chat-open #chatFab{display:none}
+    .chat-close{display:flex;margin-left:auto;width:32px;height:32px;border-radius:8px;background:#f1f4f8;color:var(--muted);font-size:15px;align-items:center;justify-content:center;flex-shrink:0}
+
+    .dday-head h2{font-size:20px}
+    .alert-banner{flex-wrap:wrap;padding:15px 16px}
+    .alert-banner .btn{width:100%;margin-top:2px}
+    .todo-card{padding:16px}
+    .todo-head{flex-wrap:wrap;gap:10px}
+    .contract-card{padding:18px}
+    .steps,.support-mini{padding:16px}
+
+    .diag-head h2{font-size:18px}
+    .diag-head>div:last-child{width:100%}
+    .diag-form{padding:18px}
+    .form-grid{grid-template-columns:1fr}
+    .onboard{padding:26px 20px}
+    .onboard h1{font-size:20px}
+    .score-card{padding:18px;gap:16px}
+    .score-desc h3{font-size:17px}
+    .count-row{gap:9px}
+    .count-box{padding:12px}
+    .count-box b{font-size:21px}
+    .findings{padding:2px 16px}
+    .clause-card{padding:16px}
+    .doc-preview{padding:16px}
+    .doc-sheet{padding:16px 12px}
+    .doc-row{flex-wrap:wrap}
+    .doc-row .badge{margin-top:0}
+
+    .sup-grid{grid-template-columns:1fr}
+    .sup-card{padding:18px}
+    .guide-card{padding:18px}
+  }
+
   /* toast */
   #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 22px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.25)}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -279,7 +344,7 @@
     </nav>
     <div class="user-chip">
       <span id="chipInfo">-</span>
-      <div class="avatar" id="chipAvatar">?</div>
+      <div class="avatar" id="chipAvatar" onclick="openOnboarding()" style="cursor:pointer">?</div>
       <span class="settings-link" onclick="openOnboarding()">내 정보 수정</span>
     </div>
   </div>
@@ -344,6 +409,7 @@
         <div class="chat-head">
           <div class="ai-dot">AI</div>
           <div><b>계약 비서</b><span>● 내 계약 정보를 알고 있어요</span></div>
+          <button class="chat-close" onclick="document.body.classList.remove('chat-open')">✕</button>
         </div>
         <div class="chat-body" id="chatBody"></div>
         <div class="quick-qs" id="quickQs"></div>
@@ -546,6 +612,14 @@
     <span class="demo-link" onclick="loadDemo()">일단 예시 프로필(지은님)로 둘러볼게요</span>
   </div>
 </div>
+
+<div class="tabbar">
+  <button data-view="dashboard" class="active"><span class="ic">🏠</span>내 계약</button>
+  <button data-view="diagnosis"><span class="ic">🔍</span>AI 진단</button>
+  <button data-view="support"><span class="ic">🎁</span>지원 제도</button>
+  <button data-view="guide"><span class="ic">📖</span>가이드</button>
+</div>
+<button id="chatFab" onclick="document.body.classList.add('chat-open')">💬</button>
 
 <div id="toast"></div>
 
@@ -1036,6 +1110,7 @@ function sendChat(){
 }
 function askAI(q){
   switchView('dashboard');
+  if(isMobile()) document.body.classList.add('chat-open');
   pushMsg('user', q);
   const body = document.getElementById('chatBody');
   const typing = document.createElement('div');
@@ -1124,14 +1199,20 @@ function clauseExtra(c){
 /* =========================================================
    NAV / ONBOARDING
    ========================================================= */
+const isMobile = () => window.matchMedia('(max-width:768px)').matches;
 function switchView(v){
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
   document.getElementById('view-'+v).classList.add('active');
-  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
+  document.querySelectorAll('nav button, .tabbar button').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
+  document.body.classList.remove('chat-open');
   window.scrollTo({top:0});
 }
 document.querySelector('nav').addEventListener('click', e=>{
   if(e.target.dataset.view) switchView(e.target.dataset.view);
+});
+document.querySelector('.tabbar').addEventListener('click', e=>{
+  const btn = e.target.closest('button');
+  if(btn && btn.dataset.view) switchView(btn.dataset.view);
 });
 
 document.getElementById('fType').addEventListener('change', e=>{
