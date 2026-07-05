@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>집지킴 — 사회초년생을 위한 AI 부동산 계약 비서</title>
+<style>
+  :root{
+    --navy:#0f2247; --navy-2:#16305f; --blue:#2563eb; --blue-light:#eff4ff;
+    --bg:#f4f6fa; --card:#ffffff; --line:#e5e9f0;
+    --text:#1a2333; --muted:#6b7688; --muted-2:#98a2b3;
+    --green:#16a34a; --green-bg:#ecfdf3; --amber:#d97706; --amber-bg:#fffaeb;
+    --red:#dc2626; --red-bg:#fef2f2;
+    --radius:14px; --shadow:0 1px 3px rgba(15,34,71,.06), 0 4px 16px rgba(15,34,71,.05);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;font-size:15px}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  input,select,textarea{font-family:inherit;font-size:15px}
+
+  /* ===== Header ===== */
+  header{background:var(--navy);color:#fff;position:sticky;top:0;z-index:50}
+  .header-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;gap:28px}
+  .logo{display:flex;align-items:center;gap:9px;font-size:19px;font-weight:800;letter-spacing:-.02em}
+  .logo-mark{width:30px;height:30px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+  nav{display:flex;gap:4px;flex:1}
+  nav button{color:#aab6d0;font-size:15px;font-weight:600;padding:8px 14px;border-radius:8px;transition:.15s}
+  nav button:hover{color:#fff;background:rgba(255,255,255,.08)}
+  nav button.active{color:#fff;background:rgba(255,255,255,.12)}
+  .user-chip{display:flex;align-items:center;gap:10px;font-size:13.5px;color:#c6d0e4}
+  .avatar{width:34px;height:34px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+
+  main{max-width:1280px;margin:0 auto;padding:28px 24px 60px}
+  .view{display:none}
+  .view.active{display:block}
+
+  /* ===== Cards / common ===== */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .badge{display:inline-flex;align-items:center;font-size:12px;font-weight:700;padding:3px 9px;border-radius:6px;white-space:nowrap}
+  .badge.blue{background:var(--blue-light);color:var(--blue)}
+  .badge.green{background:var(--green-bg);color:var(--green)}
+  .badge.amber{background:var(--amber-bg);color:var(--amber)}
+  .badge.red{background:var(--red-bg);color:var(--red)}
+  .badge.gray{background:#f1f4f8;color:var(--muted)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:700;font-size:14px;padding:10px 18px;border-radius:9px;transition:.15s}
+  .btn-primary{background:var(--blue);color:#fff}
+  .btn-primary:hover{background:#1d4fd8}
+  .btn-navy{background:var(--navy);color:#fff}
+  .btn-navy:hover{background:var(--navy-2)}
+  .btn-ghost{background:#fff;border:1px solid var(--line);color:var(--text)}
+  .btn-ghost:hover{background:#f7f9fc}
+  .btn-sm{padding:7px 13px;font-size:13px}
+
+  /* ===== Onboarding ===== */
+  .overlay{position:fixed;inset:0;background:rgba(10,20,45,.55);backdrop-filter:blur(3px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+  .onboard{background:#fff;border-radius:18px;max-width:560px;width:100%;padding:36px;max-height:92vh;overflow-y:auto}
+  .onboard h1{font-size:23px;letter-spacing:-.02em;margin-bottom:6px}
+  .onboard .sub{color:var(--muted);font-size:14.5px;margin-bottom:26px}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:13px;font-weight:700;color:var(--muted)}
+  .field input,.field select{padding:11px 13px;border:1.5px solid var(--line);border-radius:9px;background:#fff;transition:.15s}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--blue)}
+  .field .hint{font-size:12px;color:var(--muted-2)}
+  .onboard .btn{width:100%;margin-top:24px;padding:14px;font-size:15.5px}
+  .demo-link{display:block;text-align:center;margin-top:14px;color:var(--blue);font-size:13.5px;font-weight:600;text-decoration:underline;cursor:pointer}
+
+  /* ===== Dashboard layout ===== */
+  .dash{display:grid;grid-template-columns:280px 1fr 360px;gap:20px;align-items:start}
+  @media(max-width:1100px){.dash{grid-template-columns:1fr}.chat-panel{position:static!important;height:520px!important}}
+
+  /* left column */
+  .contract-card{background:var(--navy);color:#fff;border-radius:var(--radius);padding:22px}
+  .contract-card .label{font-size:12.5px;color:#8fa0c4;margin-bottom:6px}
+  .contract-card h3{font-size:17px;line-height:1.4;margin-bottom:12px;letter-spacing:-.01em}
+  .contract-card .tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+  .contract-card .tag{background:rgba(255,255,255,.12);border-radius:7px;padding:4px 10px;font-size:12.5px;font-weight:600}
+  .progress-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px}
+  .progress-row b{font-size:13.5px}
+  .pbar{height:7px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+  .pbar>div{height:100%;background:var(--blue);border-radius:99px;transition:width .4s}
+
+  .steps{padding:20px;margin-top:18px}
+  .steps h4{font-size:15px;margin-bottom:16px}
+  .step{display:flex;gap:12px;position:relative;padding-bottom:20px}
+  .step:last-child{padding-bottom:0}
+  .step::before{content:"";position:absolute;left:13px;top:28px;bottom:0;width:2px;background:var(--line)}
+  .step:last-child::before{display:none}
+  .step.done::before{background:var(--green)}
+  .step-dot{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:#eef1f6;color:var(--muted);z-index:1}
+  .step.done .step-dot{background:var(--green);color:#fff}
+  .step.now .step-dot{background:var(--blue);color:#fff}
+  .step-body b{font-size:14px;display:flex;align-items:center;gap:7px}
+  .step-body span{font-size:12.5px;color:var(--muted)}
+
+  .support-mini{padding:20px;margin-top:18px}
+  .support-mini h4{font-size:15px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .support-mini h4 a{font-size:12.5px;color:var(--blue);font-weight:600;cursor:pointer}
+  .sup-item{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;cursor:pointer;transition:.15s}
+  .sup-item:hover{border-color:var(--blue);background:var(--blue-light)}
+  .sup-item b{font-size:13.5px;display:block;margin-bottom:3px}
+  .sup-item span{font-size:12px;color:var(--muted)}
+
+  /* center column */
+  .dday-head h2{font-size:24px;letter-spacing:-.02em}
+  .dday-head h2 em{font-style:normal;color:var(--blue)}
+  .dday-head p{color:var(--muted);font-size:14.5px;margin-top:5px}
+
+  .alert-banner{border:1.5px solid #fecaca;background:#fff;border-radius:var(--radius);padding:18px 20px;display:flex;gap:14px;align-items:flex-start;margin-top:18px}
+  .alert-banner .icon{width:34px;height:34px;border-radius:50%;background:var(--red-bg);color:var(--red);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;flex-shrink:0}
+  .alert-banner b{font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .alert-banner p{font-size:13.5px;color:var(--muted);margin-top:5px}
+  .alert-banner .btn{flex-shrink:0;align-self:center}
+
+  .todo-card{margin-top:18px;padding:22px}
+  .todo-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .todo-head h3{font-size:17px}
+  .filter-tabs{display:flex;gap:6px}
+  .filter-tabs button{font-size:13px;font-weight:600;padding:6px 14px;border-radius:99px;background:#f1f4f8;color:var(--muted)}
+  .filter-tabs button.active{background:var(--navy);color:#fff}
+  .todo{display:flex;gap:14px;align-items:flex-start;padding:16px 4px;border-top:1px solid var(--line)}
+  .todo:first-of-type{border-top:none}
+  .todo.done .todo-title{text-decoration:line-through;color:var(--muted-2)}
+  .todo.done .todo-desc{color:var(--muted-2)}
+  .checkbox{width:22px;height:22px;border:2px solid #cdd5e1;border-radius:6px;flex-shrink:0;margin-top:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;background:#fff}
+  .todo.done .checkbox{background:var(--green);border-color:var(--green);color:#fff;font-size:13px}
+  .todo-main{flex:1}
+  .todo-title{font-size:15px;font-weight:700}
+  .todo-desc{font-size:13px;color:var(--muted);margin-top:3px}
+  .todo-badge{flex-shrink:0;margin-top:2px}
+  .todo-ask{font-size:12px;color:var(--blue);font-weight:600;cursor:pointer;margin-top:6px;display:inline-block}
+  .todo-ask:hover{text-decoration:underline}
+  .empty-note{text-align:center;color:var(--muted-2);font-size:14px;padding:30px 0}
+
+  /* chat panel */
+  .chat-panel{position:sticky;top:88px;display:flex;flex-direction:column;height:calc(100vh - 120px);min-height:480px}
+  .chat-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;gap:11px;align-items:center}
+  .ai-dot{width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+  .chat-head b{font-size:15px;display:block}
+  .chat-head span{font-size:12px;color:var(--green);font-weight:600}
+  .chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+  .msg{max-width:88%;padding:12px 14px;border-radius:13px;font-size:13.5px;line-height:1.6;white-space:pre-wrap;word-break:keep-all}
+  .msg.ai{background:#f4f6fa;border:1px solid var(--line);align-self:flex-start;border-top-left-radius:4px}
+  .msg.user{background:var(--blue);color:#fff;align-self:flex-end;border-top-right-radius:4px}
+  .msg .clause{background:#fff;border:1.5px dashed #cdd5e1;border-radius:9px;padding:11px 13px;margin-top:9px;font-size:13px;color:var(--text)}
+  .msg .msg-actions{margin-top:8px;display:flex;gap:8px}
+  .msg .msg-actions button{font-size:12px;font-weight:700;padding:6px 11px;border-radius:7px;background:var(--blue-light);color:var(--blue)}
+  .quick-qs{padding:0 16px 10px;display:flex;gap:7px;flex-wrap:wrap}
+  .quick-qs button{font-size:12px;font-weight:600;padding:6px 11px;border-radius:99px;border:1px solid var(--line);background:#fff;color:var(--muted);transition:.15s}
+  .quick-qs button:hover{border-color:var(--blue);color:var(--blue)}
+  .chat-input{padding:12px 14px;border-top:1px solid var(--line);display:flex;gap:9px}
+  .chat-input input{flex:1;padding:11px 14px;border:1.5px solid var(--line);border-radius:10px}
+  .chat-input input:focus{outline:none;border-color:var(--blue)}
+  .chat-input button{width:44px;height:44px;border-radius:10px;background:var(--blue);color:#fff;font-size:16px;flex-shrink:0}
+  .typing{display:inline-flex;gap:4px;padding:4px 2px}
+  .typing i{width:6px;height:6px;border-radius:50%;background:#9aa7bd;animation:blink 1.2s infinite}
+  .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+
+  /* ===== Diagnosis view ===== */
+  .diag-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+  .diag-head .crumb{font-size:13px;color:var(--muted);margin-bottom:5px}
+  .diag-head h2{font-size:22px;letter-spacing:-.02em}
+  .diag-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:start}
+  @media(max-width:1000px){.diag-grid{grid-template-columns:1fr}}
+  .diag-form{padding:24px}
+  .diag-form h3{font-size:16px;margin-bottom:5px}
+  .diag-form .sub{font-size:13px;color:var(--muted);margin-bottom:18px}
+  .check-row{display:flex;align-items:center;gap:9px;padding:9px 0;font-size:14px}
+  .check-row input{width:17px;height:17px;accent-color:var(--blue)}
+  .score-card{background:var(--navy);color:#fff;border-radius:var(--radius);padding:26px;display:flex;gap:22px;align-items:center}
+  .gauge{position:relative;width:110px;height:110px;flex-shrink:0}
+  .gauge svg{transform:rotate(-90deg)}
+  .gauge .num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .gauge .num b{font-size:30px;line-height:1}
+  .gauge .num span{font-size:11px;color:#8fa0c4;margin-top:3px}
+  .score-desc .grade-label{font-size:12.5px;color:#8fa0c4}
+  .score-desc h3{font-size:20px;margin:3px 0 8px}
+  .score-desc p{font-size:13.5px;color:#c6d0e4;line-height:1.6}
+  .count-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+  .count-box{border:1.5px solid var(--line);border-radius:12px;background:#fff;text-align:center;padding:16px}
+  .count-box b{font-size:26px;display:block;line-height:1.2}
+  .count-box span{font-size:13px;color:var(--muted);font-weight:600}
+  .count-box.g b{color:var(--green)}.count-box.g{border-color:#bbe5c8}
+  .count-box.a b{color:var(--amber)}.count-box.a{border-color:#f5d9a8}
+  .count-box.r b{color:var(--red)}.count-box.r{border-color:#f5c2c2}
+  .findings{margin-top:16px;padding:6px 22px}
+  .findings h4{font-size:15px;padding:16px 0 4px}
+  .finding{display:flex;gap:13px;padding:15px 0;border-top:1px solid var(--line);align-items:flex-start}
+  .finding:first-of-type{border-top:none}
+  .finding .badge{margin-top:2px}
+  .finding b{font-size:14.5px;display:block}
+  .finding p{font-size:13px;color:var(--muted);margin-top:3px}
+  .finding a{font-size:13px;color:var(--blue);font-weight:700;cursor:pointer;display:inline-block;margin-top:6px}
+  .clause-card{margin-top:16px;padding:22px}
+  .clause-card h4{font-size:15px;margin-bottom:6px}
+  .clause-card .sub{font-size:13px;color:var(--muted);margin-bottom:14px}
+  .clause-box{border:1.5px dashed #cdd5e1;border-radius:11px;padding:16px;font-size:14px;line-height:1.7;background:#fafbfd;margin-bottom:10px}
+  .clause-box b{color:var(--blue)}
+  .clause-actions{display:flex;gap:9px}
+  .doc-preview{padding:24px;margin-top:20px}
+  .doc-preview h3{font-size:16px;margin-bottom:4px}
+  .doc-preview .sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+  .doc-sheet{border:1px solid var(--line);border-radius:10px;padding:26px;background:#fff;font-family:"Noto Serif KR",serif}
+  .doc-sheet h5{text-align:center;font-size:17px;letter-spacing:6px;margin-bottom:4px}
+  .doc-sheet .doc-sub{text-align:center;font-size:12px;color:var(--muted);margin-bottom:18px}
+  .doc-section{font-size:13px;font-weight:700;background:#f4f6fa;padding:7px 12px;margin:14px 0 8px;border-radius:5px}
+  .doc-row{display:flex;gap:12px;padding:9px 6px;font-size:13px;border-bottom:1px dashed #e8ecf2;align-items:flex-start}
+  .doc-row .no{width:20px;color:var(--muted);flex-shrink:0}
+  .doc-row .hl{flex:1;padding:7px 10px;border-radius:7px;line-height:1.55}
+  .doc-row .hl.safe{background:var(--green-bg);border:1px solid #bbe5c8}
+  .doc-row .hl.warn{background:var(--amber-bg);border:1px solid #f5d9a8}
+  .doc-row .hl.danger{background:var(--red-bg);border:1px solid #f5c2c2}
+  .doc-row .hl.gray{color:var(--muted-2)}
+  .doc-row .badge{flex-shrink:0;margin-top:5px}
+
+  /* ===== Support view ===== */
+  .sup-filters{display:flex;gap:8px;margin:6px 0 20px;flex-wrap:wrap}
+  .sup-filters button{font-size:13px;font-weight:600;padding:7px 15px;border-radius:99px;background:#fff;border:1px solid var(--line);color:var(--muted)}
+  .sup-filters button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .sup-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+  .sup-card{padding:22px;display:flex;flex-direction:column;gap:10px}
+  .sup-card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .sup-card h3{font-size:16px;letter-spacing:-.01em}
+  .sup-card .amount{font-size:14px;color:var(--blue);font-weight:800}
+  .sup-card p{font-size:13.5px;color:var(--muted);flex:1}
+  .cond-list{display:flex;flex-direction:column;gap:5px;font-size:13px}
+  .cond{display:flex;gap:7px;align-items:center}
+  .cond .ic{width:17px;height:17px;border-radius:50%;font-size:10.5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:800}
+  .cond.ok .ic{background:var(--green-bg);color:var(--green)}
+  .cond.no .ic{background:var(--red-bg);color:var(--red)}
+  .cond.unk .ic{background:#f1f4f8;color:var(--muted)}
+  .sup-card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+  .sup-card .agency{font-size:12px;color:var(--muted-2)}
+
+  /* ===== Guide view ===== */
+  .guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+  @media(max-width:1000px){.guide-grid{grid-template-columns:1fr}}
+  .guide-col{display:flex;flex-direction:column;gap:20px}
+  .guide-card{padding:24px}
+  .guide-card>h3{font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+  .acc{border:1px solid var(--line);border-radius:10px;margin-bottom:9px;overflow:hidden}
+  .acc summary{padding:13px 16px;font-size:14px;font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .acc summary::-webkit-details-marker{display:none}
+  .acc summary::after{content:"+";font-size:17px;color:var(--muted-2);font-weight:400}
+  .acc[open] summary::after{content:"−"}
+  .acc .acc-body{padding:0 16px 15px;font-size:13.5px;color:var(--muted);line-height:1.7}
+  .acc .acc-body b{color:var(--text)}
+  .term{padding:12px 0;border-bottom:1px solid var(--line)}
+  .term:last-child{border-bottom:none}
+  .term b{font-size:14px;display:block;margin-bottom:3px;color:var(--navy)}
+  .term span{font-size:13px;color:var(--muted)}
+  .timeline-item{display:flex;gap:14px;padding-bottom:20px;position:relative}
+  .timeline-item::before{content:"";position:absolute;left:14px;top:32px;bottom:0;width:2px;background:var(--line)}
+  .timeline-item:last-child::before{display:none}
+  .tl-dot{width:29px;height:29px;border-radius:50%;background:var(--blue-light);color:var(--blue);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1}
+  .timeline-item b{font-size:14px;display:block}
+  .timeline-item p{font-size:13px;color:var(--muted);margin-top:2px}
+
+  /* toast */
+  #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 22px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .settings-link{color:#8fa0c4;font-size:12px;cursor:pointer;margin-left:4px}
+  .settings-link:hover{color:#fff;text-decoration:underline}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><span class="logo-mark">집</span>집지킴</div>
+    <nav>
+      <button data-view="dashboard" class="active">내 계약</button>
+      <button data-view="diagnosis">AI 진단</button>
+      <button data-view="support">지원 제도</button>
+      <button data-view="guide">가이드</button>
+    </nav>
+    <div class="user-chip">
+      <span id="chipInfo">-</span>
+      <div class="avatar" id="chipAvatar">?</div>
+      <span class="settings-link" onclick="openOnboarding()">내 정보 수정</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ============ DASHBOARD ============ -->
+  <section class="view active" id="view-dashboard">
+    <div class="dash">
+      <!-- left -->
+      <div>
+        <div class="contract-card">
+          <div class="label">진행 중인 계약</div>
+          <h3 id="ctName">-</h3>
+          <div class="tags" id="ctTags"></div>
+          <div class="progress-row"><span>계약 진행률</span><b id="ctProgress">0 / 0 완료</b></div>
+          <div class="pbar"><div id="ctBar" style="width:0%"></div></div>
+        </div>
+
+        <div class="card steps">
+          <h4>계약 단계</h4>
+          <div id="stepList"></div>
+        </div>
+
+        <div class="card support-mini">
+          <h4>받을 수 있는 지원 <a onclick="switchView('support')">전체 보기</a></h4>
+          <div id="miniSupport"></div>
+        </div>
+      </div>
+
+      <!-- center -->
+      <div>
+        <div class="dday-head">
+          <h2 id="ddayTitle">-</h2>
+          <p id="ddaySub">-</p>
+        </div>
+
+        <div class="alert-banner" id="alertBanner" style="display:none">
+          <div class="icon">!</div>
+          <div style="flex:1">
+            <b>전세보증보험, 잔금 전에 가입 조건을 확인하세요 <span class="badge red">중요</span></b>
+            <p id="alertDesc">-</p>
+          </div>
+          <button class="btn btn-navy btn-sm" onclick="askAI('전세보증보험 가입 조건을 확인해줘')">AI에게 확인 요청</button>
+        </div>
+
+        <div class="card todo-card">
+          <div class="todo-head">
+            <h3>해야 할 일</h3>
+            <div class="filter-tabs" id="todoTabs">
+              <button data-f="week" class="active">이번 주</button>
+              <button data-f="all">전체</button>
+              <button data-f="done">완료</button>
+            </div>
+          </div>
+          <div id="todoList"></div>
+        </div>
+      </div>
+
+      <!-- right: chat -->
+      <div class="card chat-panel">
+        <div class="chat-head">
+          <div class="ai-dot">AI</div>
+          <div><b>계약 비서</b><span>● 내 계약 정보를 알고 있어요</span></div>
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="quick-qs" id="quickQs"></div>
+        <div class="chat-input">
+          <input id="chatInput" placeholder="계약에 대해 무엇이든 물어보세요" onkeydown="if(event.key==='Enter')sendChat()">
+          <button onclick="sendChat()">↑</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DIAGNOSIS ============ -->
+  <section class="view" id="view-diagnosis">
+    <div class="diag-head">
+      <div>
+        <div class="crumb">AI 진단 · 등기부등본 · <span id="diagDate"></span> 분석</div>
+        <h2 id="diagTitle">등기부등본 AI 진단</h2>
+      </div>
+      <div style="display:flex;gap:9px">
+        <button class="btn btn-ghost btn-sm" onclick="loadSampleDiag()">예시 데이터 불러오기</button>
+        <button class="btn btn-primary btn-sm" onclick="shareReport()">리포트 공유</button>
+      </div>
+    </div>
+
+    <div class="diag-grid">
+      <div>
+        <div class="card diag-form">
+          <h3>등기부등본 정보 입력</h3>
+          <p class="sub">인터넷등기소(700원)에서 발급한 등기부등본의 갑구·을구 내용을 입력하면 AI가 위험도를 분석해요. 아직 발급 전이라면 <b style="color:var(--blue);cursor:pointer" onclick="loadSampleDiag()">예시 데이터</b>로 체험해 보세요.</p>
+          <div class="form-grid">
+            <div class="field"><label>주택 가액 (시세, 만원)</label><input type="number" id="dPrice" placeholder="예: 32000"><span class="hint">국토부 실거래가·KB시세 기준</span></div>
+            <div class="field"><label>내 보증금 (만원)</label><input type="number" id="dDeposit" placeholder="예: 18000"></div>
+            <div class="field full"><label>근저당권 채권최고액 합계 (만원) — 을구</label><input type="number" id="dMortgage" placeholder="근저당이 없으면 0"><span class="hint">보통 실제 대출금의 120% 수준으로 설정돼요</span></div>
+            <div class="field full">
+              <label>갑구·을구 체크사항</label>
+              <div class="check-row"><input type="checkbox" id="dOwnerMatch" checked><span>등기부 소유자와 계약서상 임대인이 일치한다</span></div>
+              <div class="check-row"><input type="checkbox" id="dSeizure"><span>압류·가압류·경매개시결정 기록이 있다</span></div>
+              <div class="check-row"><input type="checkbox" id="dTrust"><span>신탁등기가 되어 있다</span></div>
+              <div class="check-row"><input type="checkbox" id="dIllegal"><span>건축물대장에 위반건축물 표시가 있다</span></div>
+              <div class="check-row"><input type="checkbox" id="dRecentOwner"><span>소유권 이전이 최근 3개월 내에 있었다</span></div>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;margin-top:18px;padding:13px" onclick="runDiagnosis()">AI 위험도 진단하기</button>
+        </div>
+
+        <div class="card doc-preview" id="docPreview" style="display:none">
+          <h3>등기부등본 원문 대조 뷰</h3>
+          <p class="sub">AI가 표시한 부분을 확인하세요 — 색상은 위험도를 뜻해요</p>
+          <div class="doc-sheet">
+            <h5>등기사항전부증명서</h5>
+            <div class="doc-sub" id="docAddr">[건물] -</div>
+            <div class="doc-section">【 갑구 】 (소유권에 관한 사항)</div>
+            <div id="docGapgu"></div>
+            <div class="doc-section">【 을구 】 (소유권 이외의 권리에 관한 사항)</div>
+            <div id="docEulgu"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="diagResult" style="display:none">
+        <div class="score-card">
+          <div class="gauge">
+            <svg width="110" height="110" viewBox="0 0 110 110">
+              <circle cx="55" cy="55" r="47" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="9"/>
+              <circle id="gaugeArc" cx="55" cy="55" r="47" fill="none" stroke="#f59e0b" stroke-width="9" stroke-linecap="round" stroke-dasharray="295.3" stroke-dashoffset="295.3" style="transition:stroke-dashoffset .8s ease,stroke .4s"/>
+            </svg>
+            <div class="num"><b id="scoreNum">0</b><span>/ 100</span></div>
+          </div>
+          <div class="score-desc">
+            <div class="grade-label">종합 안전도</div>
+            <h3 id="scoreGrade">-</h3>
+            <p id="scoreDesc">-</p>
+          </div>
+        </div>
+
+        <div class="count-row">
+          <div class="count-box g"><b id="cntSafe">0</b><span>안전</span></div>
+          <div class="count-box a"><b id="cntWarn">0</b><span>주의</span></div>
+          <div class="count-box r"><b id="cntDanger">0</b><span>위험</span></div>
+        </div>
+
+        <div class="card findings">
+          <h4>발견된 항목</h4>
+          <div id="findingList"></div>
+        </div>
+
+        <div class="card clause-card" id="clauseCard" style="display:none">
+          <h4>AI 추천 특약 문구</h4>
+          <p class="sub">계약서에 바로 쓸 수 있는 문구예요. 공인중개사에게 전달해 특약란에 넣으세요.</p>
+          <div id="clauseList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SUPPORT ============ -->
+  <section class="view" id="view-support">
+    <div class="diag-head">
+      <div>
+        <div class="crumb">내 조건 기반 자동 판정 · <span id="supProfile">-</span></div>
+        <h2>받을 수 있는 지원 제도</h2>
+      </div>
+    </div>
+    <div class="sup-filters" id="supFilters">
+      <button data-f="all" class="active">전체</button>
+      <button data-f="eligible">✓ 자격 충족</button>
+      <button data-f="loan">대출</button>
+      <button data-f="cash">현금 지원</button>
+      <button data-f="insurance">보증보험</button>
+    </div>
+    <div class="sup-grid" id="supGrid"></div>
+  </section>
+
+  <!-- ============ GUIDE ============ -->
+  <section class="view" id="view-guide">
+    <div class="diag-head">
+      <div>
+        <div class="crumb">사회초년생 필수 지식</div>
+        <h2>안전 계약 가이드</h2>
+      </div>
+    </div>
+    <div class="guide-grid">
+      <div class="guide-col">
+        <div class="card guide-card">
+          <h3>🚨 전세사기 대표 유형 5가지</h3>
+          <details class="acc"><summary>깡통전세 <span class="badge red">최다 발생</span></summary><div class="acc-body">보증금 + 선순위 대출이 집값의 <b>80%를 넘는 집</b>이에요. 집이 경매로 넘어가면 보증금을 다 돌려받지 못해요.<br><b>예방:</b> (보증금+채권최고액) ÷ 시세가 70% 이하인지 확인하세요. 집지킴 AI 진단이 자동으로 계산해 드려요.</div></details>
+          <details class="acc"><summary>이중계약 · 가짜 임대인</summary><div class="acc-body">건물 관리인이나 사칭범이 집주인 행세를 하며 계약금을 가로채는 수법이에요.<br><b>예방:</b> 등기부등본의 <b>소유자 이름·주민번호 앞자리</b>와 임대인 신분증을 반드시 대조하고, 계약금은 소유자 명의 계좌로만 보내세요.</div></details>
+          <details class="acc"><summary>신탁등기 사기</summary><div class="acc-body">집이 신탁회사에 맡겨져 있으면 <b>집주인이 아니라 신탁회사에게 임대 권한</b>이 있어요. 집주인과만 계약하면 무효가 될 수 있어요.<br><b>예방:</b> 등기부 갑구에 '신탁' 표시가 있으면 신탁원부를 발급받아 임대 동의 여부를 확인하세요.</div></details>
+          <details class="acc"><summary>잔금일 대출 실행 (동시진행)</summary><div class="acc-body">내가 잔금을 치르는 <b>같은 날 집주인이 몰래 대출</b>을 받으면, 내 전입신고 효력(다음 날 0시)보다 은행 근저당이 앞서게 돼요.<br><b>예방:</b> 잔금일 아침 등기부를 재열람하고, "잔금일 다음 날까지 담보권 설정 금지" 특약을 넣으세요.</div></details>
+          <details class="acc"><summary>깜깜이 선순위 보증금 (다가구주택)</summary><div class="acc-body">다가구주택은 먼저 들어온 세입자들의 보증금이 등기부에 안 보여요. 건물이 경매되면 <b>먼저 들어온 순서대로</b> 배당받아요.<br><b>예방:</b> 임대인 동의를 받아 주민센터에서 '확정일자 부여 현황'을 열람해 선순위 보증금 총액을 확인하세요.</div></details>
+        </div>
+        <div class="card guide-card">
+          <h3>📋 계약 절차 한눈에 보기</h3>
+          <div class="timeline-item"><div class="tl-dot">1</div><div><b>계약 전 — 집 확인</b><p>등기부등본 열람 · 시세 대비 보증금 비율 확인 · 건축물대장 확인 · 임대인 신분 대조</p></div></div>
+          <div class="timeline-item"><div class="tl-dot">2</div><div><b>계약서 작성일</b><p>특약 검토 · 소유자 명의 계좌로 계약금 입금 · 공인중개사 등록 여부 확인</p></div></div>
+          <div class="timeline-item"><div class="tl-dot">3</div><div><b>잔금일</b><p>아침에 등기부 재열람 → 이상 없으면 잔금 지급 · 열쇠 수령 · 이사</p></div></div>
+          <div class="timeline-item"><div class="tl-dot">4</div><div><b>이사 당일 (가장 중요!)</b><p>전입신고 + 확정일자 — 정부24 또는 주민센터에서. 대항력은 다음 날 0시부터 발생해요</p></div></div>
+          <div class="timeline-item"><div class="tl-dot">5</div><div><b>입주 후</b><p>전세보증보험 가입(잔금+전입 후 신청 가능) · 주택임대차 신고(30일 내)</p></div></div>
+        </div>
+      </div>
+      <div class="guide-col">
+        <div class="card guide-card">
+          <h3>📖 필수 용어 사전</h3>
+          <div class="term"><b>등기부등본 (등기사항전부증명서)</b><span>집의 신분증. 소유자(갑구)와 대출·근저당(을구)이 적혀 있어요. 인터넷등기소에서 700원에 누구나 열람 가능해요.</span></div>
+          <div class="term"><b>근저당권 · 채권최고액</b><span>집주인이 집을 담보로 받은 대출. 채권최고액은 보통 실제 대출금의 120%로 설정돼요. 경매 시 은행이 나보다 먼저 가져가는 돈이에요.</span></div>
+          <div class="term"><b>대항력</b><span>"집주인이 바뀌어도 계약 기간 동안 계속 살 수 있는 권리". 이사(점유) + 전입신고를 하면 <b>다음 날 0시</b>에 생겨요.</span></div>
+          <div class="term"><b>확정일자</b><span>계약서에 공적으로 날짜 도장을 받는 것. 경매 시 후순위 채권자보다 먼저 배당받는 우선변제권의 조건이에요. 주민센터·정부24·등기소에서 받아요.</span></div>
+          <div class="term"><b>우선변제권</b><span>대항력 + 확정일자를 갖추면, 집이 경매돼도 배당에서 내 순위만큼 보증금을 우선 회수할 수 있는 권리예요.</span></div>
+          <div class="term"><b>전세보증금 반환보증 (HUG/HF/SGI)</b><span>집주인이 보증금을 안 돌려주면 보증기관이 대신 돌려주는 보험. 잔금 지급 + 전입 후 계약기간 1/2 경과 전에 가입해야 해요.</span></div>
+          <div class="term"><b>특약</b><span>계약서 뒤에 추가하는 맞춤 조건. "잔금과 동시에 근저당 말소" 같은 문구가 보증금을 지켜줘요.</span></div>
+          <div class="term"><b>임대차 신고제</b><span>보증금 6천만원 초과 또는 월세 30만원 초과 계약은 30일 내 신고 의무. 신고하면 확정일자가 자동 부여돼요.</span></div>
+        </div>
+        <div class="card guide-card">
+          <h3>🧮 안전한 집 3초 판별법</h3>
+          <div class="acc-body" style="padding:0;font-size:14px;color:var(--muted);line-height:1.8">
+            <b style="color:var(--text)">(내 보증금 + 채권최고액) ÷ 집 시세</b><br>
+            · <b style="color:var(--green)">70% 이하</b> — 안전한 편이에요<br>
+            · <b style="color:var(--amber)">70~90%</b> — 주의. 근저당 말소 특약이 꼭 필요해요<br>
+            · <b style="color:var(--red)">90% 초과</b> — 위험. 계약을 다시 생각해 보세요<br><br>
+            <button class="btn btn-primary btn-sm" onclick="switchView('diagnosis')">내 집 바로 진단하기 →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ ONBOARDING ============ -->
+<div class="overlay" id="onboardOverlay" style="display:none">
+  <div class="onboard">
+    <h1>👋 안녕하세요, 집지킴이에요</h1>
+    <p class="sub">계약 정보를 알려주시면 <b>해야 할 일 · 위험 점검 · 지원 제도</b>를 맞춤으로 챙겨드려요. 1분이면 끝나요.</p>
+    <div class="form-grid">
+      <div class="field"><label>이름 (별명도 좋아요)</label><input id="fName" placeholder="예: 지은"></div>
+      <div class="field"><label>나이 (만)</label><input type="number" id="fAge" placeholder="예: 26"></div>
+      <div class="field"><label>지역</label>
+        <select id="fRegion">
+          <option value="서울">서울</option><option value="경기">경기</option><option value="인천">인천</option>
+          <option value="부산">부산</option><option value="대구">대구</option><option value="대전">대전</option>
+          <option value="광주">광주</option><option value="울산">울산</option><option value="세종">세종</option><option value="기타">기타 지역</option>
+        </select>
+      </div>
+      <div class="field"><label>계약 유형</label>
+        <select id="fType"><option value="전세">전세</option><option value="월세">월세 (보증금+월세)</option></select>
+      </div>
+      <div class="field"><label>보증금 (만원)</label><input type="number" id="fDeposit" placeholder="예: 18000"></div>
+      <div class="field" id="fRentWrap" style="display:none"><label>월세 (만원)</label><input type="number" id="fRent" placeholder="예: 50"></div>
+      <div class="field"><label>연 소득 (만원)</label><input type="number" id="fIncome" placeholder="예: 3200"><span class="hint">지원 제도 자격 판정에만 사용돼요</span></div>
+      <div class="field"><label>현재 계약 단계</label>
+        <select id="fStage">
+          <option value="0">계약 전 — 집을 알아보는 중</option>
+          <option value="1">계약 중 — 계약서 작성~잔금 사이</option>
+          <option value="2">계약 후 — 입주 완료</option>
+        </select>
+      </div>
+      <div class="field"><label>잔금일 / 입주 예정일</label><input type="date" id="fMoveDate"></div>
+      <div class="field full"><label>집 주소 (동까지만 적어도 돼요)</label><input id="fAddress" placeholder="예: 마포구 성산동 어울림빌 302호"></div>
+    </div>
+    <button class="btn btn-primary" onclick="submitOnboarding()">맞춤 대시보드 만들기</button>
+    <span class="demo-link" onclick="loadDemo()">일단 예시 프로필(지은님)로 둘러볼게요</span>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* =========================================================
+   집지킴 — AI 부동산 계약 비서 (client-side prototype)
+   ========================================================= */
+const LS_KEY = 'jibjikim_v1';
+let state = null;
+
+const fmtMan = n => {
+  n = Number(n)||0;
+  if(n >= 10000){ const eok = Math.floor(n/10000), rest = n%10000; return rest? `${eok}억 ${rest.toLocaleString()}만` : `${eok}억`; }
+  return `${n.toLocaleString()}만`;
+};
+const todayStr = () => new Date().toISOString().slice(0,10);
+const daysUntil = d => Math.ceil((new Date(d+'T00:00:00') - new Date(new Date().toDateString())) / 86400000);
+const toast = msg => { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove('show'),2400); };
+
+/* ---------- state ---------- */
+function defaultState(user){
+  return { user, todos: buildTodos(user), diag: null, chat: [] };
+}
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+function load(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)); }catch(e){ return null; } }
+
+/* ---------- todo generation (personalized) ---------- */
+function buildTodos(u){
+  const move = u.moveDate;
+  const before = [
+    {id:'t1', phase:0, title:'등기부등본 열람 · AI 진단', desc:'인터넷등기소 700원 · 근저당·압류·소유자 확인 → 집지킴 AI 진단에 입력', due:null, urgent:true},
+    {id:'t2', phase:0, title:'시세 대비 보증금 비율 확인', desc:'국토부 실거래가·KB시세와 비교 · (보증금+근저당)÷시세 70% 이하 권장', due:null},
+    {id:'t3', phase:0, title:'임대인 신분 확인', desc:'등기부 소유자와 신분증 대조 · 대리인이면 위임장+인감증명서 확인', due:null},
+    {id:'t4', phase:0, title:'건축물대장 확인', desc:'정부24 무료 발급 · 위반건축물 여부 확인 (보증보험 가입 불가 사유)', due:null},
+    {id:'t5', phase:0, title:'공인중개사 등록 여부 확인', desc:'국가공간정보포털에서 중개사무소 정상 등록 조회', due:null},
+  ];
+  const during = [
+    {id:'t6', phase:1, title:'특약 문구 계약서에 넣기', desc:'"잔금과 동시에 근저당 말소" 등 · AI 진단에서 맞춤 문구를 받으세요', due:null, urgent:true},
+    {id:'t7', phase:1, title:'계약금, 임대인 명의 계좌로 입금', desc:'등기부 소유자 이름과 계좌 명의가 같은지 확인 후 이체', due:null},
+    {id:'t8', phase:1, title:u.type==='전세'?'전세보증보험(HUG) 가입 조건 확인':'보증금 보호 조건 확인', desc:u.type==='전세'?'보증료 약 연 0.11~0.15% · 네이버부동산·카카오페이·지사 방문 가능':'보증금이 크면 보증보험 가입을 검토하세요', due:null, urgent:true},
+    {id:'t9', phase:1, title:'잔금일 아침, 등기부등본 재열람', desc:'잔금 직전 새로운 근저당·가압류가 없는지 최종 확인 · 인터넷등기소 700원', due:move, urgent:true},
+    {id:'t10', phase:1, title:'잔금 지급 · 열쇠 수령', desc:'등기부 이상 없음 확인 후 임대인 계좌로 잔금 이체', due:move},
+  ];
+  const after = [
+    {id:'t11', phase:2, title:'전입신고 + 확정일자 받기', desc:'이사 당일 정부24 또는 주민센터에서 · 대항력은 다음 날 0시부터 발생', due:move, urgent:true},
+    {id:'t12', phase:2, title:u.type==='전세'?'전세보증보험 가입 신청':'주택임대차 신고', desc:u.type==='전세'?'잔금+전입 완료 후 신청 가능 · 계약기간 1/2 경과 전까지':'계약 후 30일 내 · 확정일자 자동 부여', due:move, urgent:u.type==='전세'},
+    {id:'t13', phase:2, title:'주택임대차 신고 (30일 내)', desc:'보증금 6천만원 초과 시 의무 · 부동산거래관리시스템 온라인 가능', due:null},
+    {id:'t14', phase:2, title:'입주 상태 사진 기록', desc:'하자·파손 부분 촬영 → 퇴거 시 원상복구 분쟁 예방', due:move},
+  ];
+  let todos = [...before, ...during, ...after];
+  // 이미 지난 단계는 완료 처리
+  todos.forEach(t => t.done = t.phase < Number(u.stage));
+  return todos;
+}
+
+/* ---------- support programs ---------- */
+const SUPPORTS = [
+  { id:'s1', name:'청년 버팀목 전세자금대출', cat:'loan', amount:'연 2.0~3.1%', agency:'주택도시기금 · HUG',
+    desc:'만 34세 이하 무주택 청년에게 저금리로 전세보증금의 80%까지 대출해줘요.',
+    conds:u=>[
+      {label:'만 19~34세', ok:u.age>=19&&u.age<=34},
+      {label:'연 소득 5,000만원 이하', ok:u.income<=5000},
+      {label:'전세 계약', ok:u.type==='전세'},
+      {label:'보증금 3억 이하(수도권)', ok:u.deposit<=30000},
+    ]},
+  { id:'s2', name:'중소기업취업청년 전월세보증금대출', cat:'loan', amount:'연 1.5% · 최대 1억', agency:'주택도시기금',
+    desc:'중소·중견기업 재직 청년 대상 초저금리 대출. 조건이 맞으면 가장 유리해요.',
+    conds:u=>[
+      {label:'만 19~34세', ok:u.age>=19&&u.age<=34},
+      {label:'연 소득 3,500만원 이하', ok:u.income<=3500},
+      {label:'중소기업 재직', ok:null},
+      {label:'보증금 2억 이하', ok:u.deposit<=20000},
+    ]},
+  { id:'s3', name:'청년 월세 특별지원', cat:'cash', amount:'월 20만원 × 12개월', agency:'국토교통부',
+    desc:'저소득 무주택 청년에게 월세를 현금으로 지원해요.',
+    conds:u=>[
+      {label:'만 19~34세', ok:u.age>=19&&u.age<=34},
+      {label:'월세 계약', ok:u.type==='월세'},
+      {label:'보증금 5천만원 이하', ok:u.deposit<=5000},
+      {label:'청년 독립가구 소득 기준 충족', ok:null},
+    ]},
+  { id:'s4', name:'서울시 청년 이사비 지원', cat:'cash', amount:'최대 40만원', agency:'서울특별시',
+    desc:'이사비·중개보수를 실비로 지원해요. 매년 상반기 모집하니 마감일을 확인하세요.',
+    conds:u=>[
+      {label:'서울 거주', ok:u.region==='서울'},
+      {label:'만 19~39세', ok:u.age>=19&&u.age<=39},
+      {label:'보증금 3억 이하 · 월세 70만원 이하', ok:u.deposit<=30000},
+    ]},
+  { id:'s5', name:'전세보증금 반환보증 (HUG)', cat:'insurance', amount:'보증료 연 0.11~0.15%', agency:'주택도시보증공사',
+    desc:'집주인이 보증금을 안 돌려주면 HUG가 대신 돌려줘요. 전세라면 사실상 필수!',
+    conds:u=>[
+      {label:'전세 계약', ok:u.type==='전세'},
+      {label:'보증금 7억 이하(수도권)', ok:u.deposit<=70000},
+      {label:'(보증금+선순위채권) ≤ 주택가액 90%', ok:null},
+      {label:'잔금 지급 + 전입신고 완료 후 신청', ok:null},
+    ]},
+  { id:'s6', name:'LH 청년 전세임대주택', cat:'loan', amount:'시중 전세가의 5% 수준 부담', agency:'LH',
+    desc:'LH가 집주인과 대신 계약하고 청년에게 재임대해요. 목돈이 없어도 가능해요.',
+    conds:u=>[
+      {label:'만 19~39세', ok:u.age>=19&&u.age<=39},
+      {label:'무주택자', ok:null},
+      {label:'수급자·저소득 가구 우선', ok:null},
+    ]},
+  { id:'s7', name:'청년 주거급여 분리지급', cat:'cash', amount:'지역별 기준임대료 내 실비', agency:'국토교통부',
+    desc:'주거급여 수급 가구의 20대 자녀가 따로 살면 임차료를 별도 지원받아요.',
+    conds:u=>[
+      {label:'만 19~30세 미혼', ok:u.age>=19&&u.age<=30},
+      {label:'부모와 주소지 분리', ok:null},
+      {label:'가구 소득 기준 충족', ok:null},
+    ]},
+];
+function supportEligibility(sp, u){
+  const conds = sp.conds(u);
+  const hardFail = conds.some(c=>c.ok===false);
+  return { conds, status: hardFail ? 'no' : (conds.every(c=>c.ok===true) ? 'yes' : 'maybe') };
+}
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+function renderAll(){
+  const u = state.user;
+  // header chip
+  document.getElementById('chipInfo').textContent = `${u.address.split(' ').slice(0,2).join(' ')} · ${u.type}`;
+  document.getElementById('chipAvatar').textContent = u.name.slice(0,2);
+  renderDashboard();
+  renderSupport();
+  document.getElementById('supProfile').textContent = `만 ${u.age}세 · ${u.region} · ${u.type} · 연소득 ${fmtMan(u.income)}원`;
+  document.getElementById('diagDate').textContent = todayStr().replace(/-/g,'.');
+  document.getElementById('diagTitle').textContent = u.address || '등기부등본 AI 진단';
+  if(state.diag) paintDiagnosis(state.diag);
+}
+
+function renderDashboard(){
+  const u = state.user;
+  // contract card
+  document.getElementById('ctName').textContent = u.address;
+  document.getElementById('ctTags').innerHTML =
+    `<span class="tag">${u.type} ${fmtMan(u.deposit)}</span>` +
+    (u.type==='월세'&&u.rent?`<span class="tag">월 ${Number(u.rent).toLocaleString()}만</span>`:'') +
+    `<span class="tag">입주 ${u.moveDate? u.moveDate.slice(5).replace('-','/') : '미정'}</span>`;
+  const done = state.todos.filter(t=>t.done).length, total = state.todos.length;
+  document.getElementById('ctProgress').textContent = `${done} / ${total} 완료`;
+  document.getElementById('ctBar').style.width = (done/total*100)+'%';
+
+  // steps
+  const stage = Number(u.stage);
+  const stepDefs = [
+    {t:'계약 전 점검', d:'등기부등본 · 시세 · 집주인 확인'},
+    {t:'계약 중', d:'특약 검토 · 잔금 · 보증보험'},
+    {t:'계약 후', d:'전입신고 · 확정일자 · 이사'},
+  ];
+  document.getElementById('stepList').innerHTML = stepDefs.map((s,i)=>{
+    const cls = i<stage?'done':(i===stage?'now':'');
+    const dot = i<stage?'✓':(i+1);
+    const badge = i===stage?'<span class="badge blue">진행 중</span>':'';
+    return `<div class="step ${cls}"><div class="step-dot">${dot}</div><div class="step-body"><b>${s.t} ${badge}</b><span>${s.d}</span></div></div>`;
+  }).join('');
+
+  // dday head
+  const stageNames = ['계약 전','계약 중','계약 후'];
+  const dLeft = u.moveDate ? daysUntil(u.moveDate) : null;
+  const urgentCnt = state.todos.filter(t=>!t.done && t.urgent).length;
+  let title, sub;
+  if(dLeft !== null && dLeft >= 0){
+    title = `${u.name}님, ${stage===2?'입주':'잔금일'}까지 <em>D-${dLeft}</em>`;
+    sub = `이번 주에 처리해야 할 일 ${urgentCnt}건이 있어요. 놓치면 보증금 보호에 영향이 있어요.`;
+  } else if(dLeft !== null && dLeft < 0){
+    title = `${u.name}님, 입주 <em>${-dLeft}일차</em>예요`;
+    sub = urgentCnt? `아직 처리하지 않은 중요 항목이 ${urgentCnt}건 있어요. 지금 바로 확인하세요.` : `중요 항목을 모두 완료했어요. 안정적인 주거 생활을 응원해요! 🎉`;
+  } else {
+    title = `${u.name}님, 환영해요 👋`;
+    sub = `${stageNames[stage]} 단계 체크리스트를 준비했어요. 하나씩 완료해 보세요.`;
+  }
+  document.getElementById('ddayTitle').innerHTML = title;
+  document.getElementById('ddaySub').textContent = sub;
+
+  // alert banner
+  const banner = document.getElementById('alertBanner');
+  if(state.diag && state.diag.score < 80 && stage < 2){
+    banner.style.display = 'flex';
+    const ratio = state.diag.ratio;
+    document.getElementById('alertDesc').textContent =
+      `등기부등본 진단에서 (보증금+선순위채권)이 주택가액의 ${ratio}%로 확인됐어요. ${ratio>90?'HUG 가입이 거절될 수 있어':'가입 조건을 미리 확인해야 하고'}, 잔금일에 근저당 말소 조건 특약이 필요할 수 있어요.`;
+  } else if(u.type==='전세' && !state.diag && stage < 2){
+    banner.style.display = 'flex';
+    document.getElementById('alertDesc').textContent =
+      `아직 등기부등본 AI 진단을 하지 않았어요. 근저당·압류 여부에 따라 보증보험 가입이 거절될 수 있으니, 잔금 전에 꼭 진단해 보세요.`;
+  } else banner.style.display = 'none';
+
+  renderTodos();
+  renderMiniSupport();
+  if(!state.chat.length) seedChat();
+}
+
+let todoFilter = 'week';
+function renderTodos(){
+  const u = state.user, stage = Number(u.stage);
+  let list = state.todos;
+  if(todoFilter==='week'){
+    list = list.filter(t => !t.done && (t.phase===stage || (t.due && daysUntil(t.due)<=7)));
+    if(!list.length) list = state.todos.filter(t=>!t.done).slice(0,4);
+  }
+  else if(todoFilter==='done') list = list.filter(t=>t.done);
+  const el = document.getElementById('todoList');
+  if(!list.length){ el.innerHTML = `<div class="empty-note">${todoFilter==='done'?'아직 완료한 항목이 없어요':'남은 할 일이 없어요 🎉'}</div>`; return; }
+  el.innerHTML = list.map(t=>{
+    let badge='';
+    if(t.done) badge = `<span class="badge green">완료</span>`;
+    else if(t.due){ const d=daysUntil(t.due); badge = `<span class="badge amber">${d>0?`D-${d} · `:''}${t.id==='t9'?'잔금일':t.id==='t11'?'입주일 '+t.due.slice(5).replace('-','/'):t.due.slice(5).replace('-','/')}</span>`; }
+    else if(t.urgent) badge = `<span class="badge red">조건 확인 필요</span>`;
+    return `<div class="todo ${t.done?'done':''}">
+      <div class="checkbox" onclick="toggleTodo('${t.id}')">${t.done?'✓':''}</div>
+      <div class="todo-main">
+        <div class="todo-title">${t.title}</div>
+        <div class="todo-desc">${t.desc}</div>
+        <span class="todo-ask" onclick="askAI('${t.title.replace(/'/g,'')}, 어떻게 하는 거야?')">💬 AI에게 물어보기</span>
+      </div>
+      <div class="todo-badge">${badge}</div>
+    </div>`;
+  }).join('');
+}
+function toggleTodo(id){
+  const t = state.todos.find(t=>t.id===id);
+  t.done = !t.done; save(); renderDashboard();
+  if(t.done) toast('✓ 완료! 잘하고 있어요');
+}
+document.getElementById('todoTabs').addEventListener('click', e=>{
+  if(e.target.dataset.f){ todoFilter = e.target.dataset.f;
+    document.querySelectorAll('#todoTabs button').forEach(b=>b.classList.toggle('active', b.dataset.f===todoFilter));
+    renderTodos(); }
+});
+
+function renderMiniSupport(){
+  const u = state.user;
+  const eligible = SUPPORTS.map(s=>({s, e:supportEligibility(s,u)})).filter(x=>x.e.status!=='no').slice(0,2);
+  document.getElementById('miniSupport').innerHTML = eligible.map(({s,e})=>
+    `<div class="sup-item" onclick="switchView('support')">
+      <b>${s.name}</b><span>${s.amount} · ${e.status==='yes'?'대상 조건 충족':'조건 일부 확인 필요'}</span>
+    </div>`).join('') || '<div class="empty-note" style="padding:10px 0">조건에 맞는 지원을 찾는 중…</div>';
+}
+
+/* ---------- support view ---------- */
+let supFilter='all';
+function renderSupport(){
+  const u = state.user;
+  const grid = document.getElementById('supGrid');
+  let items = SUPPORTS.map(s=>({s, e:supportEligibility(s,u)}));
+  if(supFilter==='eligible') items = items.filter(x=>x.e.status==='yes');
+  else if(supFilter!=='all') items = items.filter(x=>x.s.cat===supFilter);
+  grid.innerHTML = items.map(({s,e})=>{
+    const statusBadge = e.status==='yes'?'<span class="badge green">자격 충족</span>':e.status==='no'?'<span class="badge gray">대상 아님</span>':'<span class="badge amber">확인 필요</span>';
+    const catName = {loan:'대출',cash:'현금 지원',insurance:'보증보험'}[s.cat];
+    return `<div class="card sup-card">
+      <div class="top"><h3>${s.name}</h3>${statusBadge}</div>
+      <div><span class="badge blue">${catName}</span> <span class="amount">${s.amount}</span></div>
+      <p>${s.desc}</p>
+      <div class="cond-list">${e.conds.map(c=>{
+        const cls = c.ok===true?'ok':c.ok===false?'no':'unk';
+        const ic = c.ok===true?'✓':c.ok===false?'✕':'?';
+        return `<div class="cond ${cls}"><span class="ic">${ic}</span>${c.label}</div>`;}).join('')}
+      </div>
+      <div class="foot"><span class="agency">${s.agency}</span>
+        <button class="btn btn-ghost btn-sm" onclick="askAI('${s.name} 신청 방법 알려줘')">💬 AI에게 신청 방법 묻기</button>
+      </div>
+    </div>`;
+  }).join('') || '<div class="empty-note">해당하는 제도가 없어요</div>';
+}
+document.getElementById('supFilters').addEventListener('click', e=>{
+  if(e.target.dataset.f){ supFilter=e.target.dataset.f;
+    document.querySelectorAll('#supFilters button').forEach(b=>b.classList.toggle('active',b.dataset.f===supFilter));
+    renderSupport(); }
+});
+
+/* =========================================================
+   DIAGNOSIS
+   ========================================================= */
+function loadSampleDiag(){
+  document.getElementById('dPrice').value = 32000;
+  document.getElementById('dDeposit').value = state.user.deposit || 18000;
+  document.getElementById('dMortgage').value = 12000;
+  document.getElementById('dOwnerMatch').checked = true;
+  ['dSeizure','dTrust','dIllegal','dRecentOwner'].forEach(id=>document.getElementById(id).checked=false);
+  toast('예시 데이터를 불러왔어요 — 진단하기를 눌러보세요');
+}
+
+function runDiagnosis(){
+  const price = Number(document.getElementById('dPrice').value);
+  const deposit = Number(document.getElementById('dDeposit').value);
+  const mortgage = Number(document.getElementById('dMortgage').value)||0;
+  if(!price || !deposit){ toast('주택 가액과 보증금을 입력해 주세요'); return; }
+  const flags = {
+    ownerMatch: document.getElementById('dOwnerMatch').checked,
+    seizure: document.getElementById('dSeizure').checked,
+    trust: document.getElementById('dTrust').checked,
+    illegal: document.getElementById('dIllegal').checked,
+    recentOwner: document.getElementById('dRecentOwner').checked,
+  };
+  const ratio = Math.round((deposit+mortgage)/price*100);
+  let score = 100;
+  const findings = [], clauses = [];
+
+  // ratio analysis
+  if(ratio > 90){
+    score -= 25;
+    findings.push({lv:'danger', t:`보증금+선순위 채권이 주택가액의 ${ratio}%`, d:'경매 시 보증금 전액 회수가 어려울 수 있어요. 근저당 말소가 전제되어야 해요.', act:'말소 특약 문구 받기'});
+  } else if(ratio > 70){
+    score -= 15;
+    findings.push({lv:'warn', t:`보증금+선순위 채권이 주택가액의 ${ratio}%`, d:'여유가 크지 않아요. 근저당 말소 또는 감액 조건이 있으면 안전해져요.', act:'말소 특약 문구 받기'});
+  } else {
+    findings.push({lv:'safe', t:`보증금+선순위 채권이 주택가액의 ${ratio}%`, d:'담보 여력이 충분한 편이에요.'});
+  }
+
+  if(mortgage > 0){
+    score -= 5;
+    findings.push({lv:'warn', t:`근저당권 채권최고액 ${fmtMan(mortgage)}원`, d:'잔금과 동시 말소 조건이면 문제없어요. 특약으로 반드시 명시하세요.'});
+    clauses.push(`임대인은 ${state.user.moveDate? state.user.moveDate.replace(/-/g,'.')+'.' : '잔금일'} 잔금 수령과 동시에 본 부동산에 설정된 근저당권(채권최고액 금 ${(mortgage*10000).toLocaleString()}원)을 말소하며, 미이행 시 본 계약은 무효로 하고 임대인은 수령한 계약금 및 잔금을 즉시 반환한다.`);
+  } else {
+    findings.push({lv:'safe', t:'근저당권 없음', d:'을구에 담보 설정이 없어 깨끗한 상태예요.'});
+  }
+
+  if(!flags.ownerMatch){
+    score -= 30;
+    findings.push({lv:'danger', t:'등기부 소유자와 임대인 불일치', d:'가짜 임대인·이중계약 위험이 있어요. 위임장·인감증명서 없이는 절대 계약하지 마세요.'});
+    clauses.push(`본 계약은 등기부등본상 소유자 본인(또는 적법한 위임장과 인감증명서를 갖춘 대리인)과 체결하며, 계약금 및 잔금은 소유자 명의 계좌로만 지급한다.`);
+  } else {
+    findings.push({lv:'safe', t:'소유자와 임대인 일치', d:'계약 상대방 확인이 완료됐어요.'});
+  }
+
+  if(flags.seizure){
+    score -= 30;
+    findings.push({lv:'danger', t:'압류·가압류·경매개시 기록 있음', d:'집주인의 채무 문제가 진행 중이에요. 이 상태로는 계약을 권하지 않아요.'});
+  }
+  if(flags.trust){
+    score -= 25;
+    findings.push({lv:'danger', t:'신탁등기 상태', d:'임대 권한이 신탁회사에 있어요. 신탁원부를 발급받아 임대 동의를 확인하지 않으면 계약이 무효가 될 수 있어요.'});
+    clauses.push(`본 부동산은 신탁등기 상태이므로, 임대인은 계약 체결 전 신탁회사의 임대차 동의서를 임차인에게 제공하며, 미제공 시 계약은 무효로 한다.`);
+  }
+  if(flags.illegal){
+    score -= 12;
+    findings.push({lv:'warn', t:'위반건축물 표시 있음', d:'전세보증보험(HUG) 가입이 거절돼요. 전세라면 다른 집을 권해요.'});
+  }
+  if(flags.recentOwner){
+    score -= 8;
+    findings.push({lv:'warn', t:'최근 3개월 내 소유권 이전', d:'갭투자 직후 매물일 수 있어요. 임대인의 자금 상황과 국세 완납 증명을 요청해 보세요.'});
+  }
+  if(!flags.seizure && !flags.trust && !flags.illegal){
+    findings.push({lv:'safe', t:'압류·가압류 없음 · 신탁·위반건축물 아님', d:'3개 항목 모두 이상 없어요.'});
+  }
+
+  // HUG check (전세)
+  if(state.user.type==='전세'){
+    const hugOk = ratio <= 90 && !flags.illegal && deposit <= 70000;
+    if(hugOk){
+      findings.push({lv:'safe', t:'전세보증보험(HUG) 가입 가능 범위', d:'현재 조건 기준으로 가입 요건을 충족해요. 잔금+전입 후 바로 신청하세요.'});
+    } else {
+      score -= 5;
+      findings.push({lv:'warn', t:'HUG 보증보험 가입 조건 초과 가능', d:`${flags.illegal?'위반건축물은 가입이 불가해요.':' 현재 기준(보증금+채권최고액이 주택가액의 '+ratio+'%)으로는 가입 거절 가능성이 있어요. 근저당 말소가 전제되어야 해요.'}`});
+    }
+  }
+
+  // 공통 안전 특약
+  clauses.push(`임대인은 잔금 지급일 다음 날까지 본 부동산에 저당권 등 새로운 담보권을 설정하지 않으며, 위반 시 임차인은 계약을 해제하고 지급한 금액 전부의 반환을 청구할 수 있다.`);
+  if(state.user.type==='전세'){
+    clauses.push(`임대인은 임차인의 전세보증금 반환보증(HUG 등) 가입에 필요한 절차에 협조하며, 임대인 사유로 가입이 거절될 경우 본 계약을 해제할 수 있고 임대인은 수령한 금원을 즉시 반환한다.`);
+  }
+
+  score = Math.max(5, Math.min(98, score));
+  const cnt = {safe:0, warn:0, danger:0};
+  findings.forEach(f=>cnt[f.lv]++);
+
+  state.diag = { score, ratio, price, deposit, mortgage, flags, findings, clauses, cnt, date: todayStr() };
+  save();
+  paintDiagnosis(state.diag);
+  renderDashboard();
+  // mark AI diagnosis todo done
+  const t1 = state.todos.find(t=>t.id==='t1');
+  if(t1 && !t1.done){ t1.done = true; save(); renderDashboard(); }
+  document.getElementById('diagResult').scrollIntoView({behavior:'smooth', block:'start'});
+  toast('AI 진단이 완료됐어요');
+}
+
+function paintDiagnosis(d){
+  document.getElementById('diagResult').style.display='block';
+  // gauge
+  const arc = document.getElementById('gaugeArc');
+  const C = 295.3;
+  arc.style.strokeDashoffset = C * (1 - d.score/100);
+  const color = d.score>=80?'#22c55e':d.score>=55?'#f59e0b':'#ef4444';
+  arc.style.stroke = color;
+  document.getElementById('scoreNum').textContent = d.score;
+  const grade = d.score>=80?['안전 — 진행 가능','기본 확인 사항을 지키면 안전하게 계약할 수 있어요.']
+    : d.score>=55?['주의 — 조건부 진행 가능','근저당 말소 특약과 보증보험 가입이 확보되면 안전 등급으로 올라가요.']
+    : ['위험 — 재검토 권장','현재 상태로는 보증금 손실 위험이 커요. 계약 전 전문가 상담을 권해요.'];
+  document.getElementById('scoreGrade').textContent = grade[0];
+  document.getElementById('scoreGrade').style.color = color;
+  document.getElementById('scoreDesc').textContent = grade[1];
+  document.getElementById('cntSafe').textContent = d.cnt.safe;
+  document.getElementById('cntWarn').textContent = d.cnt.warn;
+  document.getElementById('cntDanger').textContent = d.cnt.danger;
+
+  const order = {danger:0, warn:1, safe:2};
+  document.getElementById('findingList').innerHTML = [...d.findings].sort((a,b)=>order[a.lv]-order[b.lv]).map(f=>{
+    const badge = f.lv==='danger'?'<span class="badge red">위험</span>':f.lv==='warn'?'<span class="badge amber">주의</span>':'<span class="badge green">안전</span>';
+    return `<div class="finding">${badge}<div><b>${f.t}</b><p>${f.d}</p>${f.act?`<a onclick="document.getElementById('clauseCard').scrollIntoView({behavior:'smooth'})">→ ${f.act}</a>`:''}</div></div>`;
+  }).join('');
+
+  const cc = document.getElementById('clauseCard');
+  if(d.clauses.length){
+    cc.style.display='block';
+    document.getElementById('clauseList').innerHTML = d.clauses.map((c,i)=>
+      `<div class="clause-box">"${c}"</div>
+       <div class="clause-actions" style="margin-bottom:16px">
+         <button class="btn btn-primary btn-sm" onclick="copyText(this.closest('div').previousElementSibling.textContent)">복사하기</button>
+         <button class="btn btn-ghost btn-sm" onclick="toast('중개사 전달용 메시지가 준비됐어요 (프로토타입)')">중개사에게 보내기</button>
+       </div>`).join('');
+  } else cc.style.display='none';
+
+  paintDocPreview(d);
+}
+
+function paintDocPreview(d){
+  const u = state.user;
+  document.getElementById('docPreview').style.display='block';
+  document.getElementById('docAddr').textContent = `[건물] ${u.region} ${u.address}`;
+  const gapgu = [];
+  gapgu.push({no:2, name:'소유권이전', text:`소유자 박○수 721103-******* ${u.region} …`,
+    cls: d.flags.ownerMatch?'safe':'danger', badge: d.flags.ownerMatch?['green','안전 · 임대인 일치']:['red','위험 · 임대인 불일치']});
+  if(d.flags.seizure) gapgu.push({no:3, name:'가압류', text:'청구금액 금 34,000,000원 채권자 ○○카드', cls:'danger', badge:['red','위험 · 압류 기록']});
+  if(d.flags.trust) gapgu.push({no:4, name:'신탁', text:'수탁자 ○○부동산신탁 주식회사', cls:'danger', badge:['red','위험 · 신탁등기']});
+  document.getElementById('docGapgu').innerHTML = gapgu.map(r=>
+    `<div class="doc-row"><span class="no">${r.no}</span><span class="hl ${r.cls}"><b>${r.name}</b> — ${r.text}</span><span class="badge ${r.badge[0]}">${r.badge[1]}</span></div>`).join('');
+  const eulgu = [];
+  if(d.mortgage>0) eulgu.push({no:1, name:'근저당권설정', text:`채권최고액 금 ${(d.mortgage*10000).toLocaleString()}원 근저당권자 ○○은행`, cls: d.ratio>90?'danger':'warn', badge: d.ratio>90?['red','위험 · 선순위 채권']:['amber','주의 · 선순위 채권']});
+  eulgu.push({no:eulgu.length+1, name:'전세권설정', text:'말소사항 — 해지', cls:'gray', badge:['gray','말소됨']});
+  document.getElementById('docEulgu').innerHTML = eulgu.map(r=>
+    `<div class="doc-row"><span class="no">${r.no}</span><span class="hl ${r.cls}"><b>${r.name}</b> — ${r.text}</span><span class="badge ${r.badge[0]}">${r.badge[1]}</span></div>`).join('');
+}
+
+function copyText(txt){
+  navigator.clipboard.writeText(txt.replace(/^"|"$/g,'')).then(()=>toast('특약 문구가 복사됐어요 📋'))
+    .catch(()=>toast('복사에 실패했어요 — 직접 선택해 주세요'));
+}
+function shareReport(){
+  const d = state.diag;
+  if(!d){ toast('먼저 진단을 실행해 주세요'); return; }
+  const txt = `[집지킴 AI 진단 리포트]\n${state.user.address}\n종합 안전도 ${d.score}/100\n안전 ${d.cnt.safe} · 주의 ${d.cnt.warn} · 위험 ${d.cnt.danger}\n(보증금+선순위)/시세 = ${d.ratio}%`;
+  navigator.clipboard.writeText(txt).then(()=>toast('리포트 요약이 복사됐어요 — 가족·친구에게 공유하세요'));
+}
+
+/* =========================================================
+   AI CHAT (rule-based, context-aware)
+   ========================================================= */
+const QUICK_QS = ['확정일자가 뭐야?','근저당 있으면 위험해?','특약 문구 만들어줘','전세보증보험 어떻게 가입해?','전입신고 안 하면 어떻게 돼?'];
+
+function seedChat(){
+  const u = state.user;
+  let greet;
+  if(state.diag){
+    greet = `${u.name}님, 등기부등본 진단에서 종합 안전도 ${state.diag.score}점이 나왔어요. ${state.diag.cnt.danger?`위험 항목 ${state.diag.cnt.danger}건은 잔금 전에 꼭 해결해야 해요.`:'큰 위험은 없지만 특약은 꼭 챙기세요.'} 궁금한 점을 물어보세요!`;
+  } else {
+    const d = u.moveDate? daysUntil(u.moveDate) : null;
+    greet = `${u.name}님, 안녕하세요! ${d!==null&&d>=0?`잔금일까지 D-${d}네요. `:''}저는 ${u.name}님의 계약 정보(${u.type} ${fmtMan(u.deposit)})를 알고 있는 계약 비서예요. 등기부등본, 특약, 보증보험… 뭐든 물어보세요.`;
+  }
+  pushMsg('ai', greet, false);
+  renderQuickQs();
+}
+function renderQuickQs(){
+  document.getElementById('quickQs').innerHTML = QUICK_QS.map(q=>`<button onclick="askAI('${q}')">${q}</button>`).join('');
+}
+function pushMsg(role, text, saveIt=true, extra=''){
+  const body = document.getElementById('chatBody');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = escapeHtml(text) + extra;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+  if(saveIt !== false){ state.chat.push({role, text}); save(); }
+}
+function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
+
+function sendChat(){
+  const inp = document.getElementById('chatInput');
+  const q = inp.value.trim();
+  if(!q) return;
+  inp.value='';
+  askAI(q);
+}
+function askAI(q){
+  switchView('dashboard');
+  pushMsg('user', q);
+  const body = document.getElementById('chatBody');
+  const typing = document.createElement('div');
+  typing.className='msg ai'; typing.innerHTML='<span class="typing"><i></i><i></i><i></i></span>';
+  body.appendChild(typing); body.scrollTop = body.scrollHeight;
+  setTimeout(()=>{
+    typing.remove();
+    const {text, extra} = aiAnswer(q);
+    pushMsg('ai', text, true, extra);
+  }, 700 + Math.random()*500);
+}
+
+function aiAnswer(q){
+  const u = state.user, d = state.diag;
+  const has = (...ks) => ks.some(k=>q.includes(k));
+  let text='', extra='';
+
+  if(has('확정일자')){
+    text = `확정일자는 계약서에 '이 날짜에 계약이 존재했다'는 공적인 도장을 받는 거예요.\n\n📌 왜 중요할까요?\n집이 경매로 넘어가도, 확정일자 + 전입신고를 해두면 후순위 채권자보다 먼저 보증금을 배당받는 '우선변제권'이 생겨요.\n\n📍 받는 방법 (5분이면 끝!)\n1. 정부24 온라인 or 주민센터 방문\n2. 계약서 원본 지참 (수수료 600원)\n3. 이사 당일 전입신고와 함께 처리하는 게 가장 좋아요${u.moveDate?`\n\n${u.name}님의 입주일 ${u.moveDate.slice(5).replace('-','/')}에 맞춰 할 일 목록에 넣어뒀어요 ✓`:''}`;
+  }
+  else if(has('근저당','저당','채권최고')){
+    if(d && d.mortgage>0){
+      text = `${u.name}님 집에는 근저당권 ${fmtMan(d.mortgage)}원(채권최고액)이 설정되어 있어요.\n\n현재 (보증금+채권최고액) ÷ 주택가액 = ${d.ratio}%${d.ratio>90?'로 위험 수준이에요. 경매 시 보증금 전액 회수가 어려울 수 있어요.':d.ratio>70?'로 주의가 필요해요.':'로 여유가 있는 편이에요.'}\n\n✅ 해결 방법: "잔금과 동시에 근저당 말소" 특약을 넣으면 돼요. 문구를 준비했어요.`;
+      extra = clauseExtra(d.clauses[0]);
+    } else {
+      text = `근저당권은 집주인이 집을 담보로 받은 대출이에요. 등기부등본 '을구'에서 확인할 수 있어요.\n\n⚠️ 왜 위험할까요?\n집이 경매되면 은행(근저당권자)이 먼저 돈을 가져가고, 남은 금액에서 보증금을 받아요.\n\n🧮 3초 판별법:\n(내 보증금 + 채권최고액) ÷ 집 시세\n· 70% 이하 = 안전 / 70~90% = 주의 / 90% 초과 = 위험\n\nAI 진단 탭에서 숫자만 넣으면 자동으로 계산해 드려요!`;
+      extra = `<div class="msg-actions"><button onclick="switchView('diagnosis')">AI 진단 바로가기 →</button></div>`;
+    }
+  }
+  else if(has('특약')){
+    if(d && d.clauses.length){
+      text = `네, ${u.name}님 계약 상황에 맞춘 특약 문구예요. 계약서에 바로 쓸 수 있어요.`;
+      extra = d.clauses.slice(0,2).map(c=>clauseExtra(c)).join('');
+    } else {
+      text = `특약은 계약서 뒤에 넣는 맞춤 안전장치예요. 기본으로 꼭 넣어야 할 문구를 드릴게요.\n\n먼저 AI 진단을 하면 ${u.name}님 집 상황(근저당 금액, 잔금일)에 맞춘 문구로 만들어 드려요!`;
+      extra = clauseExtra(`임대인은 잔금 지급일 다음 날까지 본 부동산에 새로운 담보권을 설정하지 않으며, 위반 시 임차인은 계약을 해제하고 지급한 금액 전부의 반환을 청구할 수 있다.`)
+        + `<div class="msg-actions"><button onclick="switchView('diagnosis')">내 상황 맞춤 진단 →</button></div>`;
+    }
+  }
+  else if(has('보증보험','HUG','허그','보증금 반환','반환보증')){
+    const hugIssue = d && (d.ratio>90 || d.flags.illegal);
+    text = `전세보증금 반환보증(HUG)은 집주인이 보증금을 안 돌려줄 때 HUG가 대신 돌려주는 보험이에요. ${u.type==='전세'?'전세라면 사실상 필수!':''}\n\n💰 비용: 보증금의 연 0.11~0.15% (${u.deposit?`${u.name}님 기준 약 연 ${Math.round(u.deposit*0.0013*10000/10000)}만원 수준`:''})\n\n📍 가입 조건:\n· 잔금 지급 + 전입신고 완료 후 신청\n· 계약기간 1/2 경과 전까지\n· (보증금+선순위채권) ≤ 주택가액의 90%\n\n📱 신청: 네이버부동산·카카오페이 앱 또는 HUG 지사${hugIssue?`\n\n⚠️ ${u.name}님은 현재 조건(${d.ratio}%)으로는 가입이 거절될 수 있어요. 잔금일에 근저당을 말소하는 특약이 꼭 필요해요!`:''}`;
+    if(hugIssue) extra = clauseExtra(d.clauses[0]);
+  }
+  else if(has('전입신고','전입 신고','대항력')){
+    text = `전입신고는 "저 이 집에 살아요"라고 국가에 알리는 절차예요.\n\n📌 이사 당일에 꼭 하세요!\n전입신고 + 이사(점유)를 하면 다음 날 0시부터 '대항력'이 생겨요. 집주인이 바뀌어도 계약 기간 동안 살 수 있고, 보증금도 새 집주인에게 요구할 수 있는 권리예요.\n\n⚠️ 안 하면?\n· 대항력 없음 → 집이 팔리면 쫓겨날 수 있어요\n· 우선변제권 없음 → 경매 시 보증금 배당 순위에서 밀려요\n· 전세보증보험 가입 불가\n\n📍 방법: 정부24 온라인 또는 주민센터, 확정일자와 같이 받는 게 국룰이에요.`;
+  }
+  else if(has('등기부','등본')){
+    text = `등기부등본은 집의 신분증이에요. 계약 전 반드시 직접 떼어보세요.\n\n📍 발급: 인터넷등기소(iros.go.kr) · 700원 · 누구나 즉시 열람\n\n👀 봐야 할 곳:\n· 갑구 — 소유자가 임대인과 같은 사람인지, 압류·가압류·신탁이 없는지\n· 을구 — 근저당권(대출)이 얼마나 잡혀 있는지\n\n확인한 내용을 AI 진단 탭에 입력하면 위험도를 점수로 알려드려요!`;
+    extra = `<div class="msg-actions"><button onclick="switchView('diagnosis')">AI 진단 바로가기 →</button></div>`;
+  }
+  else if(has('전세사기','사기','깡통')){
+    text = `전세사기 대표 유형과 예방법이에요.\n\n1️⃣ 깡통전세 — 보증금+대출이 집값의 90% 초과 → 시세 대비 비율 확인\n2️⃣ 가짜 임대인 — 소유자·신분증 대조, 소유자 계좌로만 입금\n3️⃣ 신탁등기 — 신탁회사 동의 없는 계약은 무효 위험\n4️⃣ 잔금일 몰래 대출 — 잔금일 아침 등기부 재열람 + 특약\n5️⃣ 다가구 선순위 보증금 — 확정일자 부여 현황 열람\n\n가이드 탭에 더 자세한 설명이 있어요. ${d?`${u.name}님 집은 현재 안전도 ${d.score}점이에요.`:'그리고 무엇보다, AI 진단부터 꼭 해보세요!'}`;
+    extra = `<div class="msg-actions"><button onclick="switchView('guide')">가이드 보기</button><button onclick="switchView('diagnosis')">AI 진단</button></div>`;
+  }
+  else if(has('대출','버팀목','중기청','디딤돌')){
+    const el = SUPPORTS.filter(s=>s.cat==='loan').map(s=>({s,e:supportEligibility(s,u)}));
+    const good = el.filter(x=>x.e.status!=='no');
+    text = `${u.name}님(만 ${u.age}세, 연소득 ${fmtMan(u.income)}원, ${u.type}) 조건으로 검토한 대출이에요.\n\n${good.map(({s,e})=>`· ${s.name} — ${s.amount} ${e.status==='yes'?'✅ 자격 충족':'⚠️ 일부 조건 확인 필요'}`).join('\n')}\n\n${good.length?'지원 제도 탭에서 조건별 상세 판정을 확인하세요!':'아쉽게도 현재 조건에 딱 맞는 대출을 못 찾았어요. 조건을 다시 확인해 볼까요?'}`;
+    extra = `<div class="msg-actions"><button onclick="switchView('support')">지원 제도 전체 보기 →</button></div>`;
+  }
+  else if(has('월세 지원','월세지원','이사비','지원금','지원 제도','정책')){
+    const good = SUPPORTS.map(s=>({s,e:supportEligibility(s,u)})).filter(x=>x.e.status!=='no');
+    text = `${u.name}님이 받을 수 있는 지원을 찾아봤어요.\n\n${good.slice(0,4).map(({s,e})=>`· ${s.name} — ${s.amount} ${e.status==='yes'?'✅':'⚠️ 확인 필요'}`).join('\n')}\n\n각 제도의 자격 조건별 충족 여부는 지원 제도 탭에서 확인할 수 있어요.`;
+    extra = `<div class="msg-actions"><button onclick="switchView('support')">지원 제도 보기 →</button></div>`;
+  }
+  else if(has('잔금')){
+    const dd = u.moveDate? daysUntil(u.moveDate): null;
+    text = `잔금일${dd!==null&&dd>=0?`(D-${dd})`:''} 체크리스트예요.\n\n☀️ 잔금일 아침\n1. 등기부등본 재열람 (700원) — 새 근저당·가압류가 생기지 않았는지 최종 확인\n2. 이상 없으면 임대인 명의 계좌로 잔금 이체\n\n🏠 이사 후 당일\n3. 전입신고 + 확정일자 (정부24/주민센터)\n4. 집 상태 사진 촬영\n\n${u.type==='전세'?'📄 이후 전세보증보험 가입까지 하면 완벽해요!':''}\n\n잔금 직전 등기부 재열람은 '잔금일 몰래 대출' 사기를 막는 가장 확실한 방법이에요.`;
+  }
+  else if(has('중개','수수료','복비')){
+    text = `중개보수(복비)는 법정 상한이 정해져 있어요.\n\n${u.type==='전세'?`전세 ${fmtMan(u.deposit)}원 기준:\n· 거래금액 1~6억 구간 상한요율 0.4% → 최대 약 ${Math.round(u.deposit*0.004)}만원`:`월세는 (보증금 + 월세×100)으로 환산해 계산해요.`}\n\n💡 팁:\n· 상한요율일 뿐, 협의로 낮출 수 있어요\n· 현금영수증 발급 의무가 있어요\n· 등록된 중개사인지 국가공간정보포털에서 확인하세요`;
+  }
+  else if(has('고마워','감사','좋아','최고')){
+    text = `도움이 됐다니 기뻐요! 😊 ${u.name}님의 안전한 계약을 끝까지 챙길게요. 궁금한 게 생기면 언제든 물어보세요.`;
+  }
+  else {
+    text = `좋은 질문이에요! 제가 잘 아는 주제들로 안내해 드릴게요.\n\n· "확정일자가 뭐야?" — 용어 설명\n· "근저당 있으면 위험해?" — 내 등기부 분석\n· "특약 문구 만들어줘" — 맞춤 특약 생성\n· "받을 수 있는 지원금 알려줘" — 맞춤 정책 추천\n· "잔금일에 뭐 해야 해?" — 절차 안내\n\n또는 가이드 탭에서 전세사기 유형과 용어 사전을 볼 수 있어요.`;
+  }
+  return {text, extra};
+}
+function clauseExtra(c){
+  return `<div class="clause">"${escapeHtml(c)}"</div><div class="msg-actions"><button onclick="copyText(this.parentElement.previousElementSibling.textContent)">복사하기</button><button onclick="toast('중개사 전달용으로 준비했어요 (프로토타입)')">중개사에게 보내기</button></div>`;
+}
+
+/* =========================================================
+   NAV / ONBOARDING
+   ========================================================= */
+function switchView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
+  window.scrollTo({top:0});
+}
+document.querySelector('nav').addEventListener('click', e=>{
+  if(e.target.dataset.view) switchView(e.target.dataset.view);
+});
+
+document.getElementById('fType').addEventListener('change', e=>{
+  document.getElementById('fRentWrap').style.display = e.target.value==='월세'?'flex':'none';
+});
+
+function openOnboarding(){
+  const o = document.getElementById('onboardOverlay');
+  o.style.display='flex';
+  if(state){
+    const u = state.user;
+    fName.value=u.name; fAge.value=u.age; fRegion.value=u.region; fType.value=u.type;
+    fDeposit.value=u.deposit; fRent.value=u.rent||''; fIncome.value=u.income;
+    fStage.value=u.stage; fMoveDate.value=u.moveDate||''; fAddress.value=u.address;
+    document.getElementById('fRentWrap').style.display = u.type==='월세'?'flex':'none';
+  }
+}
+function submitOnboarding(){
+  const name = fName.value.trim(), age = Number(fAge.value), deposit = Number(fDeposit.value);
+  if(!name || !age || !deposit){ toast('이름, 나이, 보증금은 꼭 입력해 주세요'); return; }
+  const user = {
+    name, age, region: fRegion.value, type: fType.value,
+    deposit, rent: Number(fRent.value)||0, income: Number(fIncome.value)||0,
+    stage: fStage.value, moveDate: fMoveDate.value || null,
+    address: fAddress.value.trim() || `${fRegion.value} 나의 집`,
+  };
+  const keepTodos = state && JSON.stringify(state.user) !== JSON.stringify(user);
+  state = state && !keepTodos ? state : { user, todos: buildTodos(user), diag: state?state.diag:null, chat: [] };
+  state.user = user;
+  save();
+  document.getElementById('onboardOverlay').style.display='none';
+  document.getElementById('chatBody').innerHTML='';
+  state.chat = [];
+  renderAll();
+  toast(`${name}님 맞춤 대시보드가 준비됐어요 🏠`);
+}
+function loadDemo(){
+  const move = new Date(Date.now() + 9*86400000).toISOString().slice(0,10);
+  const user = { name:'지은', age:26, region:'서울', type:'전세', deposit:18000, rent:0, income:3200,
+    stage:'1', moveDate:move, address:'마포구 성산동 어울림빌 302호' };
+  state = defaultState(user);
+  save();
+  document.getElementById('onboardOverlay').style.display='none';
+  renderAll();
+  // preload demo diagnosis
+  loadSampleDiag();
+  runDiagnosis();
+  switchView('dashboard');
+  toast('지은님 예시 프로필로 시작해요 — 내 정보 수정에서 바꿀 수 있어요');
+}
+
+/* ---------- boot ---------- */
+(function(){
+  state = load();
+  if(state && state.user){
+    renderAll();
+    // restore chat
+    const body = document.getElementById('chatBody');
+    if(state.chat.length){
+      body.innerHTML='';
+      state.chat.forEach(m=>pushMsg(m.role, m.text, false));
+      renderQuickQs();
+    }
+  } else {
+    document.getElementById('onboardOverlay').style.display='flex';
+  }
+})();
+</script>
+</body>
+</html>
