@@ -11,3 +11,13 @@
 
 ## 실행
 `index.html`을 브라우저에서 열면 됩니다. 서버·빌드 불필요 (데이터는 localStorage 저장).
+
+## AI 챗봇 활성화 (선택)
+
+챗봇은 기본으로 규칙 기반으로 동작하고, Google Gemini API 키(무료)를 등록하면 진짜 AI 응답으로 자동 업그레이드됩니다.
+
+1. https://aistudio.google.com/apikey 에서 무료 API 키 발급
+2. Vercel 프로젝트에 환경변수 등록: `vercel env add GEMINI_API_KEY production` (또는 Vercel 대시보드 → Settings → Environment Variables)
+3. 재배포: `vercel --prod`
+
+키가 없거나 호출이 실패하면 자동으로 규칙 기반 답변으로 폴백하므로 서비스는 항상 동작합니다.

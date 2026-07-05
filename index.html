@@ -132,6 +132,7 @@
   .todo-badge{flex-shrink:0;margin-top:2px}
   .todo-ask{font-size:12px;color:var(--blue);font-weight:600;cursor:pointer;margin-top:6px;display:inline-block}
   .todo-ask:hover{text-decoration:underline}
+  a.todo-ask{text-decoration:none;margin-left:12px}
   .empty-note{text-align:center;color:var(--muted-2);font-size:14px;padding:30px 0}
 
   /* chat panel */
@@ -507,6 +508,7 @@
             <span>글자를 자동 인식해서 아래 칸을 채워드려요 · 클릭해서 파일 선택도 가능 · 파일은 서버로 전송되지 않아요</span>
             <input type="file" id="pdfFile" accept="application/pdf,.pdf" hidden>
           </div>
+          <div id="pdfSummary" style="display:none;border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:-6px 0 16px;font-size:13px;background:#fff;line-height:1.6"></div>
 
           <details class="acc guide-toggle">
             <summary>📄 등기부등본 어디를 보면 되나요? — 샘플로 확인하기</summary>
@@ -744,23 +746,23 @@ function load(){
 function buildTodos(u){
   const move = u.moveDate;
   const before = [
-    {id:'t1', phase:0, title:'등기부등본 열람 · AI 진단', desc:'인터넷등기소 700원 · 근저당·압류·소유자 확인 → 집지킴 AI 진단에 입력', due:null, urgent:true},
-    {id:'t2', phase:0, title:'시세 대비 보증금 비율 확인', desc:'국토부 실거래가·KB시세와 비교 · (보증금+근저당)÷시세 70% 이하 권장', due:null},
+    {id:'t1', phase:0, title:'등기부등본 열람 · AI 진단', desc:'인터넷등기소 700원 · 근저당·압류·소유자 확인 → 집지킴 AI 진단에 입력', due:null, urgent:true, link:'https://www.iros.go.kr'},
+    {id:'t2', phase:0, title:'시세 대비 보증금 비율 확인', desc:'국토부 실거래가·KB시세와 비교 · (보증금+근저당)÷시세 70% 이하 권장', due:null, link:'https://rt.molit.go.kr'},
     {id:'t3', phase:0, title:'임대인 신분 확인', desc:'등기부 소유자와 신분증 대조 · 대리인이면 위임장+인감증명서 확인', due:null},
-    {id:'t4', phase:0, title:'건축물대장 확인', desc:'정부24 무료 발급 · 위반건축물 여부 확인 (보증보험 가입 불가 사유)', due:null},
-    {id:'t5', phase:0, title:'공인중개사 등록 여부 확인', desc:'국가공간정보포털에서 중개사무소 정상 등록 조회', due:null},
+    {id:'t4', phase:0, title:'건축물대장 확인', desc:'정부24 무료 발급 · 위반건축물 여부 확인 (보증보험 가입 불가 사유)', due:null, link:'https://www.gov.kr'},
+    {id:'t5', phase:0, title:'공인중개사 등록 여부 확인', desc:'국가공간정보포털에서 중개사무소 정상 등록 조회', due:null, link:'https://www.nsdi.go.kr'},
   ];
   const during = [
     {id:'t6', phase:1, title:'특약 문구 계약서에 넣기', desc:'"잔금과 동시에 근저당 말소" 등 · AI 진단에서 맞춤 문구를 받으세요', due:null, urgent:true},
     {id:'t7', phase:1, title:'계약금, 임대인 명의 계좌로 입금', desc:'등기부 소유자 이름과 계좌 명의가 같은지 확인 후 이체', due:null},
-    {id:'t8', phase:1, title:u.type==='전세'?'전세보증보험(HUG) 가입 조건 확인':'보증금 보호 조건 확인', desc:u.type==='전세'?'보증료 약 연 0.11~0.15% · 네이버부동산·카카오페이·지사 방문 가능':'보증금이 크면 보증보험 가입을 검토하세요', due:null, urgent:true},
-    {id:'t9', phase:1, title:'잔금일 아침, 등기부등본 재열람', desc:'잔금 직전 새로운 근저당·가압류가 없는지 최종 확인 · 인터넷등기소 700원', due:move, urgent:true},
+    {id:'t8', phase:1, title:u.type==='전세'?'전세보증보험(HUG) 가입 조건 확인':'보증금 보호 조건 확인', desc:u.type==='전세'?'보증료 약 연 0.11~0.15% · 네이버부동산·카카오페이·지사 방문 가능':'보증금이 크면 보증보험 가입을 검토하세요', due:null, urgent:true, link:'https://www.khug.or.kr/jeonse'},
+    {id:'t9', phase:1, title:'잔금일 아침, 등기부등본 재열람', desc:'잔금 직전 새로운 근저당·가압류가 없는지 최종 확인 · 인터넷등기소 700원', due:move, urgent:true, link:'https://www.iros.go.kr'},
     {id:'t10', phase:1, title:'잔금 지급 · 열쇠 수령', desc:'등기부 이상 없음 확인 후 임대인 계좌로 잔금 이체', due:move},
   ];
   const after = [
-    {id:'t11', phase:2, title:'전입신고 + 확정일자 받기', desc:'이사 당일 정부24 또는 주민센터에서 · 대항력은 다음 날 0시부터 발생', due:move, urgent:true},
-    {id:'t12', phase:2, title:u.type==='전세'?'전세보증보험 가입 신청':'주택임대차 신고', desc:u.type==='전세'?'잔금+전입 완료 후 신청 가능 · 계약기간 1/2 경과 전까지':'계약 후 30일 내 · 확정일자 자동 부여', due:move, urgent:u.type==='전세'},
-    {id:'t13', phase:2, title:'주택임대차 신고 (30일 내)', desc:'보증금 6천만원 초과 시 의무 · 부동산거래관리시스템 온라인 가능', due:null},
+    {id:'t11', phase:2, title:'전입신고 + 확정일자 받기', desc:'이사 당일 정부24 또는 주민센터에서 · 대항력은 다음 날 0시부터 발생', due:move, urgent:true, link:'https://www.gov.kr'},
+    {id:'t12', phase:2, title:u.type==='전세'?'전세보증보험 가입 신청':'주택임대차 신고', desc:u.type==='전세'?'잔금+전입 완료 후 신청 가능 · 계약기간 1/2 경과 전까지':'계약 후 30일 내 · 확정일자 자동 부여', due:move, urgent:u.type==='전세', link:u.type==='전세'?'https://www.khug.or.kr/jeonse':'https://rtms.molit.go.kr'},
+    {id:'t13', phase:2, title:'주택임대차 신고 (30일 내)', desc:'보증금 6천만원 초과 시 의무 · 부동산거래관리시스템 온라인 가능', due:null, link:'https://rtms.molit.go.kr'},
     {id:'t14', phase:2, title:'입주 상태 사진 기록', desc:'하자·파손 부분 촬영 → 퇴거 시 원상복구 분쟁 예방', due:move},
   ];
   let todos = [...before, ...during, ...after];
@@ -873,7 +875,8 @@ function renderDashboard(){
       ${u.type==='월세'&&u.rent?`<span class="tag">월 ${Number(u.rent).toLocaleString()}만</span>`:''}
       <span class="tag">입주 ${u.moveDate? u.moveDate.slice(5).replace('-','/') : '미정'}</span></div>
       <div class="progress-row"><span>계약 진행률</span><b>${done} / ${total} 완료</b></div>
-      <div class="pbar"><div style="width:${done/total*100}%"></div></div>`;
+      <div class="pbar"><div style="width:${done/total*100}%"></div></div>
+      ${u.moveDate?`<button class="btn btn-sm" style="width:100%;margin-top:14px;background:rgba(255,255,255,.14);color:#fff" onclick="downloadIcs()">📅 일정 캘린더에 추가 (.ics)</button>`:''}`;
   }
 
   // steps
@@ -950,7 +953,7 @@ function renderTodos(){
       <div class="todo-main">
         <div class="todo-title">${t.title}</div>
         <div class="todo-desc">${t.desc}</div>
-        <span class="todo-ask" onclick="askAI('${t.title.replace(/'/g,'')}, 어떻게 하는 거야?')">💬 AI에게 물어보기</span>
+        <span class="todo-ask" onclick="askAI('${t.title.replace(/'/g,'')}, 어떻게 하는 거야?')">💬 AI에게 물어보기</span>${t.link?`<a class="todo-ask" href="${t.link}" target="_blank" rel="noopener">🔗 바로가기</a>`:''}
       </div>
       <div class="todo-badge">${badge}</div>
     </div>`;
@@ -1224,7 +1227,18 @@ function sendChat(){
   inp.value='';
   askAI(q);
 }
-function askAI(q){
+function buildAiContext(){
+  const u = state.user, d = state.diag;
+  const parts = [];
+  if(!isGuest()){
+    parts.push(`${u.name}, 만 ${u.age}세, ${u.region}, ${u.type} 계약, 보증금 ${fmtMan(u.deposit)}원${u.rent?`, 월세 ${u.rent}만원`:''}, 연소득 ${fmtMan(u.income)}원, 현재 ${['계약 전','계약 중','계약 후'][Number(u.stage)]} 단계${u.moveDate?`, 잔금/입주일 ${u.moveDate} (D-${daysUntil(u.moveDate)})`:''}`);
+  } else parts.push('맞춤 설정 전(둘러보는 중) — 개인 수치는 알 수 없음');
+  if(d) parts.push(`등기부 AI 진단: 안전도 ${d.score}/100, (보증금+선순위채권)/시세 ${d.ratio}%, 근저당 채권최고액 ${fmtMan(d.mortgage)}원, 위험 ${d.cnt.danger}건·주의 ${d.cnt.warn}건 — ${d.findings.filter(f=>f.lv!=='safe').map(f=>f.t).join(' / ')}`);
+  const pending = state.todos.filter(t=>!t.done).slice(0,5).map(t=>t.title).join(', ');
+  if(pending) parts.push(`남은 할 일: ${pending}`);
+  return parts.join('\n');
+}
+async function askAI(q){
   switchView('dashboard');
   if(isMobile()) document.body.classList.add('chat-open');
   pushMsg('user', q);
@@ -1232,11 +1246,15 @@ function askAI(q){
   const typing = document.createElement('div');
   typing.className='msg ai'; typing.innerHTML='<span class="typing"><i></i><i></i><i></i></span>';
   body.appendChild(typing); body.scrollTop = body.scrollHeight;
-  setTimeout(()=>{
-    typing.remove();
-    const {text, extra} = aiAnswer(q);
-    pushMsg('ai', text, true, extra);
-  }, 700 + Math.random()*500);
+  let live = null;
+  try{
+    const res = await fetch('/api/chat', { method:'POST', headers:{'content-type':'application/json'},
+      body: JSON.stringify({ messages: state.chat.slice(-8), context: buildAiContext() }) });
+    if(res.ok){ const j = await res.json(); if(j.text) live = j.text.trim(); }
+  }catch(e){ /* 로컬 실행·키 미설정·오프라인 → 규칙 기반 폴백 */ }
+  typing.remove();
+  if(live){ pushMsg('ai', live); }
+  else { const {text, extra} = aiAnswer(q); pushMsg('ai', text, true, extra); }
 }
 
 function aiAnswer(q){
@@ -1321,6 +1339,42 @@ function clauseExtra(c){
 }
 
 /* =========================================================
+   D-day 캘린더 내보내기 (.ics)
+   ========================================================= */
+function addDays(dateStr, n){ return new Date(new Date(dateStr+'T00:00:00').getTime()+n*86400000).toISOString().slice(0,10); }
+function buildIcs(){
+  const u = state.user, mv = u.moveDate;
+  const events = [
+    {d: mv, t:'🏠 잔금일 — 아침에 등기부등본 재열람!', desc:'잔금 이체 전 인터넷등기소(iros.go.kr)에서 새 근저당·가압류가 없는지 최종 확인 후 임대인 명의 계좌로 잔금 지급'},
+    {d: mv, t:'📌 전입신고 + 확정일자 받기', desc:'이사 당일 정부24(gov.kr) 또는 주민센터에서 처리. 대항력은 다음 날 0시부터 발생'},
+  ];
+  if(u.type!=='월세') events.push({d: addDays(mv,1), t:'🛡️ 전세보증보험(HUG) 가입 신청', desc:'잔금+전입 완료 후 신청 가능. 안심전세포털(khug.or.kr/jeonse) 또는 네이버부동산·카카오페이 앱'});
+  events.push({d: addDays(mv,30), t:'⏰ 주택임대차 신고 마감일', desc:'계약 후 30일 이내 신고 의무(보증금 6천만원 초과 등). rtms.molit.go.kr'});
+  const stamp = new Date().toISOString().replace(/[-:.]/g,'').slice(0,15)+'Z';
+  const esc = s => s.replace(/\\/g,'\\\\').replace(/;/g,'\;').replace(/,/g,'\\,');
+  const D = d => d.replace(/-/g,'');
+  const body = events.map((e,i)=>['BEGIN:VEVENT',
+    `UID:jibjikim-${D(e.d)}-${i}@jibjikim.vercel.app`,
+    `DTSTAMP:${stamp}`,
+    `DTSTART;VALUE=DATE:${D(e.d)}`,
+    `DTEND;VALUE=DATE:${D(addDays(e.d,1))}`,
+    `SUMMARY:${esc(e.t)}`,
+    `DESCRIPTION:${esc(e.desc)}`,
+    'END:VEVENT'].join('\r\n')).join('\r\n');
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//jibjikim//KR','CALSCALE:GREGORIAN',body,'END:VCALENDAR'].join('\r\n');
+}
+function downloadIcs(){
+  if(!state.user.moveDate){ toast('맞춤 설정에서 잔금일·입주일을 입력하면 일정을 만들어드려요'); openOnboarding(); return; }
+  const blob = new Blob([buildIcs()], {type:'text/calendar;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '집지킴-계약일정.ics';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('캘린더 파일을 받았어요 — 열면 폰 캘린더에 등록돼요 📅');
+}
+
+/* =========================================================
    PDF 자동 추출 (pdf.js — 파일은 브라우저 안에서만 처리)
    ========================================================= */
 let pdfjsReady = null;
@@ -1349,12 +1403,31 @@ async function extractPdfText(file){
 }
 function parseRegistry(text){
   const t = text.replace(/\s+/g,' ');
-  const amounts = [...t.matchAll(/채권최고액\s*금?\s*([\d,]+)\s*원/g)].map(m=>Number(m[1].replace(/,/g,'')));
+  // ① 말소된 순위번호 수집 — "2번근저당권설정등기말소" 형태
+  const cancelled = new Set([...t.matchAll(/(\d+)\s*번\s*근저당권(?:설정)?(?:등기)?\s*말소/g)].map(m=>m[1]));
+  // ② 근저당 항목: 순위번호 + 채권최고액 구조 매칭 (말소 문구 자체는 제외)
+  const entries = [...t.matchAll(/(\d+)(?:-\d+)?\s*근저당권설정(?!.{0,12}말소).{0,300}?채권최고액\s*금?\s*([\d,]+)\s*원/g)]
+    .map(m=>({rank:m[1], amt:Number(m[2].replace(/,/g,''))}));
+  const structured = entries.length > 0;
+  let amounts;
+  if(structured){
+    amounts = entries.filter(e=>!cancelled.has(e.rank)).map(e=>e.amt);
+  } else {
+    // 구조 인식 실패 시 단순 합산 폴백
+    amounts = [...t.matchAll(/채권최고액\s*금?\s*([\d,]+)\s*원/g)].map(m=>Number(m[1].replace(/,/g,'')));
+  }
   const totalWon = amounts.reduce((a,b)=>a+b,0);
+  // ③ 갑구 소유자 — 가장 마지막(최신) 소유자
+  const owners = [...t.matchAll(/소유자\s+([가-힣]{2,5})\s+(\d{6})\s*[-–]/g)];
+  const owner = owners.length ? owners[owners.length-1] : null;
   return {
     isRegistry: /등기사항전부증명서|등기부등본|갑\s*구|을\s*구/.test(t),
     mortgageMan: Math.round(totalWon/10000),
     mortgageCount: amounts.length,
+    cancelledCount: structured ? entries.length - amounts.length : 0,
+    structured,
+    ownerName: owner ? owner[1] : null,
+    ownerBirth: owner ? owner[2] : null,
     seizure: /(가압류|압류|경매개시결정|강제경매)/.test(t),
     trust: /신탁원부|신탁등기|수탁자/.test(t),
   };
@@ -1371,14 +1444,24 @@ async function handleRegistryPdf(file){
     document.getElementById('dMortgage').value = r.mortgageMan || 0;
     document.getElementById('dSeizure').checked = r.seizure;
     document.getElementById('dTrust').checked = r.trust;
-    const found = [];
-    if(r.mortgageCount) found.push(`근저당 ${r.mortgageCount}건 · 채권최고액 합계 ${fmtMan(r.mortgageMan)}원`);
-    else found.push('근저당 없음');
-    if(r.seizure) found.push('압류·가압류 의심 단어 발견');
-    if(r.trust) found.push('신탁 관련 단어 발견');
-    toast(`자동 입력 완료 — ${found.join(' · ')}`);
+    // 분석 요약 패널
+    const sum = document.getElementById('pdfSummary');
+    const rows = [];
+    if(r.ownerName){
+      const masked = r.ownerName[0] + '○' + (r.ownerName.length>2 ? r.ownerName.slice(2) : '');
+      rows.push(`👤 등기부 소유자: <b>${masked}</b> (${r.ownerBirth.slice(0,2)}년생) — 계약서의 임대인·신분증과 같은 사람인지 대조 후 위 체크박스를 확인하세요`);
+    }
+    rows.push(r.mortgageCount
+      ? `🏦 유효 근저당 ${r.mortgageCount}건 · 채권최고액 합계 <b>${fmtMan(r.mortgageMan)}원</b>${r.cancelledCount?` <b style="color:var(--green)">(말소된 ${r.cancelledCount}건 제외)</b>`:''}`
+      : `🏦 유효한 근저당 없음${r.cancelledCount?` <b style="color:var(--green)">(말소된 ${r.cancelledCount}건 제외)</b>`:''}`);
+    if(r.seizure) rows.push(`🚨 <b style="color:var(--red)">압류·가압류·경매 관련 단어 발견</b> — 원문에서 말소 여부를 확인하세요`);
+    if(r.trust) rows.push(`⚠️ <b style="color:var(--amber)">신탁 관련 단어 발견</b> — 신탁원부에서 임대 동의 확인이 필요해요`);
+    if(!r.structured && r.mortgageCount) rows.push(`ℹ️ 문서 구조를 완전히 읽지 못해 단순 합산했어요 — 말소 항목이 섞였을 수 있으니 원본과 대조하세요`);
+    sum.innerHTML = rows.map(x=>`<div style="padding:3px 0">${x}</div>`).join('');
+    sum.style.display = 'block';
+    toast('자동 입력 완료 — 아래 분석 요약을 확인하세요');
     dz.querySelector('b').textContent = `✅ ${file.name} 인식 완료`;
-    dz.querySelector('span').textContent = '말소(빨간 줄)된 항목이 섞여 있을 수 있어요 — 원본과 값을 꼭 대조하고, 시세·보증금을 채운 뒤 진단하세요';
+    dz.querySelector('span').textContent = '값을 확인하고 시세·보증금을 채운 뒤 진단하세요 · 다른 파일을 넣으면 다시 인식해요';
   }catch(e){
     toast('PDF를 읽지 못했어요 — 아래에 직접 입력해 주세요');
     dz.querySelector('b').textContent = '📎 등기부등본 PDF를 여기에 끌어다 놓으세요';
