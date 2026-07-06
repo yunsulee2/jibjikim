@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>집지킴 — 사회초년생을 위한 AI 부동산 계약 비서</title>
+<title>집집 (ZibZip) — 놓치기 쉬운 부동산 계약, 집집이 챙겨드려요</title>
 <style>
   :root{
     --navy:#0F2247; --navy-2:#1B3060; --blue:#2D50B5; --blue-light:#EAEDF7;
-    --bg:#F4F3EF; --card:#FFFFFF; --line:#E7E4DB;
+    --bg:#EEF3FB; --card:#FFFFFF; --line:#E1E8F2;
     --text:#33415C; --muted:#8A94A8; --muted-2:#AAB1C0;
     --green:#1B7A52; --green-bg:#E8F0EB; --amber:#B4720F; --amber-bg:#F6EEDD;
     --red:#B3382E; --red-bg:#F6E9E6; --gold:#D9A441; --gold-bg:#F6EFDE;
@@ -26,12 +26,14 @@
   /* ===== Header ===== */
   header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
   .header-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;gap:28px}
-  .logo{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:800;letter-spacing:-.02em;color:var(--navy)}
-  .logo-mark{width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--navy)}
+  .logo{display:flex;align-items:center;gap:9px;font-size:18px;font-weight:800;letter-spacing:-.02em;color:var(--navy)}
+  .logo-mark{width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:var(--blue)}
+  .logo-txt{display:flex;flex-direction:column;line-height:1}
+  .logo-txt i{font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.14em;color:var(--muted-2);margin-top:2px}
   nav{display:flex;gap:4px;flex:1}
   nav button{color:var(--text);font-size:14.5px;font-weight:600;padding:8px 14px;border-radius:9px;transition:.15s}
-  nav button:hover{color:var(--navy);background:#F1EFE8}
-  nav button.active{color:var(--navy);background:#EDEAE1;font-weight:700}
+  nav button:hover{color:var(--navy);background:#EAF0FA}
+  nav button.active{color:var(--navy);background:#E3EBF7;font-weight:700}
   .user-chip{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
   .avatar{width:33px;height:33px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
 
@@ -68,14 +70,14 @@
   .field{display:flex;flex-direction:column;gap:6px}
   .field.full{grid-column:1/-1}
   .field label{font-size:13px;font-weight:700;color:var(--muted)}
-  .field input,.field select{height:44px;padding:0 13px;border:1px solid #DAD6CB;border-radius:10px;background:#fff;transition:.15s;font-size:14.5px}
+  .field input,.field select{height:44px;padding:0 13px;border:1px solid #CCD8EA;border-radius:10px;background:#fff;transition:.15s;font-size:14.5px}
   .field input:focus,.field select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(45,80,181,.14)}
   .field .hint{font-size:12px;color:var(--muted-2)}
   .onboard .btn{width:100%;margin-top:24px;padding:14px;font-size:15.5px}
 
   /* ===== Dashboard layout ===== */
-  .dash{display:grid;grid-template-columns:280px 1fr 360px;gap:20px;align-items:start}
-  @media(max-width:1100px) and (min-width:769px){.dash{grid-template-columns:1fr}.chat-panel{position:static!important;height:520px!important}}
+  .dash{display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start}
+  @media(max-width:1100px) and (min-width:769px){.dash{grid-template-columns:1fr}}
 
   /* left column */
   .contract-card{background:var(--navy);color:#fff;border-radius:var(--radius);padding:22px}
@@ -106,6 +108,8 @@
   .support-mini h4 a{font-size:12.5px;color:var(--blue);font-weight:600;cursor:pointer}
   .sup-item{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;cursor:pointer;transition:.15s}
   .sup-item:hover{border-color:var(--blue);background:var(--blue-light)}
+  .sup-item.static{cursor:default;margin-bottom:8px}
+  .sup-item.static:hover{border-color:var(--line);background:#fff}
   .sup-item b{font-size:13.5px;display:block;margin-bottom:3px}
   .sup-item span{font-size:12px;color:var(--muted)}
 
@@ -119,11 +123,13 @@
   .alert-banner b{font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .alert-banner p{font-size:13.5px;color:var(--muted);margin-top:5px}
   .alert-banner .btn{flex-shrink:0;align-self:center}
+  .alert-x{width:26px;height:26px;border-radius:7px;background:#f1f4f8;color:var(--muted);font-size:13px;flex-shrink:0;align-self:flex-start;display:flex;align-items:center;justify-content:center}
+  .alert-x:hover{background:var(--red-bg);color:var(--red)}
 
   .todo-card{margin-top:18px;padding:22px}
   .todo-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
   .todo-head h3{font-size:17px}
-  .filter-tabs{display:flex;gap:3px;background:#ECE9E0;padding:3px;border-radius:10px}
+  .filter-tabs{display:flex;gap:3px;background:#E4EBF6;padding:3px;border-radius:10px}
   .filter-tabs button{font-size:13px;font-weight:600;padding:5px 13px;border-radius:8px;color:var(--muted)}
   .filter-tabs button.active{background:#fff;color:var(--navy);font-weight:700;box-shadow:0 1px 2px rgba(15,34,71,.08)}
   .todo{display:flex;gap:14px;align-items:flex-start;padding:16px 4px;border-top:1px solid var(--line)}
@@ -141,11 +147,18 @@
   a.todo-ask{text-decoration:none;margin-left:12px}
   .empty-note{text-align:center;color:var(--muted-2);font-size:14px;padding:30px 0}
 
-  /* chat panel */
-  .chat-panel{position:sticky;top:88px;display:flex;flex-direction:column;height:calc(100vh - 120px);min-height:480px}
+  /* chat drawer (모든 화면 공통) */
+  .chat-panel{position:fixed;top:0;right:0;bottom:0;width:390px;max-width:92vw;background:#fff;border-left:1px solid var(--line);
+    display:flex;flex-direction:column;z-index:120;transform:translateX(102%);transition:transform .32s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 32px rgba(15,34,71,.12)}
+  body.chat-open .chat-panel{transform:none}
+  .chat-backdrop{position:fixed;inset:0;background:rgba(10,20,45,.28);opacity:0;pointer-events:none;transition:opacity .3s;z-index:110}
+  body.chat-open .chat-backdrop{opacity:1;pointer-events:auto}
   .chat-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;gap:11px;align-items:center}
   .ai-dot{width:36px;height:36px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .ai-dot svg{width:16px;height:16px;fill:var(--gold)}
+  .ai-face{width:38px;height:38px;flex-shrink:0}
+  .ai-face svg{width:38px;height:38px}
+  .chat-title{flex:1}
   .chat-head b{font-size:15px;display:block}
   .chat-head span{font-size:12px;color:var(--green);font-weight:600}
   .chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
@@ -159,7 +172,7 @@
   .quick-qs button{font-size:12px;font-weight:600;padding:6px 11px;border-radius:99px;border:1px solid var(--line);background:#fff;color:var(--muted);transition:.15s}
   .quick-qs button:hover{border-color:var(--blue);color:var(--blue)}
   .chat-input{padding:12px 14px;border-top:1px solid var(--line);display:flex;gap:9px}
-  .chat-input input{flex:1;height:44px;padding:0 14px;border:1px solid #DAD6CB;border-radius:10px}
+  .chat-input input{flex:1;height:44px;padding:0 14px;border:1px solid #CCD8EA;border-radius:10px}
   .chat-input input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(45,80,181,.14)}
   .chat-input button{width:44px;height:44px;border-radius:10px;background:var(--navy);color:#fff;font-size:16px;flex-shrink:0}
   .typing{display:inline-flex;gap:4px;padding:4px 2px}
@@ -171,8 +184,12 @@
   .diag-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px}
   .diag-head .crumb{font-size:13px;color:var(--muted);margin-bottom:5px}
   .diag-head h2{font-size:22px;letter-spacing:-.02em}
-  .diag-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:start}
+  .diag-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:start}
   @media(max-width:1000px){.diag-grid{grid-template-columns:1fr}}
+  .diag-right{display:flex;flex-direction:column;gap:16px}
+  .diag-guide{padding:20px}
+  .diag-guide h4{font-size:15px;margin-bottom:12px;color:var(--navy)}
+  .diag-guide .sample-doc{margin-top:0}
   .diag-form{padding:24px}
   .diag-form h3{font-size:16px;margin-bottom:5px}
   .diag-form .sub{font-size:13px;color:var(--muted);margin-bottom:18px}
@@ -263,10 +280,15 @@
   .timeline-item b{font-size:14px;display:block}
   .timeline-item p{font-size:13px;color:var(--muted);margin-top:2px}
 
-  /* ===== Mobile (bottom tab bar + chat overlay) ===== */
+  /* ===== 계약 비서 FAB (모든 화면 공통) ===== */
   .tabbar{display:none}
-  #chatFab{display:none}
-  .chat-close{display:none}
+  #chatFab{position:fixed;right:26px;bottom:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+    width:60px;height:60px;border-radius:50%;background:var(--navy);color:#fff;box-shadow:0 8px 22px rgba(15,34,71,.32);z-index:100;transition:transform .15s,box-shadow .15s}
+  #chatFab:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(15,34,71,.4)}
+  #chatFab .fab-label{font-size:9.5px;font-weight:800;letter-spacing:.02em}
+  body.chat-open #chatFab{display:none}
+  .chat-close{display:flex;width:32px;height:32px;border-radius:8px;background:#f1f4f8;color:var(--muted);font-size:15px;align-items:center;justify-content:center;flex-shrink:0}
+  .chat-close:hover{background:var(--red-bg);color:var(--red)}
   @media(max-width:768px){
     body{font-size:14.5px}
     .header-inner{padding:0 16px;height:54px;gap:12px}
@@ -288,14 +310,11 @@
     .dash>div:nth-child(2){order:1}
     .dash>div:nth-child(3){order:3}
 
-    /* chat: FAB → fullscreen overlay */
-    .chat-panel{display:none}
-    body.chat-open .chat-panel{display:flex;position:fixed!important;inset:0;z-index:80;height:100%!important;min-height:0;border-radius:0;border:none}
+    /* chat drawer: 모바일은 전체 화면 */
+    .chat-panel{width:100%;max-width:100%;border-left:none}
     body.chat-open .chat-panel .chat-input{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
     body.chat-open{overflow:hidden}
-    #chatFab{display:flex;position:fixed;right:16px;bottom:calc(70px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:var(--blue);color:#fff;font-size:23px;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(37,99,235,.45);z-index:59}
-    body.chat-open #chatFab{display:none}
-    .chat-close{display:flex;margin-left:auto;width:32px;height:32px;border-radius:8px;background:#f1f4f8;color:var(--muted);font-size:15px;align-items:center;justify-content:center;flex-shrink:0}
+    #chatFab{right:16px;bottom:calc(74px + env(safe-area-inset-bottom));width:54px;height:54px}
 
     .dday-head h2{font-size:20px}
     .alert-banner{flex-wrap:wrap;padding:15px 16px}
@@ -369,12 +388,46 @@
   .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:44px 0 10px;text-align:left}
   @media(max-width:768px){.feature-grid{grid-template-columns:1fr}.landing{padding:28px 0 10px}}
   .feature-card{padding:24px}
-  .feature-card .fic{width:44px;height:44px;border-radius:12px;background:#F1EFE8;color:var(--navy);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .feature-card .fic{width:44px;height:44px;border-radius:12px;background:#EAF0FA;color:var(--navy);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
   .feature-card b{font-size:15.5px;display:block;margin-bottom:6px}
   .feature-card p{font-size:13.5px;color:var(--muted);line-height:1.65;word-break:keep-all}
   .landing .flow-strip{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:34px;font-size:13px;color:var(--muted);font-weight:600}
   .landing .flow-strip .step-pill{background:#fff;border:1px solid var(--line);border-radius:99px;padding:7px 15px}
   .landing .flow-strip .arr{color:var(--muted-2)}
+
+  /* ===== Landing scroll sections ===== */
+  .lp-sec{margin-top:72px;text-align:center;scroll-margin-top:76px}
+  .lp-title{font-size:clamp(22px,3vw,30px);letter-spacing:-.02em}
+  .lp-sub{color:var(--muted);font-size:15px;margin:10px auto 28px;max-width:520px;word-break:keep-all}
+  .feature-card{position:relative;cursor:pointer}
+  .feature-card .fc-go{display:inline-block;margin-top:12px;font-size:13px;font-weight:700;color:var(--blue)}
+  .feature-card:hover .fc-go{text-decoration:underline}
+  .lp-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:left}
+  .lp-step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;display:flex;gap:14px;align-items:flex-start}
+  .lp-num{width:34px;height:34px;border-radius:10px;background:var(--navy);color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .lp-step b{font-size:15.5px;color:var(--navy);display:block}
+  .lp-step p{font-size:13px;color:var(--muted);margin:5px 0 8px;line-height:1.6;word-break:keep-all}
+  .lp-warn{font-size:12.5px;font-weight:700;color:var(--red);background:var(--red-bg);border-radius:7px;padding:5px 9px;display:inline-block;line-height:1.5}
+  .lp-how{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:left}
+  .lp-howstep{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+  .lp-howno{width:30px;height:30px;border-radius:50%;background:var(--blue-light);color:var(--blue);font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .lp-howstep b{font-size:15.5px;color:var(--navy);display:block;margin-bottom:5px}
+  .lp-howstep p{font-size:13.5px;color:var(--muted);line-height:1.65;word-break:keep-all}
+  .lp-faq{max-width:680px;margin:0 auto;text-align:left}
+  .lp-cta{margin:72px auto 10px;max-width:720px;background:var(--navy);border-radius:20px;padding:44px 32px;text-align:center;color:#fff}
+  .lp-cta h2{color:#fff;font-size:clamp(20px,2.6vw,26px);letter-spacing:-.02em}
+  .lp-cta p{color:#c6d0e4;font-size:14.5px;margin:10px 0 24px}
+  .lp-cta .cta-row{display:flex;gap:11px;justify-content:center;flex-wrap:wrap}
+  .lp-cta .btn-ghost{background:transparent;border-color:rgba(255,255,255,.35);color:#fff}
+  .lp-cta .btn-ghost:hover{background:rgba(255,255,255,.1)}
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+  @media(max-width:768px){
+    .lp-sec{margin-top:52px}
+    .lp-steps,.lp-how{grid-template-columns:1fr}
+    .lp-cta{margin-top:52px;padding:34px 22px}
+  }
 
   /* ===== PDF dropzone ===== */
   .dropzone{border:2px dashed #c3cede;border-radius:12px;padding:20px 16px;text-align:center;cursor:pointer;transition:.15s;margin-bottom:16px;background:#fafbfd}
@@ -406,6 +459,14 @@
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
   .cal-cell{min-height:36px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:2px 3px;display:flex;flex-direction:column;gap:2px;overflow:hidden}
   .cal-cell.blank{background:#fafbfd}
+  .cal-cell.click{cursor:pointer;transition:background .12s}
+  .cal-cell.click:hover{background:var(--blue-light)}
+  .cal-cell.sel{background:var(--blue-light);box-shadow:inset 0 0 0 1.5px var(--blue)}
+  .cal-add{display:flex;gap:6px;margin-top:10px}
+  .cal-add input{flex:1;height:34px;padding:0 11px;border:1px solid #CCD8EA;border-radius:8px;font-size:13px}
+  .cal-add input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(45,80,181,.14)}
+  .cal-del{width:20px;height:20px;border-radius:5px;background:#f1f4f8;color:var(--muted-2);font-size:11px;flex-shrink:0}
+  .cal-del:hover{background:var(--red-bg);color:var(--red)}
   .cal-day{font-size:10.5px;color:var(--muted);font-weight:600}
   .cal-cell.today .cal-day{background:var(--blue);color:#fff;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center}
   .cal-ev{display:flex;align-items:center;gap:0;font-size:0;border-radius:99px;padding:2px;align-self:flex-start}
@@ -434,7 +495,7 @@
 
 <header>
   <div class="header-inner">
-    <div class="logo"><span class="logo-mark"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M3.5 11.2 12 4l8.5 7.2M5.8 9.8V20h12.4V9.8"/><path d="M9.8 20v-5.4h4.4V20"/></svg></span>집지킴</div>
+    <div class="logo"><span class="logo-mark"><svg viewBox="0 0 28 28" width="27" height="27"><path d="M4 12.4 14 4.4l10 8" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.2 11v11.4c0 .6.5 1.1 1.1 1.1h13.4c.6 0 1.1-.5 1.1-1.1V11" fill="var(--blue-light)" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/><circle cx="11" cy="15.2" r="1.15" fill="currentColor"/><circle cx="17" cy="15.2" r="1.15" fill="currentColor"/><path d="M11 18.4c.9.9 5.1.9 6 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="logo-txt">집집<i>ZibZip</i></span></div>
     <nav>
       <button data-view="dashboard" class="active">내 계약</button>
       <button data-view="diagnosis">AI 진단</button>
@@ -443,7 +504,7 @@
     </nav>
     <div class="user-chip">
       <span id="chipInfo">-</span>
-      <div class="avatar" id="chipAvatar" onclick="openOnboarding()" style="cursor:pointer">?</div>
+      <div class="avatar" id="chipAvatar" onclick="switchView('dashboard')" style="cursor:pointer" title="내 계약 대시보드로 이동">?</div>
       <span class="settings-link" onclick="openOnboarding()">내 정보 수정</span>
     </div>
   </div>
@@ -457,25 +518,65 @@
       <div class="hero-inner">
         <span class="badge-lg">사회초년생을 위한 AI 부동산 계약 비서</span>
         <h1>전세사기, 몰라서<br><em>당하지 않게</em></h1>
-        <p class="lead">등기부등본이 뭔지 몰라도 괜찮아요. 계약 전 위험 진단부터 전입신고·확정일자까지, 첫 계약의 모든 순간을 집지킴이 옆에서 챙겨드려요.</p>
+        <p class="lead">놓치기 쉬운 부동산 계약 절차, 집집이 챙겨드려요. 등기부등본이 뭔지 몰라도 괜찮아요.</p>
         <div class="cta-row">
-          <button class="btn btn-primary" onclick="startService()">무료로 시작하기 →</button>
-          <button class="btn btn-ghost" onclick="startService(); openOnboarding()">1분 맞춤 설정</button>
+          <button class="btn btn-primary" onclick="startService(); openOnboarding()">내 집 등록하기 →</button>
         </div>
-        <p class="trust">회원가입 없음 · 입력 정보는 내 브라우저에만 저장 · <span id="verLanding"></span></p>
       </div>
-      <div class="hero-scroll" onclick="document.querySelector('.feature-grid').scrollIntoView({behavior:'smooth'})">아래로 둘러보기<span>↓</span></div>
+      <div class="hero-scroll" onclick="document.getElementById('lp-problem').scrollIntoView({behavior:'smooth'})">아래로 둘러보기<span>↓</span></div>
     </div>
     <div class="landing">
-      <div class="feature-grid">
-        <div class="card feature-card"><div class="fic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M7 3h7.5L19 7.5V21H7V3z"/><path d="M14.5 3v4.5H19M10 12h5M10 16h5"/></svg></div><b>등기부등본 AI 진단</b><p>PDF를 끌어다 놓거나 숫자만 입력하면 깡통전세·근저당 위험을 점수로 알려주고, 계약서에 넣을 특약 문구까지 만들어줘요.</p></div>
-        <div class="card feature-card"><div class="fic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M5 6.2l1.4 1.4 2.4-2.6M5 12.2l1.4 1.4 2.4-2.6M5 18.2l1.4 1.4 2.4-2.6M12 7h8M12 13h8M12 19h8"/></svg></div><b>계약 전·중·후 체크리스트</b><p>잔금일 기준 D-day에 맞춰 등기부 재열람, 전입신고, 확정일자, 보증보험까지 놓치지 않게 순서대로 알려줘요.</p></div>
-        <div class="card feature-card"><div class="fic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M4 8.7h16v4H4zM5.6 12.7V20h12.8v-7.3M12 8.7V20"/><path d="M12 8.5c-3.8 0-4.6-3.6-2.4-4.3 1.6-.5 2.4 1.8 2.4 4.3zm0 0c3.8 0 4.6-3.6 2.4-4.3-1.6-.5-2.4 1.8-2.4 4.3z"/></svg></div><b>지원 제도 자동 매칭</b><p>버팀목 대출, 청년 월세지원, 이사비 지원… 나이·지역·소득 기준으로 받을 수 있는 제도를 자동 판정해요.</p></div>
+      <!-- 문제 인식 → 기능 -->
+      <div class="lp-sec reveal" id="lp-problem">
+        <h2 class="lp-title">첫 계약, 이런 게 막막하죠</h2>
+        <p class="lp-sub">부동산 지식이 없어도 괜찮아요. 집집이 단계마다 대신 챙길게요.</p>
+        <div class="feature-grid">
+          <div class="card feature-card" onclick="switchView('diagnosis')"><div class="fic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M7 3h7.5L19 7.5V21H7V3z"/><path d="M14.5 3v4.5H19M10 12h5M10 16h5"/></svg></div><b>“이 집, 안전한 걸까?”</b><p>PDF만 올리면 깡통전세·근저당 위험을 점수로 진단하고 특약까지 만들어줘요.</p><span class="fc-go">AI 진단 바로가기 →</span></div>
+          <div class="card feature-card" onclick="switchView('dashboard')"><div class="fic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M5 6.2l1.4 1.4 2.4-2.6M5 12.2l1.4 1.4 2.4-2.6M5 18.2l1.4 1.4 2.4-2.6M12 7h8M12 13h8M12 19h8"/></svg></div><b>“언제 뭘 해야 하지?”</b><p>잔금일 기준으로 등기부 재열람·전입신고·확정일자 순서를 알림으로 챙겨줘요.</p><span class="fc-go">내 계약 대시보드 →</span></div>
+          <div class="card feature-card" onclick="switchView('support')"><div class="fic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M4 8.7h16v4H4zM5.6 12.7V20h12.8v-7.3M12 8.7V20"/><path d="M12 8.5c-3.8 0-4.6-3.6-2.4-4.3 1.6-.5 2.4 1.8 2.4 4.3zm0 0c3.8 0 4.6-3.6 2.4-4.3-1.6-.5-2.4 1.8-2.4 4.3z"/></svg></div><b>“나 지원금 받을 수 있나?”</b><p>나이·지역·소득만 넣으면 버팀목 대출·청년 월세지원 자격을 자동 판정해요.</p><span class="fc-go">지원 제도 보기 →</span></div>
+        </div>
       </div>
-      <div class="flow-strip">
-        <span class="step-pill">① 집 정하기 전 — AI 진단</span><span class="arr">→</span>
-        <span class="step-pill">② 계약할 때 — 특약·체크리스트</span><span class="arr">→</span>
-        <span class="step-pill">③ 이사 후 — 전입신고·보증보험</span>
+
+      <!-- 계약 절차 + 조심할 점 -->
+      <div class="lp-sec reveal">
+        <h2 class="lp-title">계약은 이렇게 진행돼요</h2>
+        <p class="lp-sub">단계마다 꼭 짚어야 할 것과 조심할 점만 모았어요.</p>
+        <div class="lp-steps">
+          <div class="lp-step"><span class="lp-num">전</span><div><b>계약 전 — 집 확인</b><p>등기부등본 열람 · 시세 대비 보증금 비율 확인 · 임대인 신분 대조</p><span class="lp-warn">⚠ 보증금+근저당이 시세의 70%를 넘으면 위험</span></div></div>
+          <div class="lp-step"><span class="lp-num">중</span><div><b>계약할 때 — 특약·잔금</b><p>“잔금과 동시에 근저당 말소” 특약 · 소유자 명의 계좌로 입금</p><span class="lp-warn">⚠ 잔금일 아침 등기부 재열람은 필수</span></div></div>
+          <div class="lp-step"><span class="lp-num">후</span><div><b>이사 후 — 권리 확보</b><p>전입신고 + 확정일자 · 전세보증보험 가입</p><span class="lp-warn">⚠ 대항력은 전입신고 다음 날 0시부터 생겨요</span></div></div>
+        </div>
+      </div>
+
+      <!-- 사용법 -->
+      <div class="lp-sec reveal">
+        <h2 class="lp-title">이렇게 사용하세요</h2>
+        <div class="lp-how">
+          <div class="lp-howstep"><span class="lp-howno">1</span><b>내 집 등록</b><p>보증금·잔금일만 입력하면 맞춤 체크리스트가 만들어져요.</p></div>
+          <div class="lp-howstep"><span class="lp-howno">2</span><b>등기부 AI 진단</b><p>등기부등본 PDF를 올리면 위험도를 점수로 알려줘요.</p></div>
+          <div class="lp-howstep"><span class="lp-howno">3</span><b>비서와 함께 진행</b><p>모르는 건 계약 비서에게 묻고, 일정은 캘린더로 챙겨요.</p></div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="lp-sec reveal">
+        <h2 class="lp-title">자주 묻는 질문</h2>
+        <div class="lp-faq">
+          <details class="acc"><summary>정말 무료인가요? 회원가입이 필요한가요?</summary><div class="acc-body">네, 전부 무료예요. 회원가입도 없어요. 입력한 정보는 서버가 아니라 내 브라우저에만 저장돼요.</div></details>
+          <details class="acc"><summary>등기부등본은 어디서 떼나요?</summary><div class="acc-body">인터넷등기소(iros.go.kr)에서 700원에 누구나 즉시 발급받을 수 있어요. PDF로 저장해 그대로 올리면 돼요.</div></details>
+          <details class="acc"><summary>진단 결과를 그대로 믿어도 되나요?</summary><div class="acc-body">위험 신호를 빠르게 걸러주는 참고용 도구예요. 중요한 계약은 공인중개사·법률구조공단 상담과 함께 확인하는 걸 권해요.</div></details>
+          <details class="acc"><summary>전세가 아니라 월세인데 써도 되나요?</summary><div class="acc-body">물론이에요. 월세도 보증금 보호·확정일자·지원 제도가 똑같이 중요해요. 계약 유형을 월세로 설정하면 맞춰서 챙겨드려요.</div></details>
+        </div>
+      </div>
+
+      <!-- 최종 CTA -->
+      <div class="lp-cta reveal">
+        <h2>지금 우리 집부터 확인해볼까요?</h2>
+        <p>등기부등본만 있으면 3초 만에 위험도를 알 수 있어요.</p>
+        <div class="cta-row">
+          <button class="btn btn-accent" onclick="switchView('diagnosis')">등기부등본 바로 진단하기 →</button>
+          <button class="btn btn-ghost" onclick="startService(); openOnboarding()">내 집 등록하기</button>
+        </div>
       </div>
     </div>
   </section>
@@ -500,8 +601,12 @@
           </div>
           <div class="cal-dow"><span style="color:#e05252">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span style="color:#4a7bd4">토</span></div>
           <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-add" id="calAdd" style="display:none">
+            <input id="calAddInput" placeholder="일정 내용" maxlength="30" onkeydown="if(event.key==='Enter')confirmAddEvent()">
+            <button class="btn btn-navy btn-sm" onclick="confirmAddEvent()">추가</button>
+            <button class="btn btn-ghost btn-sm" onclick="cancelAddEvent()">취소</button>
+          </div>
           <div class="cal-list" id="calList"></div>
-          <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:12px" onclick="downloadIcs()">캘린더 앱으로 내보내기 (.ics)</button>
         </div>
 
         <div class="card steps">
@@ -510,8 +615,9 @@
         </div>
 
         <div class="card support-mini">
-          <h4>받을 수 있는 지원 <a onclick="switchView('support')">전체 보기</a></h4>
+          <h4>받을 수 있는 지원</h4>
           <div id="miniSupport"></div>
+          <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:12px" onclick="switchView('support')">지원 제도 전체 보기 →</button>
         </div>
       </div>
 
@@ -529,13 +635,14 @@
             <p id="alertDesc">-</p>
           </div>
           <button class="btn btn-navy btn-sm" onclick="askAI('전세보증보험 가입 조건을 확인해줘')">비서에게 확인 요청</button>
+          <button class="alert-x" onclick="dismissBanner()" title="이 안내 닫기" aria-label="닫기">✕</button>
         </div>
 
         <div class="card todo-card">
           <div class="todo-head">
             <h3>해야 할 일</h3>
             <div class="filter-tabs" id="todoTabs">
-              <button data-f="week" class="active">이번 주</button>
+              <button data-f="week" class="active">Now</button>
               <button data-f="all">전체</button>
               <button data-f="done">완료</button>
             </div>
@@ -543,21 +650,6 @@
           <div id="todoList"></div>
         </div>
 
-      </div>
-
-      <!-- right: chat -->
-      <div class="card chat-panel">
-        <div class="chat-head">
-          <div class="ai-dot"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg></div>
-          <div><b>계약 비서</b><span>● 내 계약 정보를 알고 있어요</span></div>
-          <button class="chat-close" onclick="document.body.classList.remove('chat-open')">✕</button>
-        </div>
-        <div class="chat-body" id="chatBody"></div>
-        <div class="quick-qs" id="quickQs"></div>
-        <div class="chat-input">
-          <input id="chatInput" placeholder="계약에 대해 무엇이든 물어보세요" onkeydown="if(event.key==='Enter')sendChat()">
-          <button onclick="sendChat()">↑</button>
-        </div>
       </div>
     </div>
   </section>
@@ -579,35 +671,25 @@
       <div>
         <div class="card diag-form">
           <h3>등기부등본 정보 입력</h3>
-          <p class="sub">인터넷등기소(700원)에서 발급한 등기부등본의 갑구·을구 내용을 입력하면 AI가 위험도를 분석해요. 아직 발급 전이라면 <b style="color:var(--blue);cursor:pointer" onclick="loadSampleDiag()">예시 데이터</b>로 체험해 보세요.</p>
+          <p class="sub">숫자 세 개만 넣으면 바로 진단돼요. 등기부등본 PDF가 있으면 끌어다 놓아 자동으로 채울 수도 있어요. 처음이라면 <b style="color:var(--blue);cursor:pointer" onclick="loadSampleDiag()">예시 데이터</b>로 체험해 보세요.</p>
 
-          <div class="dropzone" id="pdfDrop" onclick="document.getElementById('pdfFile').click()">
-            <b>등기부등본 PDF를 여기에 끌어다 놓으세요</b>
-            <span>글자를 자동 인식해서 아래 칸을 채워드려요 · 클릭해서 파일 선택도 가능 · 파일은 서버로 전송되지 않아요</span>
-            <input type="file" id="pdfFile" accept="application/pdf,.pdf" hidden>
-          </div>
-          <div id="pdfSummary" style="display:none;border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:-6px 0 16px;font-size:13px;background:#fff;line-height:1.6"></div>
-
-          <details class="acc guide-toggle">
-            <summary>등기부등본 어디를 보면 되나요? — 샘플로 확인하기</summary>
-            <div class="acc-body">
-              직접 입력할 때는 아래 색칠된 위치의 값을 찾으면 돼요.
-              <div class="sample-doc">
-                <div class="sd-title">등기사항전부증명서 (샘플)</div>
-                <div class="sd-sec">【 갑구 】 소유권에 관한 사항</div>
-                <div class="sd-row"><span>2 · 소유권이전 · 소유자</span> <mark class="m1">홍○동 900101-*******</mark> <span class="num-chip">1</span> <span>→ 계약서의 임대인과 같은 사람인지 확인 후 체크</span></div>
-                <div class="sd-row"><span>3 ·</span> <mark class="m3">가압류 · 압류 · 경매개시결정</mark> <span class="num-chip">3</span> <span>→ 이런 단어가 보이면 해당 체크박스에 표시</span></div>
-                <div class="sd-sec">【 을구 】 소유권 이외의 권리에 관한 사항</div>
-                <div class="sd-row"><span>1 · 근저당권설정 ·</span> <mark class="m2">채권최고액 금 240,000,000원</mark> <span class="num-chip">2</span> <span>→ 이 금액을 만원 단위로 입력 (예: 24000)</span></div>
-                <div class="sd-row" style="border-bottom:none"><span>시세는 등기부가 아니라 <b>네이버부동산·국토부 실거래가</b>에서 같은 건물·면적으로 확인해요</span></div>
-              </div>
-            </div>
-          </details>
-
+          <!-- ① 핵심 금액 3개 (맨 위) -->
           <div class="form-grid">
             <div class="field"><label>주택 가액 (시세, 만원)</label><input type="number" id="dPrice" placeholder="예: 32000"><span class="hint">국토부 실거래가·KB시세 기준</span></div>
             <div class="field"><label>내 보증금 (만원)</label><input type="number" id="dDeposit" placeholder="예: 18000"></div>
             <div class="field full"><label>근저당권 채권최고액 합계 (만원) — 을구</label><input type="number" id="dMortgage" placeholder="근저당이 없으면 0"><span class="hint">보통 실제 대출금의 120% 수준으로 설정돼요</span></div>
+          </div>
+
+          <!-- ② PDF 드래그 (중간) — 올리면 위 값이 자동으로 채워져요 -->
+          <div class="dropzone" id="pdfDrop" onclick="document.getElementById('pdfFile').click()">
+            <b>등기부등본 PDF를 여기에 끌어다 놓으세요</b>
+            <span>글자를 자동 인식해서 위 칸을 채워드려요 · 클릭해서 파일 선택도 가능 · 파일은 서버로 전송되지 않아요</span>
+            <input type="file" id="pdfFile" accept="application/pdf,.pdf" hidden>
+          </div>
+          <div id="pdfSummary" style="display:none;border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:-6px 0 16px;font-size:13px;background:#fff;line-height:1.6"></div>
+
+          <!-- ③ 체크사항 (아래) -->
+          <div class="form-grid">
             <div class="field full">
               <label>갑구·을구 체크사항</label>
               <div class="check-row"><input type="checkbox" id="dOwnerMatch" checked><span>등기부 소유자와 계약서상 임대인이 일치한다</span></div>
@@ -633,6 +715,21 @@
           </div>
         </div>
       </div>
+
+      <div class="diag-right">
+        <!-- 상시 표시 가이드 (접고 펴지 않고 계속 보임) -->
+        <div class="card diag-guide" id="diagGuide">
+          <h4>등기부등본 어디를 보나요?</h4>
+          <div class="sample-doc">
+            <div class="sd-title">등기사항전부증명서 (샘플)</div>
+            <div class="sd-sec">【 갑구 】 소유권에 관한 사항</div>
+            <div class="sd-row"><span>2 · 소유권이전 · 소유자</span> <mark class="m1">홍○동 900101-*******</mark> <span class="num-chip">1</span> <span>→ 계약서의 임대인과 같은 사람인지 확인 후 체크</span></div>
+            <div class="sd-row"><span>3 ·</span> <mark class="m3">가압류 · 압류 · 경매개시결정</mark> <span class="num-chip">3</span> <span>→ 이런 단어가 보이면 해당 체크박스에 표시</span></div>
+            <div class="sd-sec">【 을구 】 소유권 이외의 권리에 관한 사항</div>
+            <div class="sd-row"><span>1 · 근저당권설정 ·</span> <mark class="m2">채권최고액 금 240,000,000원</mark> <span class="num-chip">2</span> <span>→ 이 금액을 만원 단위로 입력 (예: 24000)</span></div>
+            <div class="sd-row" style="border-bottom:none"><span>시세는 등기부가 아니라 <b>네이버부동산·국토부 실거래가</b>에서 같은 건물·면적으로 확인해요</span></div>
+          </div>
+        </div>
 
       <div id="diagResult" style="display:none">
         <div class="score-card">
@@ -668,6 +765,7 @@
           <div id="clauseList"></div>
         </div>
       </div>
+      </div>
     </div>
   </section>
 
@@ -701,7 +799,7 @@
       <div class="guide-col">
         <div class="card guide-card">
           <h3>전세사기 대표 유형 5가지</h3>
-          <details class="acc"><summary>깡통전세 <span class="badge red">최다 발생</span></summary><div class="acc-body">보증금 + 선순위 대출이 집값의 <b>80%를 넘는 집</b>이에요. 집이 경매로 넘어가면 보증금을 다 돌려받지 못해요.<br><b>예방:</b> (보증금+채권최고액) ÷ 시세가 70% 이하인지 확인하세요. 집지킴 AI 진단이 자동으로 계산해 드려요.</div></details>
+          <details class="acc"><summary>깡통전세 <span class="badge red">최다 발생</span></summary><div class="acc-body">보증금 + 선순위 대출이 집값의 <b>80%를 넘는 집</b>이에요. 집이 경매로 넘어가면 보증금을 다 돌려받지 못해요.<br><b>예방:</b> (보증금+채권최고액) ÷ 시세가 70% 이하인지 확인하세요. 집집 AI 진단이 자동으로 계산해 드려요.</div></details>
           <details class="acc"><summary>이중계약 · 가짜 임대인</summary><div class="acc-body">건물 관리인이나 사칭범이 집주인 행세를 하며 계약금을 가로채는 수법이에요.<br><b>예방:</b> 등기부등본의 <b>소유자 이름·주민번호 앞자리</b>와 임대인 신분증을 반드시 대조하고, 계약금은 소유자 명의 계좌로만 보내세요.</div></details>
           <details class="acc"><summary>신탁등기 사기</summary><div class="acc-body">집이 신탁회사에 맡겨져 있으면 <b>집주인이 아니라 신탁회사에게 임대 권한</b>이 있어요. 집주인과만 계약하면 무효가 될 수 있어요.<br><b>예방:</b> 등기부 갑구에 '신탁' 표시가 있으면 신탁원부를 발급받아 임대 동의 여부를 확인하세요.</div></details>
           <details class="acc"><summary>잔금일 대출 실행 (동시진행)</summary><div class="acc-body">내가 잔금을 치르는 <b>같은 날 집주인이 몰래 대출</b>을 받으면, 내 전입신고 효력(다음 날 0시)보다 은행 근저당이 앞서게 돼요.<br><b>예방:</b> 잔금일 아침 등기부를 재열람하고, "잔금일 다음 날까지 담보권 설정 금지" 특약을 넣으세요.</div></details>
@@ -780,21 +878,37 @@
   </div>
 </div>
 
+<!-- ============ 계약 비서 드로어 (모든 화면에서 열림) ============ -->
+<div class="chat-backdrop" onclick="closeChat()"></div>
+<aside class="chat-panel">
+  <div class="chat-head">
+    <div class="ai-face" aria-hidden="true"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="var(--navy)"/><circle cx="12.5" cy="16" r="1.9" fill="var(--gold)"/><circle cx="23.5" cy="16" r="1.9" fill="var(--gold)"/><path d="M12.5 22c2.4 2.4 8.6 2.4 11 0" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div class="chat-title"><b>계약 비서</b><span id="chatStatus">● 내 계약 정보를 알고 있어요</span></div>
+    <button class="chat-close" onclick="closeChat()" aria-label="닫기">✕</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="quick-qs" id="quickQs"></div>
+  <div class="chat-input">
+    <input id="chatInput" placeholder="계약에 대해 무엇이든 물어보세요" onkeydown="if(event.key==='Enter')sendChat()">
+    <button onclick="sendChat()" aria-label="보내기">↑</button>
+  </div>
+</aside>
+
 <div class="tabbar">
   <button data-view="dashboard" class="active"><span class="ic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M3.5 11.2 12 4l8.5 7.2M5.8 9.8V20h12.4V9.8"/></svg></span>내 계약</button>
   <button data-view="diagnosis"><span class="ic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M12 3l7 2.8v5.1c0 4.4-2.9 7.3-7 9.1-4.1-1.8-7-4.7-7-9.1V5.8L12 3z"/><path d="M9 11.8l2.1 2.1 3.9-4.2"/></svg></span>AI 진단</button>
   <button data-view="support"><span class="ic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M4 8.7h16v4H4zM5.6 12.7V20h12.8v-7.3M12 8.7V20"/><path d="M12 8.5c-3.8 0-4.6-3.6-2.4-4.3 1.6-.5 2.4 1.8 2.4 4.3zm0 0c3.8 0 4.6-3.6 2.4-4.3-1.6-.5-2.4 1.8-2.4 4.3z"/></svg></span>지원 제도</button>
   <button data-view="guide"><span class="ic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15.5H6.5A2.5 2.5 0 004 21V5.5z"/><path d="M20 18.5H6.5A2.5 2.5 0 004 21"/></svg></span>가이드</button>
 </div>
-<button id="chatFab" onclick="document.body.classList.add('chat-open')"><svg class="ic-svg" viewBox="0 0 24 24" style="width:24px;height:24px"><path d="M4 5h16v11.5H9.5L4 20.5V5z"/></svg></button>
+<button id="chatFab" onclick="openChat()" aria-label="계약 비서 열기"><svg viewBox="0 0 36 36" width="30" height="30"><circle cx="18" cy="18" r="15" fill="#fff"/><circle cx="12.6" cy="16.5" r="1.8" fill="var(--navy)"/><circle cx="23.4" cy="16.5" r="1.8" fill="var(--navy)"/><path d="M12.6 22c2.4 2.2 8.4 2.2 10.8 0" fill="none" stroke="var(--navy)" stroke-width="2" stroke-linecap="round"/></svg><span class="fab-label">비서</span></button>
 
 <div id="toast"></div>
 
 <script>
 /* =========================================================
-   집지킴 — AI 부동산 계약 비서 (client-side prototype)
+   집집 — AI 부동산 계약 비서 (client-side prototype)
    ========================================================= */
-const APP_VERSION = 'v3.0 · 디자인 시스템 v2';
+const APP_VERSION = 'v3.1 · 집집(ZibZip) 리뉴얼';
 const LS_KEY = 'jibjikim_v1';
 let state = null;
 const GUEST_USER = { name:null, age:null, region:null, type:null, deposit:null, rent:0, income:null, stage:'0', moveDate:null, address:null };
@@ -826,11 +940,13 @@ function load(){
 function buildTodos(u){
   const move = u.moveDate;
   const before = [
-    {id:'t1', phase:0, title:'등기부등본 열람 · AI 진단', desc:'인터넷등기소 700원 · 근저당·압류·소유자 확인 → 집지킴 AI 진단에 입력', due:null, urgent:true, link:'https://www.iros.go.kr'},
+    {id:'t1', phase:0, title:'등기부등본 열람 · AI 진단', desc:'인터넷등기소 700원 · 근저당·압류·소유자 확인 → 집집 AI 진단에 입력', due:null, urgent:true, link:'https://www.iros.go.kr'},
     {id:'t2', phase:0, title:'시세 대비 보증금 비율 확인', desc:'국토부 실거래가·KB시세와 비교 · (보증금+근저당)÷시세 70% 이하 권장', due:null, link:'https://rt.molit.go.kr'},
     {id:'t3', phase:0, title:'임대인 신분 확인', desc:'등기부 소유자와 신분증 대조 · 대리인이면 위임장+인감증명서 확인', due:null},
     {id:'t4', phase:0, title:'건축물대장 확인', desc:'정부24 무료 발급 · 위반건축물 여부 확인 (보증보험 가입 불가 사유)', due:null, link:'https://www.gov.kr'},
     {id:'t5', phase:0, title:'공인중개사 등록 여부 확인', desc:'국가공간정보포털에서 중개사무소 정상 등록 조회', due:null, link:'https://www.nsdi.go.kr'},
+    {id:'t5b', phase:0, title:'집 상태 직접 확인 (서류 밖 체크)', desc:'도배·장판·곰팡이·수압·채광·소음 · 낮과 밤 모두 둘러보면 좋아요', due:null},
+    {id:'t5c', phase:0, title:'옵션·관리비·교통 확인', desc:'포함 옵션(가전·가구) 목록 · 관리비 항목 · 지하철·버스·편의시설 거리', due:null},
   ];
   const during = [
     {id:'t6', phase:1, title:'특약 문구 계약서에 넣기', desc:'"잔금과 동시에 근저당 말소" 등 · AI 진단에서 맞춤 문구를 받으세요', due:null, urgent:true},
@@ -841,8 +957,8 @@ function buildTodos(u){
   ];
   const after = [
     {id:'t11', phase:2, title:'전입신고 + 확정일자 받기', desc:'이사 당일 정부24 또는 주민센터에서 · 대항력은 다음 날 0시부터 발생', due:move, urgent:true, link:'https://www.gov.kr'},
-    {id:'t12', phase:2, title:u.type==='전세'?'전세보증보험 가입 신청':'주택임대차 신고', desc:u.type==='전세'?'잔금+전입 완료 후 신청 가능 · 계약기간 1/2 경과 전까지':'계약 후 30일 내 · 확정일자 자동 부여', due:move, urgent:u.type==='전세', link:u.type==='전세'?'https://www.khug.or.kr/jeonse':'https://rtms.molit.go.kr'},
-    {id:'t13', phase:2, title:'주택임대차 신고 (30일 내)', desc:'보증금 6천만원 초과 시 의무 · 부동산거래관리시스템 온라인 가능', due:null, link:'https://rtms.molit.go.kr'},
+    {id:'t12', phase:2, title:u.type==='전세'?'전세보증보험 가입 신청':'보증금 보호 마무리 점검', desc:u.type==='전세'?'잔금+전입 완료 후 신청 가능 · 계약기간 1/2 경과 전까지':'확정일자·전입신고가 모두 처리됐는지 확인 (소액보증금 최우선변제 대비)', due:move, urgent:u.type==='전세', link:u.type==='전세'?'https://www.khug.or.kr/jeonse':null},
+    {id:'t13', phase:2, title:'주택임대차 신고 (30일 내)', desc:'보증금 6천만원 초과 또는 월세 30만원 초과 시 의무 · 신고하면 확정일자 자동 부여', due:null, link:'https://rtms.molit.go.kr'},
     {id:'t14', phase:2, title:'입주 상태 사진 기록', desc:'하자·파손 부분 촬영 → 퇴거 시 원상복구 분쟁 예방', due:move},
   ];
   let todos = [...before, ...during, ...after];
@@ -927,11 +1043,14 @@ function renderAll(){
     document.getElementById('supProfile').textContent = '맞춤 설정을 하면 내 조건으로 자격을 자동 판정해요';
   } else {
     const shortAddr = u.address === `${u.region} 나의 집` ? u.region : u.address.split(' ').slice(0,2).join(' ');
-    document.getElementById('chipInfo').textContent = `${shortAddr} · ${u.type}`;
-    document.getElementById('chipAvatar').textContent = u.name.slice(0,2);
+    document.getElementById('chipInfo').textContent = `${u.name}님 · ${u.type}`;
+    document.getElementById('chipAvatar').textContent = u.name.slice(0,1);   // 성 한 글자만 (원문 이름은 아래 title)
+    document.querySelector('.user-chip').setAttribute('title', `${u.name}님 · ${shortAddr} · ${u.type}`);
     document.querySelector('.settings-link').textContent = '내 정보 수정';
     document.getElementById('supProfile').textContent = `만 ${u.age}세 · ${u.region} · ${u.type} · 연소득 ${fmtMan(u.income)}원`;
   }
+  const cs = document.getElementById('chatStatus');
+  if(cs) cs.textContent = isGuest() ? '● 무엇이든 물어보세요' : '● 내 계약 정보를 알고 있어요';
   renderDashboard();
   renderSupport();
   document.getElementById('diagDate').textContent = todayStr().replace(/-/g,'.');
@@ -979,7 +1098,7 @@ function renderDashboard(){
   const urgentCnt = state.todos.filter(t=>!t.done && t.urgent).length;
   let title, sub;
   if(isGuest()){
-    title = `첫 계약, 집지킴이 함께해요`;
+    title = `첫 계약, 집집이 함께해요`;
     sub = `등기부등본이 뭔지 몰라도 괜찮아요. 계약 전 체크리스트부터 하나씩 따라오세요.`;
   } else if(dLeft !== null && dLeft >= 0){
     title = `${u.name}님, ${stage===2?'입주':'잔금일'}까지 <em>D-${dLeft}</em>`;
@@ -994,9 +1113,10 @@ function renderDashboard(){
   document.getElementById('ddayTitle').innerHTML = title;
   document.getElementById('ddaySub').textContent = sub;
 
-  // alert banner
+  // alert banner (사용자가 닫으면 이 세션 동안 숨김)
   const banner = document.getElementById('alertBanner');
-  if(state.diag && state.diag.score < 80 && stage < 2){
+  if(state.bannerDismissed){ banner.style.display = 'none'; }
+  else if(state.diag && state.diag.score < 80 && stage < 2){
     banner.style.display = 'flex';
     const ratio = state.diag.ratio;
     document.getElementById('alertDesc').textContent =
@@ -1012,6 +1132,7 @@ function renderDashboard(){
   renderCalendar();
   if(!state.chat.length) seedChat();
 }
+function dismissBanner(){ state.bannerDismissed = true; save(); document.getElementById('alertBanner').style.display='none'; }
 
 let todoFilter = 'week';
 function renderTodos(){
@@ -1042,8 +1163,24 @@ function renderTodos(){
 }
 function toggleTodo(id){
   const t = state.todos.find(t=>t.id===id);
-  t.done = !t.done; save(); renderDashboard();
-  if(t.done) toast('완료! 잘하고 있어요');
+  t.done = !t.done;
+  const advanced = t.done ? autoAdvanceStage() : false;
+  save(); renderDashboard();
+  if(advanced){ const names=['계약 전','계약 중','계약 후']; toast(`${names[Number(state.user.stage)]} 단계로 넘어갔어요 🎉`); }
+  else if(t.done) toast('완료! 잘하고 있어요');
+}
+// 한 단계의 할 일을 모두 완료하면 계약 단계를 자동으로 진행 (뒤로는 되돌리지 않음)
+function autoAdvanceStage(){
+  if(isGuest()) return false;
+  const u = state.user;
+  let adv = 0;
+  for(let p=0;p<3;p++){
+    const ph = state.todos.filter(t=>t.phase===p);
+    if(ph.length && ph.every(t=>t.done)) adv = p+1; else break;
+  }
+  const newStage = Math.min(2, Math.max(Number(u.stage), adv));
+  if(newStage !== Number(u.stage)){ u.stage = String(newStage); return true; }
+  return false;
 }
 document.getElementById('todoTabs').addEventListener('click', e=>{
   if(e.target.dataset.f){ todoFilter = e.target.dataset.f;
@@ -1055,9 +1192,9 @@ function renderMiniSupport(){
   const u = state.user;
   const eligible = SUPPORTS.map(s=>({s, e:supportEligibility(s,u)})).filter(x=>x.e.status!=='no').slice(0,2);
   document.getElementById('miniSupport').innerHTML = eligible.map(({s,e})=>
-    `<div class="sup-item" onclick="switchView('support')">
+    `<div class="sup-item static">
       <b>${s.name}</b><span>${s.amount} · ${e.status==='yes'?'대상 조건 충족':'조건 일부 확인 필요'}</span>
-    </div>`).join('') || '<div class="empty-note" style="padding:10px 0">조건에 맞는 지원을 찾는 중…</div>';
+    </div>`).join('') || `<div class="empty-note" style="padding:10px 0">${isGuest()?'내 집을 등록하면 조건에 맞는 지원을 찾아드려요':'조건에 맞는 지원을 찾는 중…'}</div>`;
 }
 
 /* ---------- support view ---------- */
@@ -1264,7 +1401,7 @@ function copyText(txt){
 function shareReport(){
   const d = state.diag;
   if(!d){ toast('먼저 진단을 실행해 주세요'); return; }
-  const txt = `[집지킴 AI 진단 리포트]\n${state.user.address}\n종합 안전도 ${d.score}/100\n안전 ${d.cnt.safe} · 주의 ${d.cnt.warn} · 위험 ${d.cnt.danger}\n(보증금+선순위)/시세 = ${d.ratio}%`;
+  const txt = `[집집 AI 진단 리포트]\n${state.user.address}\n종합 안전도 ${d.score}/100\n안전 ${d.cnt.safe} · 주의 ${d.cnt.warn} · 위험 ${d.cnt.danger}\n(보증금+선순위)/시세 = ${d.ratio}%`;
   navigator.clipboard.writeText(txt).then(()=>toast('리포트 요약이 복사됐어요 — 가족·친구에게 공유하세요'));
 }
 
@@ -1279,7 +1416,7 @@ function seedChat(){
   if(state.diag){
     greet = `${isGuest()?'':u.name+'님, '}등기부등본 진단에서 종합 안전도 ${state.diag.score}점이 나왔어요. ${state.diag.cnt.danger?`위험 항목 ${state.diag.cnt.danger}건은 잔금 전에 꼭 해결해야 해요.`:'큰 위험은 없지만 특약은 꼭 챙기세요.'} 궁금한 점을 물어보세요!`;
   } else if(isGuest()){
-    greet = `안녕하세요! 저는 집지킴 계약 비서예요. 등기부등본, 특약, 전세보증보험… 계약이 처음이라 모르는 게 많아도 괜찮아요, 뭐든 물어보세요. 맞춤 설정을 하면 내 계약 기준으로 더 정확하게 답해드려요.`;
+    greet = `안녕하세요! 저는 집집 계약 비서예요. 등기부등본, 특약, 전세보증보험… 계약이 처음이라 모르는 게 많아도 괜찮아요, 뭐든 물어보세요. 맞춤 설정을 하면 내 계약 기준으로 더 정확하게 답해드려요.`;
   } else {
     const d = u.moveDate? daysUntil(u.moveDate) : null;
     greet = `${u.name}님, 안녕하세요! ${d!==null&&d>=0?`잔금일까지 D-${d}네요. `:''}저는 ${u.name}님의 계약 정보(${u.type} ${fmtMan(u.deposit)})를 알고 있는 계약 비서예요. 등기부등본, 특약, 보증보험… 뭐든 물어보세요.`;
@@ -1319,9 +1456,10 @@ function buildAiContext(){
   if(pending) parts.push(`남은 할 일: ${pending}`);
   return parts.join('\n');
 }
+function openChat(){ document.body.classList.add('chat-open'); setTimeout(()=>{ const i=document.getElementById('chatInput'); if(i && !isMobile()) i.focus(); }, 320); }
+function closeChat(){ document.body.classList.remove('chat-open'); }
 async function askAI(q){
-  switchView('dashboard');
-  if(isMobile()) document.body.classList.add('chat-open');
+  openChat();
   pushMsg('user', q);
   const body = document.getElementById('chatBody');
   const typing = document.createElement('div');
@@ -1407,11 +1545,32 @@ function aiAnswer(q){
   else if(has('중개','수수료','복비')){
     text = `중개보수(복비)는 법정 상한이 정해져 있어요.\n\n${u.type==='전세'&&u.deposit?`전세 ${fmtMan(u.deposit)}원 기준:\n· 거래금액 1~6억 구간 상한요율 0.4% → 최대 약 ${Math.round(u.deposit*0.004)}만원`:`월세는 (보증금 + 월세×100)으로 환산해 계산해요.`}\n\n팁:\n· 상한요율일 뿐, 협의로 낮출 수 있어요\n· 현금영수증 발급 의무가 있어요\n· 등록된 중개사인지 국가공간정보포털에서 확인하세요`;
   }
-  else if(has('고마워','감사','좋아','최고')){
+  else if(has('일정','캘린더','등록','추가해','스케줄')){
+    if(u.moveDate){
+      const mv = u.moveDate;
+      text = `${u.name?u.name+'님 ':''}잔금·입주일(${mv.slice(5).replace('-','/')}) 기준으로 꼭 챙길 일정을 캘린더에 넣어드릴게요. 아래 버튼을 누르면 바로 등록돼요.`;
+      extra = `<div class="msg-actions">`
+        + `<button onclick="addEventFromChat('${mv}','잔금일 · 등기부 재열람')">잔금일 등록</button>`
+        + `<button onclick="addEventFromChat('${mv}','전입신고 + 확정일자')">전입신고 등록</button>`
+        + `<button onclick="switchView('dashboard');closeChat()">캘린더 보기</button></div>`;
+    } else {
+      text = `일정을 등록하려면 먼저 잔금일·입주 예정일이 필요해요. 내 집을 등록하면 계약 일정이 자동으로 캘린더에 채워지고, 캘린더에서 날짜를 눌러 직접 추가할 수도 있어요.`;
+      extra = `<div class="msg-actions"><button onclick="openOnboarding()">내 집 등록하기</button></div>`;
+    }
+  }
+  else if(has('안녕','하이','반가','ㅎㅇ','누구야','뭐 하는','뭐하는','도와')){
+    text = `안녕하세요! 저는 ${isGuest()?'':u.name+'님의 '}계약 비서예요. 등기부등본, 특약, 전세보증보험, 전입신고, 청년 지원 제도까지 — 계약이 처음이라 막막한 것들을 편하게 물어보세요. 어려운 말은 최대한 쉽게 풀어드릴게요.`;
+    extra = `<div class="msg-actions"><button onclick="askAI('전세 계약, 뭐부터 해야 해?')">뭐부터 해야 해?</button><button onclick="switchView('diagnosis');closeChat()">AI 진단</button></div>`;
+  }
+  else if(has('뭐부터','어디서부터','처음','시작','순서')){
+    text = `천천히 하나씩 하면 돼요. 순서는 이래요.\n\n1. 집 정하기 전 — 등기부등본 열람 + AI 진단으로 위험도 확인\n2. 계약할 때 — 근저당 말소 특약 넣기, 소유자 계좌로 입금\n3. 잔금일 — 아침에 등기부 재열람 후 잔금\n4. 이사 당일 — 전입신고 + 확정일자 (가장 중요!)\n5. 입주 후 — 전세보증보험 가입\n\n${isGuest()?'내 집을 등록하면 이 순서를 잔금일에 맞춰 알림으로 챙겨드려요.':u.name+'님 계약 단계에 맞춰 대시보드에 할 일을 정리해뒀어요.'}`;
+    extra = `<div class="msg-actions">${isGuest()?'<button onclick="openOnboarding()">내 집 등록하기</button>':'<button onclick="switchView(\'dashboard\');closeChat()">내 할 일 보기</button>'}<button onclick="switchView('guide');closeChat()">가이드 보기</button></div>`;
+  }
+  else if(has('고마워','감사','좋아','최고','ㄳ','땡큐')){
     text = `도움이 됐다니 기뻐요! 안전한 계약을 끝까지 챙길게요. 궁금한 게 생기면 언제든 물어보세요.`;
   }
   else {
-    text = `좋은 질문이에요! 제가 잘 아는 주제들로 안내해 드릴게요.\n\n· "확정일자가 뭐야?" — 용어 설명\n· "근저당 있으면 위험해?" — 내 등기부 분석\n· "특약 문구 만들어줘" — 맞춤 특약 생성\n· "받을 수 있는 지원금 알려줘" — 맞춤 정책 추천\n· "잔금일에 뭐 해야 해?" — 절차 안내\n\n또는 가이드 탭에서 전세사기 유형과 용어 사전을 볼 수 있어요.`;
+    text = `${isGuest()?'':u.name+'님, '}그 부분도 같이 볼게요. 제가 특히 잘 도와드릴 수 있는 건 이런 것들이에요.\n\n· "확정일자가 뭐야?" — 어려운 용어 쉽게 설명\n· "근저당 있으면 위험해?" — 내 등기부 분석\n· "특약 문구 만들어줘" — 맞춤 특약 생성\n· "지원금 뭐 받을 수 있어?" — 맞춤 정책 추천\n· "잔금일에 뭐 해야 해?" — 절차 안내\n· "일정 등록해줘" — 캘린더에 일정 추가\n\n편하게 이어서 물어봐 주세요.`;
   }
   return {text, extra};
 }
@@ -1456,14 +1615,14 @@ function buildIcs(){
   const esc = s => s.replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');
   const D = d => d.replace(/-/g,'');
   const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//jibjikim//jibjikim.vercel.app//KR',
-    'CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:집지킴 계약 일정'];
+    'CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:집집 계약 일정'];
   events.forEach((e,i)=>{
     lines.push('BEGIN:VEVENT',
       `UID:jibjikim-${D(e.d)}-${i}@jibjikim.vercel.app`,
       `DTSTAMP:${stamp}`,
       `DTSTART;VALUE=DATE:${D(e.d)}`,
       `DTEND;VALUE=DATE:${D(addDays(e.d,1))}`,
-      `SUMMARY:${esc('[집지킴] '+e.t)}`,
+      `SUMMARY:${esc('[집집] '+e.t)}`,
       `DESCRIPTION:${esc(e.desc)}`,
       'TRANSP:TRANSPARENT','END:VEVENT');
   });
@@ -1472,7 +1631,13 @@ function buildIcs(){
 }
 /* ---- 웹 내장 캘린더 ---- */
 let calMonth = null;
+let addingDate = null;   // 사용자가 일정 추가 중인 날짜
 const EV_COLORS = {red:'#dc2626', blue:'#2563eb', green:'#16a34a', amber:'#d97706'};
+// 계약 일정(자동) + 내가 추가한 일정(수동)을 합친 단일 소스
+function allCalEvents(){
+  const custom = (state.customEvents||[]).map(e=>({...e, c:'blue', custom:true, t:e.s}));
+  return [...contractEvents(), ...custom].sort((a,b)=>a.d.localeCompare(b.d));
+}
 function renderCalendar(){
   const grid = document.getElementById('calGrid');
   if(!grid) return;
@@ -1480,7 +1645,7 @@ function renderCalendar(){
   const [y,m] = calMonth.split('-').map(Number);
   const startDow = new Date(y, m-1, 1).getDay();
   const dim = new Date(y, m, 0).getDate();
-  const evs = contractEvents();
+  const evs = allCalEvents();
   const byDay = {};
   evs.forEach(e=>{ if(e.d.slice(0,7)===calMonth){ const dd=Number(e.d.slice(8)); (byDay[dd]=byDay[dd]||[]).push(e); }});
   document.getElementById('calTitle').textContent = `${y}년 ${m}월`;
@@ -1489,18 +1654,53 @@ function renderCalendar(){
   for(let i=0;i<startDow;i++) cells += '<div class="cal-cell blank"></div>';
   for(let d=1;d<=dim;d++){
     const ds = `${calMonth}-${String(d).padStart(2,'0')}`;
-    cells += `<div class="cal-cell ${ds===today?'today':''}"><span class="cal-day">${d}</span>${(byDay[d]||[]).map(e=>`<span class="cal-ev ${e.c}" title="${e.t}">${e.s}</span>`).join('')}</div>`;
+    cells += `<div class="cal-cell click ${ds===today?'today':''} ${ds===addingDate?'sel':''}" onclick="openAddEvent('${ds}')" title="클릭해서 일정 추가"><span class="cal-day">${d}</span>${(byDay[d]||[]).map(e=>`<span class="cal-ev ${e.c}" title="${e.t}">${e.s}</span>`).join('')}</div>`;
   }
   const trail = (7-(startDow+dim)%7)%7;
   for(let i=0;i<trail;i++) cells += '<div class="cal-cell blank"></div>';
   grid.innerHTML = cells;
   const list = document.getElementById('calList');
   if(evs.length){
-    const gcal = e => `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('[집지킴] '+e.t)}&dates=${e.d.replace(/-/g,'')}/${addDays(e.d,1).replace(/-/g,'')}&details=${encodeURIComponent(e.desc)}`;
-    list.innerHTML = evs.map(e=>`<div class="cal-li"><b>${e.d.slice(5).replace('-','/')}</b><span class="dot" style="background:${EV_COLORS[e.c]}"></span><span style="flex:1">${e.s}</span><a href="${gcal(e)}" target="_blank" rel="noopener" style="font-size:11px;color:var(--blue);font-weight:700;text-decoration:none;flex-shrink:0">+Google</a></div>`).join('');
+    list.innerHTML = evs.map((e,i)=>`<div class="cal-li"><b>${e.d.slice(5).replace('-','/')}</b><span class="dot" style="background:${EV_COLORS[e.c]}"></span><span style="flex:1">${e.s}</span>${e.custom?`<button class="cal-del" onclick="deleteCustomEvent('${e.d}','${escapeHtml(e.s)}')" title="삭제">✕</button>`:''}</div>`).join('');
   } else {
-    list.innerHTML = `<div style="text-align:center;padding:8px 0;color:var(--muted);font-size:13.5px">잔금일·입주일을 입력하면 등기부 재열람 → 전입신고 → 보증보험 → 임대차 신고 일정이 자동으로 표시돼요<br><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="openOnboarding()">1분 맞춤 설정</button></div>`;
+    list.innerHTML = `<div style="text-align:center;padding:8px 0;color:var(--muted);font-size:13px">날짜를 눌러 일정을 추가하거나, 내 집을 등록하면 계약 일정이 자동으로 채워져요<br><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="openOnboarding()">내 집 등록하기</button></div>`;
   }
+}
+function openAddEvent(ds){
+  addingDate = ds;
+  const box = document.getElementById('calAdd');
+  box.style.display = 'flex';
+  const inp = document.getElementById('calAddInput');
+  inp.placeholder = `${ds.slice(5).replace('-','/')} 일정 내용`;
+  inp.value = '';
+  renderCalendar();
+  inp.focus();
+}
+function cancelAddEvent(){ addingDate = null; document.getElementById('calAdd').style.display='none'; renderCalendar(); }
+function confirmAddEvent(){
+  const label = document.getElementById('calAddInput').value.trim();
+  if(!addingDate || !label){ toast('일정 내용을 입력해 주세요'); return; }
+  state.customEvents = state.customEvents || [];
+  state.customEvents.push({d: addingDate, s: label, desc: label});
+  save();
+  const d = addingDate; addingDate = null;
+  document.getElementById('calAdd').style.display='none';
+  if(calMonth !== d.slice(0,7)) calMonth = d.slice(0,7);
+  renderCalendar();
+  toast(`${d.slice(5).replace('-','/')} 일정을 추가했어요`);
+}
+function deleteCustomEvent(d, s){
+  state.customEvents = (state.customEvents||[]).filter(e=>!(e.d===d && e.s===s));
+  save(); renderCalendar(); toast('일정을 삭제했어요');
+}
+// 비서가 대화 중 일정을 캘린더에 등록 (예: 잔금일·전입신고 등)
+function addEventFromChat(d, label){
+  if(!d){ toast('날짜 정보가 없어요'); return; }
+  state.customEvents = state.customEvents || [];
+  if(state.customEvents.some(e=>e.d===d && e.s===label)){ toast('이미 등록된 일정이에요'); return; }
+  state.customEvents.push({d, s: label, desc: label});
+  save(); calMonth = d.slice(0,7); renderCalendar();
+  toast(`캘린더에 “${label}” 일정을 등록했어요`);
 }
 function calShift(n){
   const [y,m] = calMonth.split('-').map(Number);
@@ -1513,7 +1713,7 @@ function downloadIcs(){
   const blob = new Blob([buildIcs()], {type:'text/calendar;charset=utf-8'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = '집지킴-계약일정.ics';
+  a.download = '집집-계약일정.ics';
   a.click();
   URL.revokeObjectURL(a.href);
   toast('캘린더 파일을 받았어요 — 열면 폰 캘린더에 등록돼요');
@@ -1675,14 +1875,24 @@ function submitOnboarding(){
   // 할 일 목록은 새 정보 기준으로 다시 만들되, 이미 체크한 항목은 유지
   const doneMap = state ? Object.fromEntries(state.todos.map(t=>[t.id, t.done])) : {};
   const todos = buildTodos(user).map(t=>({...t, done: doneMap[t.id] !== undefined ? doneMap[t.id] : t.done}));
-  state = { user, todos, diag: state ? state.diag : null, chat: [] };
+  state = { user, todos, diag: state ? state.diag : null, chat: [], customEvents: state ? (state.customEvents||[]) : [], bannerDismissed: false };
   calMonth = null; // 캘린더를 잔금일이 있는 달로 재설정
   save();
   document.getElementById('onboardOverlay').style.display='none';
   document.getElementById('chatBody').innerHTML='';
   state.chat = [];
   renderAll();
+  switchView('dashboard');   // 설정 완료 후 맞춤 대시보드로 바로 이동
   toast(`${name}님 맞춤 대시보드가 준비됐어요`);
+}
+/* ---------- 스크롤 리빌 (가벼운 폴리시) ---------- */
+function setupReveal(){
+  const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(e=>e.classList.add('in')); return; }
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }});
+  }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  els.forEach(e=>io.observe(e));
 }
 /* ---------- boot ---------- */
 (function(){
@@ -1699,9 +1909,10 @@ function submitOnboarding(){
   renderAll();
   if(firstVisit) switchView('landing');
   setupPdfDrop();
-  document.getElementById('verLanding').textContent = APP_VERSION;
-  document.querySelector('.user-chip').title = '집지킴 ' + APP_VERSION;
-  console.log('집지킴', APP_VERSION);
+  setupReveal();
+  const _ver = document.getElementById('verLanding'); if(_ver) _ver.textContent = APP_VERSION;
+  document.querySelector('.user-chip').title = '집집 ' + APP_VERSION;
+  console.log('집집', APP_VERSION);
   const body = document.getElementById('chatBody');
   if(state.chat.length){
     body.innerHTML='';
