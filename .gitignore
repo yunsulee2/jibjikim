@@ -1,3 +1,5 @@
 .vercel/
 .gstack/
 .omc/
+*.pdf
+docs/
