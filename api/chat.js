@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return res.status(503).json({ error: 'no_api_key' });
 
-  const { messages = [], context = '' } = req.body || {};
+  const { messages = [], context = '', image = null } = req.body || {};
   if (!Array.isArray(messages) || !messages.length) return res.status(400).json({ error: 'bad_request' });
 
   const system = `너는 '집집'의 AI 부동산 계약 비서다. 한국의 주택 임대차(전세·월세) 제도 전문가로서,
@@ -18,6 +18,7 @@ export default async function handler(req, res) {
 - 사용자가 불안해하면 먼저 안심시키고, 모르는 용어는 비유로 쉽게 풀어준다. 이전 대화 맥락을 이어서 답한다.
 - 답변은 3~7문장, 핵심 먼저. 목록이 필요하면 · 기호를 쓴다. 마크다운 문법(**, ## 등)은 절대 쓰지 않는다.
 - 아래 [사용자 상황]이 있으면 반드시 그 수치와 상황을 인용해 맞춤으로 답한다. 다만 상황에만 갇히지 말고, 일반적인 질문에도 폭넓게 답한다.
+- 사진(등기부등본·계약서 등)이 첨부되면 문서 종류를 먼저 밝히고, 소유자·근저당(채권최고액)·압류·전세권·특약 등 위험과 직결되는 내용을 읽어 짚어준다. 글자가 흐려 확실하지 않은 값은 추측하지 말고 "잘 안 보인다"고 말한다.
 - 특약 문구를 요청받으면 계약서에 바로 쓸 수 있는 완성 문장을 큰따옴표로 제시한다.
 - 확실하지 않은 법률·세부 요건은 단정하지 말고 관련 기관(주민센터, HUG, 인터넷등기소, 정부24) 확인을 권한다.
 - 부동산과 무관한 질문에는 "계약과 주거 관련 질문을 도와드리는 비서"라고 부드럽게 안내한다.
@@ -30,6 +31,14 @@ ${String(context).slice(0, 2000)}`;
     role: m.role === 'user' ? 'user' : 'model',
     parts: [{ text: String(m.text || '').slice(0, 2000) }],
   }));
+
+  // 사진 첨부(등기부등본·계약서) — 마지막 사용자 메시지에 이미지를 붙인다
+  if (image && image.data && contents.length) {
+    const mime = /^image\/(jpeg|png|webp)$/.test(image.mime) ? image.mime : 'image/jpeg';
+    contents[contents.length - 1].parts.push({
+      inline_data: { mime_type: mime, data: String(image.data).slice(0, 4_000_000) },
+    });
+  }
 
   try {
     const r = await fetch(

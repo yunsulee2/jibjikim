@@ -483,6 +483,50 @@
     .cal-cell{min-height:42px;padding:3px}
   }
 
+  /* ===== 알림 센터 ===== */
+  .notif-card{margin-top:18px;padding:22px}
+  .notif-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .notif-head h3{font-size:17px;flex:1}
+  .notif-head .stat{color:var(--red)}
+  .notif-item{display:flex;gap:13px;padding:13px 2px;border-top:1px solid var(--line);align-items:flex-start}
+  .notif-item:first-of-type{border-top:none}
+  .notif-when{min-width:76px;flex-shrink:0;text-align:left}
+  .notif-when b{display:block;font-size:13.5px;color:var(--navy)}
+  .notif-when span{font-size:11.5px;font-weight:700}
+  .notif-main{flex:1;min-width:0}
+  .notif-main b{font-size:14.5px;display:block;color:var(--navy)}
+  .notif-main p{font-size:13px;color:var(--muted);margin-top:2px;word-break:keep-all}
+  .notif-item.past{opacity:.45}
+  .notif-item.hard .notif-main b{color:var(--red)}
+
+  /* ===== 보증금 반환 시뮬레이터 ===== */
+  .calc-card{margin-top:16px;padding:22px}
+  .calc-card h4{font-size:15px;margin-bottom:5px}
+  .calc-card .sub{font-size:13px;color:var(--muted);margin-bottom:13px}
+  .calc-seg{display:flex;gap:3px;background:#ECEFF6;padding:3px;border-radius:10px;margin-bottom:12px}
+  .calc-seg button{flex:1;font-size:13px;font-weight:600;padding:7px 0;border-radius:8px;color:var(--muted)}
+  .calc-seg button.active{background:#fff;color:var(--navy);font-weight:700;box-shadow:0 1px 2px rgba(15,34,71,.08)}
+  .calc-rows{margin-top:12px;border-top:1px solid var(--line)}
+  .calc-row{display:flex;justify-content:space-between;gap:10px;padding:9px 2px;font-size:13.5px;border-bottom:1px dashed var(--line)}
+  .calc-row span{color:var(--muted)}
+  .calc-row b{color:var(--navy)}
+  .calc-final{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .calc-final>div{border-radius:12px;padding:14px;text-align:center}
+  .calc-final .get{background:var(--green-bg)}
+  .calc-final .lose{background:var(--red-bg)}
+  .calc-final small{font-size:12px;font-weight:700;display:block;margin-bottom:3px}
+  .calc-final .get small{color:var(--green)} .calc-final .lose small{color:var(--red)}
+  .calc-final b{font-size:19px;letter-spacing:-.02em}
+  .calc-final .get b{color:var(--green)} .calc-final .lose b{color:var(--red)}
+
+  /* ===== 챗 사진 첨부 ===== */
+  .chat-attach{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .chat-attach:hover{color:var(--navy);border-color:var(--navy)}
+  .chat-imgbar{display:flex;align-items:center;gap:9px;padding:8px 14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+  .chat-imgbar img{width:36px;height:36px;object-fit:cover;border-radius:8px}
+  .chat-imgbar button{margin-left:auto;width:26px;height:26px;border-radius:7px;background:#F1F3F8;color:var(--muted)}
+  .msg-img{max-width:170px;border-radius:10px;display:block;margin-top:7px}
+
   /* toast */
   #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 22px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.25)}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -638,6 +682,12 @@
           <button class="alert-x" onclick="dismissBanner()" title="이 안내 닫기" aria-label="닫기">✕</button>
         </div>
 
+        <div class="card notif-card">
+          <div class="notif-head"><h3>알림 센터</h3><span class="stat" id="notifCount"></span></div>
+          <p style="font-size:12.5px;color:var(--muted);margin-bottom:6px">놓치면 손해 보는 기한을 계약이 끝나는 날까지 챙겨드려요</p>
+          <div id="notifList"></div>
+        </div>
+
         <div class="card todo-card">
           <div class="todo-head">
             <h3>해야 할 일</h3>
@@ -764,6 +814,17 @@
           <p class="sub">계약서에 바로 쓸 수 있는 문구예요. 공인중개사에게 전달해 특약란에 넣으세요.</p>
           <div id="clauseList"></div>
         </div>
+
+        <div class="card calc-card" id="calcCard" style="display:none">
+          <h4>경매로 넘어가면, 내 돈은 얼마나 돌아올까요?</h4>
+          <p class="sub">위 진단 값 그대로 배당 순서를 시뮬레이션해요 — 낙찰가율을 바꿔보세요</p>
+          <div class="calc-seg" id="calcSeg">
+            <button onclick="setCalcRate(60)">낙찰 60%</button><button class="active" onclick="setCalcRate(70)">70%</button><button onclick="setCalcRate(80)">80%</button><button onclick="setCalcRate(90)">90%</button>
+          </div>
+          <div class="check-row" style="padding:4px 0 2px"><input type="checkbox" id="calcFixChk" checked onchange="calcFix=this.checked;renderCalc()"><span>전입신고 + 확정일자를 마쳤어요 (우선변제권 확보)</span></div>
+          <div id="calcRows"></div>
+          <p style="font-size:11.5px;color:var(--muted-2);margin-top:10px;word-break:keep-all">참고용 계산이에요 — 소액임차인 최우선변제, 당해세, 다른 선순위 임차인 등에 따라 실제 배당과 다를 수 있어요.</p>
+        </div>
       </div>
       </div>
     </div>
@@ -871,6 +932,7 @@
         </select>
       </div>
       <div class="field"><label>잔금일 / 입주 예정일</label><input type="date" id="fMoveDate"></div>
+      <div class="field"><label>계약 만료일 (만기)</label><input type="date" id="fEndDate"><span class="hint">비워두면 입주일+2년으로 계산해요</span></div>
       <div class="field full"><label>집 주소 · 별칭 (동까지만 적어도 돼요)</label><input id="fAddress" placeholder="예: ○○구 ○○동 원룸 / 아직 못 정했으면 비워두세요"></div>
     </div>
     <button class="btn btn-primary" onclick="submitOnboarding()">맞춤 대시보드 만들기</button>
@@ -888,7 +950,10 @@
   </div>
   <div class="chat-body" id="chatBody"></div>
   <div class="quick-qs" id="quickQs"></div>
+  <div class="chat-imgbar" id="chatImgBar" style="display:none"><img id="chatImgThumb" alt=""><span>사진 1장 첨부됨 — 등기부·계약서를 읽고 답해드려요</span><button onclick="clearChatImg()" aria-label="사진 제거">✕</button></div>
   <div class="chat-input">
+    <button class="chat-attach" onclick="document.getElementById('chatImgFile').click()" aria-label="사진 첨부" title="등기부등본·계약서 사진 첨부"><svg class="ic-svg" viewBox="0 0 24 24" style="width:19px;height:19px"><path d="M8.5 12.2l5.8-5.8a3.1 3.1 0 114.4 4.4l-7.4 7.4a4.6 4.6 0 01-6.5-6.5l7-7"/></svg></button>
+    <input type="file" id="chatImgFile" accept="image/*" hidden>
     <input id="chatInput" placeholder="계약에 대해 무엇이든 물어보세요" onkeydown="if(event.key==='Enter')sendChat()">
     <button onclick="sendChat()" aria-label="보내기">↑</button>
   </div>
@@ -908,10 +973,10 @@
 /* =========================================================
    집집 — AI 부동산 계약 비서 (client-side prototype)
    ========================================================= */
-const APP_VERSION = 'v3.1 · 집집(ZibZip) 리뉴얼';
+const APP_VERSION = 'v3.2 · 알림센터·시뮬레이터·사진챗';
 const LS_KEY = 'jibjikim_v1';
 let state = null;
-const GUEST_USER = { name:null, age:null, region:null, type:null, deposit:null, rent:0, income:null, stage:'0', moveDate:null, address:null };
+const GUEST_USER = { name:null, age:null, region:null, type:null, deposit:null, rent:0, income:null, stage:'0', moveDate:null, endDate:null, address:null };
 const isGuest = () => !state.user.name;
 
 const fmtMan = n => {
@@ -970,7 +1035,7 @@ function buildTodos(u){
 /* ---------- support programs ---------- */
 const chk = (v, fn) => (v===null||v===undefined||v==='') ? null : fn(v);
 const SUPPORTS = [
-  { id:'s1', name:'청년 버팀목 전세자금대출', cat:'loan', amount:'연 2.0~3.1%', agency:'주택도시기금 · HUG',
+  { id:'s1', name:'청년 버팀목 전세자금대출', cat:'loan', amount:'연 2.0~3.1%', agency:'주택도시기금 · HUG', url:'https://nhuf.molit.go.kr',
     desc:'만 34세 이하 무주택 청년에게 저금리로 전세보증금의 80%까지 대출해줘요.',
     conds:u=>[
       {label:'만 19~34세', ok:chk(u.age,a=>a>=19&&a<=34)},
@@ -978,7 +1043,7 @@ const SUPPORTS = [
       {label:'전세 계약', ok:chk(u.type,t=>t==='전세')},
       {label:'보증금 3억 이하(수도권)', ok:chk(u.deposit,d=>d<=30000)},
     ]},
-  { id:'s2', name:'중소기업취업청년 전월세보증금대출', cat:'loan', amount:'연 1.5% · 최대 1억', agency:'주택도시기금',
+  { id:'s2', name:'중소기업취업청년 전월세보증금대출', cat:'loan', amount:'연 1.5% · 최대 1억', agency:'주택도시기금', url:'https://nhuf.molit.go.kr',
     desc:'중소·중견기업 재직 청년 대상 초저금리 대출. 조건이 맞으면 가장 유리해요.',
     conds:u=>[
       {label:'만 19~34세', ok:chk(u.age,a=>a>=19&&a<=34)},
@@ -986,7 +1051,7 @@ const SUPPORTS = [
       {label:'중소기업 재직', ok:null},
       {label:'보증금 2억 이하', ok:chk(u.deposit,d=>d<=20000)},
     ]},
-  { id:'s3', name:'청년 월세 특별지원', cat:'cash', amount:'월 20만원 × 12개월', agency:'국토교통부',
+  { id:'s3', name:'청년 월세 특별지원', cat:'cash', amount:'월 20만원 × 12개월', agency:'국토교통부', url:'https://www.bokjiro.go.kr',
     desc:'저소득 무주택 청년에게 월세를 현금으로 지원해요.',
     conds:u=>[
       {label:'만 19~34세', ok:chk(u.age,a=>a>=19&&a<=34)},
@@ -994,14 +1059,14 @@ const SUPPORTS = [
       {label:'보증금 5천만원 이하', ok:chk(u.deposit,d=>d<=5000)},
       {label:'청년 독립가구 소득 기준 충족', ok:null},
     ]},
-  { id:'s4', name:'서울시 청년 이사비 지원', cat:'cash', amount:'최대 40만원', agency:'서울특별시',
+  { id:'s4', name:'서울시 청년 이사비 지원', cat:'cash', amount:'최대 40만원', agency:'서울특별시', url:'https://housing.seoul.go.kr',
     desc:'이사비·중개보수를 실비로 지원해요. 매년 상반기 모집하니 마감일을 확인하세요.',
     conds:u=>[
       {label:'서울 거주', ok:chk(u.region,r=>r==='서울')},
       {label:'만 19~39세', ok:chk(u.age,a=>a>=19&&a<=39)},
       {label:'보증금 3억 이하 · 월세 70만원 이하', ok:chk(u.deposit,d=>d<=30000)},
     ]},
-  { id:'s5', name:'전세보증금 반환보증 (HUG)', cat:'insurance', amount:'보증료 연 0.11~0.15%', agency:'주택도시보증공사',
+  { id:'s5', name:'전세보증금 반환보증 (HUG)', cat:'insurance', amount:'보증료 연 0.11~0.15%', agency:'주택도시보증공사', url:'https://www.khug.or.kr/jeonse',
     desc:'집주인이 보증금을 안 돌려주면 HUG가 대신 돌려줘요. 전세라면 사실상 필수!',
     conds:u=>[
       {label:'전세 계약', ok:chk(u.type,t=>t==='전세')},
@@ -1009,14 +1074,14 @@ const SUPPORTS = [
       {label:'(보증금+선순위채권) ≤ 주택가액 90%', ok:null},
       {label:'잔금 지급 + 전입신고 완료 후 신청', ok:null},
     ]},
-  { id:'s6', name:'LH 청년 전세임대주택', cat:'loan', amount:'시중 전세가의 5% 수준 부담', agency:'LH',
+  { id:'s6', name:'LH 청년 전세임대주택', cat:'loan', amount:'시중 전세가의 5% 수준 부담', agency:'LH', url:'https://apply.lh.or.kr',
     desc:'LH가 집주인과 대신 계약하고 청년에게 재임대해요. 목돈이 없어도 가능해요.',
     conds:u=>[
       {label:'만 19~39세', ok:chk(u.age,a=>a>=19&&a<=39)},
       {label:'무주택자', ok:null},
       {label:'수급자·저소득 가구 우선', ok:null},
     ]},
-  { id:'s7', name:'청년 주거급여 분리지급', cat:'cash', amount:'지역별 기준임대료 내 실비', agency:'국토교통부',
+  { id:'s7', name:'청년 주거급여 분리지급', cat:'cash', amount:'지역별 기준임대료 내 실비', agency:'국토교통부', url:'https://www.bokjiro.go.kr',
     desc:'주거급여 수급 가구의 20대 자녀가 따로 살면 임차료를 별도 지원받아요.',
     conds:u=>[
       {label:'만 19~30세 미혼', ok:chk(u.age,a=>a>=19&&a<=30)},
@@ -1130,6 +1195,7 @@ function renderDashboard(){
   renderTodos();
   renderMiniSupport();
   renderCalendar();
+  renderNotif();
   if(!state.chat.length) seedChat();
 }
 function dismissBanner(){ state.bannerDismissed = true; save(); document.getElementById('alertBanner').style.display='none'; }
@@ -1218,7 +1284,10 @@ function renderSupport(){
         return `<div class="cond ${cls}"><span class="ic">${ic}</span>${c.label}</div>`;}).join('')}
       </div>
       <div class="foot"><span class="agency">${s.agency}</span>
-        <button class="btn btn-ghost btn-sm" onclick="askAI('${s.name} 신청 방법 알려줘')">비서에게 신청 방법 묻기</button>
+        <span style="display:flex;gap:7px">
+          <button class="btn btn-ghost btn-sm" onclick="askAI('${s.name} 신청 방법 알려줘')">비서에게 묻기</button>
+          ${s.url?`<a class="btn btn-primary btn-sm" href="${s.url}" target="_blank" rel="noopener" style="text-decoration:none">신청하러 가기 ↗</a>`:''}
+        </span>
       </div>
     </div>`;
   }).join('') || '<div class="empty-note">해당하는 제도가 없어요</div>';
@@ -1350,6 +1419,7 @@ function runDiagnosis(){
 
 function paintDiagnosis(d){
   document.getElementById('diagResult').style.display='block';
+  renderCalc();
   // gauge
   const arc = document.getElementById('gaugeArc');
   const C = 295.3;
@@ -1452,9 +1522,9 @@ function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 function sendChat(){
   const inp = document.getElementById('chatInput');
   const q = inp.value.trim();
-  if(!q) return;
+  if(!q && !chatImg) return;
   inp.value='';
-  askAI(q);
+  askAI(q || '이 사진을 읽고 위험한 부분이 있는지 알려줘', chatImg);
 }
 function buildAiContext(){
   const u = state.user, d = state.diag;
@@ -1469,9 +1539,11 @@ function buildAiContext(){
 }
 function openChat(){ document.body.classList.add('chat-open'); setTimeout(()=>{ const i=document.getElementById('chatInput'); if(i && !isMobile()) i.focus(); }, 320); }
 function closeChat(){ document.body.classList.remove('chat-open'); }
-async function askAI(q){
+async function askAI(q, img=null){
   openChat();
-  pushMsg('user', q);
+  const image = img || null;
+  if(image) clearChatImg();
+  pushMsg('user', q, true, image?`<img class="msg-img" src="${image.url}" alt="첨부한 사진">`:'');
   const body = document.getElementById('chatBody');
   const typing = document.createElement('div');
   typing.className='msg ai'; typing.innerHTML='<span class="typing"><i></i><i></i><i></i></span>';
@@ -1479,13 +1551,135 @@ async function askAI(q){
   let live = null;
   try{
     const res = await fetch('/api/chat', { method:'POST', headers:{'content-type':'application/json'},
-      body: JSON.stringify({ messages: state.chat.slice(-8), context: buildAiContext() }) });
+      body: JSON.stringify({ messages: state.chat.slice(-8), context: buildAiContext(),
+        image: image ? {mime: image.mime, data: image.data} : undefined }) });
     if(res.ok){ const j = await res.json(); if(j.text) live = j.text.trim(); }
   }catch(e){ /* 로컬 실행·키 미설정·오프라인 → 규칙 기반 폴백 */ }
   typing.remove();
   if(live){ pushMsg('ai', live); }
+  else if(image){
+    pushMsg('ai', '사진을 읽는 기능은 AI 연결(GEMINI_API_KEY 설정) 후에 사용할 수 있어요.\n\n지금 바로 할 수 있는 방법: 등기부등본이 PDF 파일이라면 AI 진단 탭에 끌어다 놓으세요 — 글자를 자동 인식해서 근저당·압류까지 분석해드려요!', true,
+      `<div class="msg-actions"><button onclick="switchView('diagnosis')">AI 진단 탭으로 →</button></div>`);
+  }
   else { const {text, extra} = aiAnswer(q); pushMsg('ai', text, true, extra); }
 }
+
+/* ---- 날짜 헬퍼 ---- */
+function addMonths(ds, n){
+  const d = new Date(ds+'T00:00:00');
+  d.setMonth(d.getMonth()+n);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function getEndDate(u){
+  if(u.endDate) return u.endDate;
+  if(u.moveDate) return addMonths(u.moveDate, 24);
+  return null;
+}
+
+/* =========================================================
+   알림 센터 — 계약 후에도 기한을 챙겨주는 타임라인
+   ========================================================= */
+function buildAlerts(){
+  const u = state.user, mv = u.moveDate, end = getEndDate(u);
+  if(!mv) return [];
+  const A = [];
+  A.push({d: addDays(mv,30), t:'주택임대차 신고 마감', desc:'계약 후 30일 이내 · 신고하면 확정일자가 자동 부여돼요 (rtms.molit.go.kr)'});
+  if(u.type!=='월세' && end){
+    const mid = new Date((new Date(mv+'T00:00:00').getTime() + new Date(end+'T00:00:00').getTime())/2);
+    const midStr = `${mid.getFullYear()}-${String(mid.getMonth()+1).padStart(2,'0')}-${String(mid.getDate()).padStart(2,'0')}`;
+    A.push({d: midStr, t:'전세보증보험 가입 마감', desc:'계약기간 절반이 지나면 가입할 수 없어요 — 아직이라면 서두르세요 (HUG 기준)'});
+  }
+  if(end){
+    A.push({d: addMonths(end,-6), t:'계약갱신청구 가능 시작', desc:'만기 6개월 전부터 갱신요구권을 쓸 수 있어요 — 1회, 최대 2년 연장, 임대료 인상 5% 상한'});
+    A.push({d: addMonths(end,-2), t:'갱신청구·종료 통지 마감', desc:'만기 2개월 전까지 임대인에게 알려야 해요. 놓치면 묵시적 갱신으로 같은 조건 자동 연장 — 이사 계획이 있다면 특히 주의!', hard:true});
+    A.push({d: end, t:'계약 만기 — 보증금 반환일', desc:'반환이 늦어질 것 같으면 임차권등기명령(전출 전 필수)을 미리 알아두세요'});
+  }
+  return A.map(a=>{
+    const dd = daysUntil(a.d);
+    return {...a, dd, lv: dd<0?'past':dd<=14?'red':dd<=60?'amber':'blue'};
+  }).sort((a,b)=>a.d.localeCompare(b.d));
+}
+function renderNotif(){
+  const list = document.getElementById('notifList');
+  if(!list) return;
+  const alerts = buildAlerts();
+  if(!alerts.length){
+    document.getElementById('notifCount').textContent = '';
+    list.innerHTML = `<div class="empty-note" style="padding:14px 0">잔금일·계약 만료일을 입력하면 갱신청구 마감, 보증보험 기한 같은 놓치면 손해 보는 날짜를 알려드려요<br><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="openOnboarding()">1분 맞춤 설정</button></div>`;
+    return;
+  }
+  const soon = alerts.filter(a=>a.dd>=0 && a.dd<=60).length;
+  document.getElementById('notifCount').textContent = soon? `60일 내 ${soon}건` : '';
+  const C = {past:'var(--muted-2)', red:'var(--red)', amber:'var(--amber)', blue:'var(--blue)'};
+  list.innerHTML = alerts.map(a=>`
+    <div class="notif-item ${a.lv==='past'?'past':''} ${a.hard?'hard':''}">
+      <div class="notif-when"><b>${a.d.slice(2).replace(/-/g,'.')}</b><span style="color:${C[a.lv]}">${a.dd<0?'지남':a.dd===0?'오늘!':'D-'+a.dd}</span></div>
+      <div class="notif-main"><b>${a.hard?'⚠ ':''}${a.t}</b><p>${a.desc}</p></div>
+    </div>`).join('');
+}
+
+/* =========================================================
+   보증금 반환 시뮬레이터 — 위험을 점수가 아닌 내 돈으로
+   ========================================================= */
+let calcRate = 70, calcFix = true;
+function setCalcRate(r){
+  calcRate = r;
+  document.querySelectorAll('#calcSeg button').forEach(b=>b.classList.toggle('active', b.textContent.includes(String(r))));
+  renderCalc();
+}
+function renderCalc(){
+  const card = document.getElementById('calcCard');
+  if(!card) return;
+  const d = state.diag;
+  if(!d){ card.style.display='none'; return; }
+  card.style.display = 'block';
+  const sale = Math.round(d.price * calcRate / 100);      // 낙찰가
+  const cost = Math.round(sale * 0.03);                    // 경매 비용(약 3%)
+  const fund = sale - cost;                                // 배당 재원
+  const seniorPaid = Math.min(fund, d.mortgage);           // 선순위(근저당·전세권) 먼저
+  const remain = Math.max(0, fund - seniorPaid);
+  const my = calcFix ? Math.min(remain, d.deposit) : 0;    // 확정일자 없으면 배당 순위 없음
+  const loss = d.deposit - my;
+  const W = n => n > 0 ? fmtMan(n)+'원' : '0원';
+  document.getElementById('calcRows').innerHTML = `
+    <div class="calc-rows">
+      <div class="calc-row"><span>시세 ${fmtMan(d.price)}원이 ${calcRate}%에 낙찰되면</span><b>${fmtMan(sale)}원</b></div>
+      <div class="calc-row"><span>경매 비용(약 3%) 차감</span><b>− ${fmtMan(cost)}원</b></div>
+      <div class="calc-row"><span>선순위 채권(은행 등)이 먼저 가져감</span><b>− ${fmtMan(seniorPaid)}원</b></div>
+      <div class="calc-row"><span>남는 배당 재원</span><b>${fmtMan(remain)}원</b></div>
+      ${calcFix?'':'<div class="calc-row"><span style="color:var(--red)">확정일자·전입 없음 → 배당 순위에서 제외돼요</span><b style="color:var(--red)">0원</b></div>'}
+    </div>
+    <div class="calc-final">
+      <div class="get"><small>내가 돌려받는 돈</small><b>${W(my)}</b></div>
+      <div class="lose"><small>돌려받지 못하는 돈</small><b>${loss>0?W(loss):'없음'}</b></div>
+    </div>
+    ${loss>0?`<p style="font-size:12.5px;color:var(--red);font-weight:600;margin-top:9px;word-break:keep-all">보증금 ${fmtMan(d.deposit)}원 중 ${Math.round(loss/d.deposit*100)}%를 잃을 수 있어요. ${calcFix?'근저당 말소 특약이 필요한 이유예요.':'전입신고+확정일자만 해도 결과가 크게 달라져요 — 체크해서 비교해보세요.'}</p>`
+    :`<p style="font-size:12.5px;color:var(--green);font-weight:600;margin-top:9px">이 시나리오에서는 보증금 전액을 돌려받을 수 있어요.</p>`}`;
+}
+
+/* =========================================================
+   챗 사진 첨부 — 등기부·계약서 사진을 읽고 답변
+   ========================================================= */
+let chatImg = null;
+function clearChatImg(){ chatImg = null; document.getElementById('chatImgBar').style.display='none'; document.getElementById('chatImgFile').value=''; }
+function setChatImg(file){
+  if(!file || !file.type.startsWith('image/')){ toast('이미지 파일만 첨부할 수 있어요'); return; }
+  const img = new Image();
+  img.onload = () => {
+    const MAX = 1280;
+    const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+    const cv = document.createElement('canvas');
+    cv.width = Math.round(img.width*scale); cv.height = Math.round(img.height*scale);
+    cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+    const url = cv.toDataURL('image/jpeg', 0.85);
+    chatImg = { mime:'image/jpeg', data: url.split(',')[1], url };
+    document.getElementById('chatImgThumb').src = url;
+    document.getElementById('chatImgBar').style.display = 'flex';
+    openChat();
+  };
+  img.src = URL.createObjectURL(file);
+}
+document.getElementById('chatImgFile').addEventListener('change', e=>{ if(e.target.files[0]) setChatImg(e.target.files[0]); });
 
 function aiAnswer(q){
   const u = state.user, d = state.diag;
@@ -1607,6 +1801,11 @@ function contractEvents(){
   ];
   if(u.type!=='월세') ev.push({d: addDays(mv,1), s:'보증보험 신청', c:'green', t:'전세보증보험(HUG) 가입 신청', desc:'잔금+전입 완료 후 신청 가능. 안심전세포털(khug.or.kr/jeonse) 또는 네이버부동산·카카오페이 앱'});
   ev.push({d: addDays(mv,30), s:'임대차신고 마감', c:'amber', t:'주택임대차 신고 마감일', desc:'계약 후 30일 이내 신고 의무(보증금 6천만원 초과 등). rtms.molit.go.kr'});
+  const end = getEndDate(u);
+  if(end){
+    ev.push({d: addMonths(end,-2), s:'갱신통지 마감', c:'red', t:'계약갱신·종료 통지 마감 (만기 2개월 전)', desc:'이날까지 임대인에게 갱신 의사 또는 종료 통지를 해야 해요. 놓치면 묵시적 갱신으로 자동 연장될 수 있어요'});
+    ev.push({d: end, s:'계약 만기', c:'amber', t:'계약 만기 — 보증금 반환일', desc:'반환이 늦어질 것 같으면 임차권등기명령을 알아두세요'});
+  }
   return ev;
 }
 function foldIcsLine(line){
@@ -1915,7 +2114,7 @@ function openOnboarding(){
     const u = state.user;
     fName.value=u.name||''; fAge.value=u.age||''; fRegion.value=u.region||'서울'; fType.value=u.type||'전세';
     fDeposit.value=u.deposit||''; fRent.value=u.rent||''; fIncome.value=u.income||'';
-    fStage.value=u.stage||'0'; fMoveDate.value=u.moveDate||''; fAddress.value=(u.address&&u.address!==`${u.region} 나의 집`)?u.address:'';
+    fStage.value=u.stage||'0'; fMoveDate.value=u.moveDate||''; fEndDate.value=u.endDate||''; fAddress.value=(u.address&&u.address!==`${u.region} 나의 집`)?u.address:'';
     document.getElementById('fRentWrap').style.display = u.type==='월세'?'flex':'none';
   }
 }
@@ -1926,7 +2125,7 @@ function submitOnboarding(){
   const user = {
     name, age, region: fRegion.value, type: fType.value,
     deposit, rent: Number(fRent.value)||0, income: Number(fIncome.value)||0,
-    stage: fStage.value, moveDate: fMoveDate.value || null,
+    stage: fStage.value, moveDate: fMoveDate.value || null, endDate: fEndDate.value || null,
     address: fAddress.value.trim() || `${fRegion.value} 나의 집`,
   };
   // 할 일 목록은 새 정보 기준으로 다시 만들되, 이미 체크한 항목은 유지
