@@ -292,6 +292,7 @@
   @media(max-width:768px){
     body{font-size:14.5px}
     .header-inner{padding:0 16px;height:54px;gap:12px}
+    .notif-pop{top:58px;right:8px;left:8px;width:auto}
     nav{display:none}
     #chipInfo{display:none}
     .settings-link{display:none}
@@ -483,6 +484,19 @@
     .cal-cell{min-height:42px;padding:3px}
   }
 
+  /* ===== 알림 벨 + 드롭다운 ===== */
+  .bell-btn{position:relative;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--text);flex-shrink:0}
+  .bell-btn:hover{background:var(--blue-light);color:var(--navy)}
+  .bell-badge{position:absolute;top:2px;right:1px;min-width:17px;height:17px;border-radius:99px;background:var(--red);color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid #fff}
+  .notif-pop{position:fixed;top:66px;right:24px;width:410px;max-width:calc(100vw - 16px);max-height:min(72vh,580px);overflow-y:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 48px rgba(15,34,71,.20);z-index:95;padding:18px 20px}
+  .notif-pop-head{display:flex;align-items:center;gap:10px}
+  .notif-pop-head b{font-size:16px;color:var(--navy);flex:1}
+  .notif-pop-sub{font-size:12.5px;color:var(--muted);margin:2px 0 6px}
+  .sim-teaser{margin-top:18px;padding:17px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .sim-teaser b{font-size:14.5px;color:var(--navy);display:block}
+  .sim-teaser p{font-size:12.5px;color:var(--muted);margin-top:2px;word-break:keep-all}
+  .sim-teaser .btn{flex-shrink:0}
+
   /* ===== 알림 센터 ===== */
   .notif-card{margin-top:18px;padding:22px}
   .notif-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
@@ -546,6 +560,10 @@
       <button data-view="support">지원 제도</button>
       <button data-view="guide">가이드</button>
     </nav>
+    <button class="bell-btn" onclick="toggleNotif(event)" aria-label="알림 센터" title="알림 센터">
+      <svg class="ic-svg" viewBox="0 0 24 24" style="width:21px;height:21px"><path d="M18 9.6a6 6 0 10-12 0c0 4.8-2 6.2-2 6.2h16s-2-1.4-2-6.2M13.7 19.2a1.95 1.95 0 01-3.4 0"/></svg>
+      <span class="bell-badge" id="bellBadge" style="display:none">0</span>
+    </button>
     <div class="user-chip">
       <span id="chipInfo">-</span>
       <div class="avatar" id="chipAvatar" onclick="switchView('dashboard')" style="cursor:pointer" title="내 계약 대시보드로 이동">?</div>
@@ -553,6 +571,12 @@
     </div>
   </div>
 </header>
+
+<div class="notif-pop" id="notifPop" style="display:none">
+  <div class="notif-pop-head"><b>알림 센터</b><span class="stat" id="notifCount" style="color:var(--red)"></span></div>
+  <p class="notif-pop-sub">놓치면 손해 보는 기한을 계약이 끝나는 날까지 챙겨드려요</p>
+  <div id="notifList"></div>
+</div>
 
 <main>
   <!-- ============ LANDING ============ -->
@@ -682,10 +706,12 @@
           <button class="alert-x" onclick="dismissBanner()" title="이 안내 닫기" aria-label="닫기">✕</button>
         </div>
 
-        <div class="card notif-card">
-          <div class="notif-head"><h3>알림 센터</h3><span class="stat" id="notifCount"></span></div>
-          <p style="font-size:12.5px;color:var(--muted);margin-bottom:6px">놓치면 손해 보는 기한을 계약이 끝나는 날까지 챙겨드려요</p>
-          <div id="notifList"></div>
+        <div class="card sim-teaser">
+          <div style="flex:1;min-width:0">
+            <b>경매로 넘어가면, 내 보증금은 얼마나 돌아올까요?</b>
+            <p>등기부 진단 값으로 낙찰가율별 배당을 계산해 점수가 아닌 내 돈 기준으로 보여드려요.</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="goCalc()">시뮬레이션 →</button>
         </div>
 
         <div class="card todo-card">
@@ -804,17 +830,6 @@
           </div>
         </div>
 
-        <div class="card findings">
-          <h4>발견된 항목</h4>
-          <div id="findingList"></div>
-        </div>
-
-        <div class="card clause-card" id="clauseCard" style="display:none">
-          <h4>AI 추천 특약 문구</h4>
-          <p class="sub">계약서에 바로 쓸 수 있는 문구예요. 공인중개사에게 전달해 특약란에 넣으세요.</p>
-          <div id="clauseList"></div>
-        </div>
-
         <div class="card calc-card" id="calcCard" style="display:none">
           <h4>경매로 넘어가면, 내 돈은 얼마나 돌아올까요?</h4>
           <p class="sub">위 진단 값 그대로 배당 순서를 시뮬레이션해요 — 낙찰가율을 바꿔보세요</p>
@@ -824,6 +839,17 @@
           <div class="check-row" style="padding:4px 0 2px"><input type="checkbox" id="calcFixChk" checked onchange="calcFix=this.checked;renderCalc()"><span>전입신고 + 확정일자를 마쳤어요 (우선변제권 확보)</span></div>
           <div id="calcRows"></div>
           <p style="font-size:11.5px;color:var(--muted-2);margin-top:10px;word-break:keep-all">참고용 계산이에요 — 소액임차인 최우선변제, 당해세, 다른 선순위 임차인 등에 따라 실제 배당과 다를 수 있어요.</p>
+        </div>
+
+        <div class="card findings">
+          <h4>발견된 항목</h4>
+          <div id="findingList"></div>
+        </div>
+
+        <div class="card clause-card" id="clauseCard" style="display:none">
+          <h4>AI 추천 특약 문구</h4>
+          <p class="sub">계약서에 바로 쓸 수 있는 문구예요. 공인중개사에게 전달해 특약란에 넣으세요.</p>
+          <div id="clauseList"></div>
         </div>
       </div>
       </div>
@@ -973,7 +999,7 @@
 /* =========================================================
    집집 — AI 부동산 계약 비서 (client-side prototype)
    ========================================================= */
-const APP_VERSION = 'v3.2 · 알림센터·시뮬레이터·사진챗';
+const APP_VERSION = 'v3.3 · 알림 벨 + 시뮬레이터 전면 배치';
 const LS_KEY = 'jibjikim_v1';
 let state = null;
 const GUEST_USER = { name:null, age:null, region:null, type:null, deposit:null, rent:0, income:null, stage:'0', moveDate:null, endDate:null, address:null };
@@ -1599,10 +1625,35 @@ function buildAlerts(){
     return {...a, dd, lv: dd<0?'past':dd<=14?'red':dd<=60?'amber':'blue'};
   }).sort((a,b)=>a.d.localeCompare(b.d));
 }
+function toggleNotif(e){
+  if(e) e.stopPropagation();
+  const pop = document.getElementById('notifPop');
+  const opening = pop.style.display === 'none';
+  if(opening) renderNotif();
+  pop.style.display = opening ? 'block' : 'none';
+}
+document.addEventListener('click', e=>{
+  const pop = document.getElementById('notifPop');
+  if(pop.style.display !== 'none' && !pop.contains(e.target)) pop.style.display = 'none';
+});
+function goCalc(){
+  switchView('diagnosis');
+  if(state.diag){
+    setTimeout(()=>document.getElementById('calcCard').scrollIntoView({behavior:'smooth', block:'center'}), 80);
+  } else {
+    toast('먼저 등기부 진단을 실행하면 시뮬레이션이 열려요 — 예시 데이터로도 가능!');
+  }
+}
 function renderNotif(){
   const list = document.getElementById('notifList');
   if(!list) return;
   const alerts = buildAlerts();
+  const badge = document.getElementById('bellBadge');
+  const soonAll = alerts.filter(a=>a.dd>=0 && a.dd<=60).length;
+  if(badge){
+    badge.style.display = soonAll ? 'flex' : 'none';
+    badge.textContent = soonAll;
+  }
   if(!alerts.length){
     document.getElementById('notifCount').textContent = '';
     list.innerHTML = `<div class="empty-note" style="padding:14px 0">잔금일·계약 만료일을 입력하면 갱신청구 마감, 보증보험 기한 같은 놓치면 손해 보는 날짜를 알려드려요<br><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="openOnboarding()">1분 맞춤 설정</button></div>`;
