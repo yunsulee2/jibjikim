@@ -718,7 +718,7 @@
 
 <main>
   <!-- ============ LANDING ============ -->
-  <section class="view" id="view-landing">
+  <section class="view active" id="view-landing">
     <div class="hero-full">
       <img class="hero-bg" src="assets/hero.jpg" alt="">
       <div class="hero-inner">
@@ -788,7 +788,7 @@
   </section>
 
   <!-- ============ DASHBOARD ============ -->
-  <section class="view active" id="view-dashboard">
+  <section class="view" id="view-dashboard">
     <div class="dash">
       <!-- left -->
       <div>
@@ -2947,7 +2947,7 @@ function setupPdfDrop(){
    ========================================================= */
 const isMobile = () => window.matchMedia('(max-width:768px)').matches;
 function startService(){
-  save(); // 랜딩은 최초 1회만
+  save();
   switchView('dashboard');
 }
 document.querySelector('.logo').style.cursor='pointer';
@@ -3028,7 +3028,7 @@ function setupReveal(){
     state.todos = buildTodos(state.user).map(t=>({...t, done: doneMap[t.id] !== undefined ? doneMap[t.id] : t.done}));
   }
   renderAll();
-  if(firstVisit) switchView('landing');
+  switchView('landing');   // 재방문자도 항상 랜딩(첫 페이지)부터
   setupPdfDrop();
   setupReveal();
   const _ver = document.getElementById('verLanding'); if(_ver) _ver.textContent = APP_VERSION;
