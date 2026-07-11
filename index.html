@@ -626,9 +626,10 @@
   .rv-card-name span{font-size:12.5px;color:var(--muted)}
   .rv-avatar{border-radius:50%;object-fit:cover;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center}
   .rv-avatar-txt{color:#fff;font-weight:800;line-height:1}
-  /* 프로필 사진(아이콘과 별도) — 카드 평점행 우측 */
-  .rv-stars-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-  .rv-side-photo{border-radius:12px;object-fit:cover;flex-shrink:0;border:1px solid var(--line)}
+  /* 프로필 사진(아이콘과 별도) — 카드 우측 여백을 채움 */
+  .rv-card-body{display:flex;gap:13px;align-items:stretch;margin-top:10px}
+  .rv-card-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+  .rv-side-photo{border-radius:13px;object-fit:cover;flex-shrink:0;border:1px solid var(--line)}
   .rv-dh-photo{border-radius:14px;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,255,255,.28)}
   .rv-dh-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}
   .rv-dh-top .rv-avatar{border:2px solid rgba(255,255,255,.3)}
@@ -2164,11 +2165,13 @@ function renderReviewList(){
         <span class="rv-badge ${s.badge.cls}">${s.badge.label}</span>
       </div>
       <div class="rv-verify">AI 서류 검증 통과 <b>${s.verified}건</b> · ${b.since}년~</div>
-      <div class="rv-stars-row">
-        <div class="rv-stars">${stars(s.avg)} <span class="rv-count">${s.avg?s.avg.toFixed(1):'-'} · 리뷰 ${s.count}</span></div>
-        ${brokerPhotoImg(b, 56, 'rv-side-photo')}
+      <div class="rv-card-body">
+        <div class="rv-card-text">
+          <div class="rv-stars">${stars(s.avg)} <span class="rv-count">${s.avg?s.avg.toFixed(1):'-'} · 리뷰 ${s.count}</span></div>
+          <div class="rv-quote${top?'':' empty'}">${top? '"'+top.text.slice(0,64)+(top.text.length>64?'…':'')+'"' : '아직 리뷰가 없어요 — 첫 리뷰의 주인공이 되어보세요'}</div>
+        </div>
+        ${brokerPhotoImg(b, 108, 'rv-side-photo')}
       </div>
-      <div class="rv-quote${top?'':' empty'}">${top? '"'+top.text.slice(0,64)+(top.text.length>64?'…':'')+'"' : '아직 리뷰가 없어요 — 첫 리뷰의 주인공이 되어보세요'}</div>
     </div>`;
   }).join('');
 }
