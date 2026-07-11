@@ -558,6 +558,13 @@
   .diag-panel.active{display:block}
   .panel-intro{background:var(--blue-light);border-radius:12px;padding:16px 18px;font-size:13.5px;color:var(--text);line-height:1.65;margin-bottom:18px}
   .panel-intro b{color:var(--navy)}
+  /* 통합 진단 서브 점수 · 섹션 라벨 */
+  .subscore-row{display:flex;gap:10px;margin:14px 0 4px}
+  .subscore{flex:1;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:11px;padding:10px 13px;display:flex;flex-direction:column;gap:2px}
+  .subscore span{font-size:11.5px;color:#C3CDE1}
+  .subscore b{font-size:19px;font-weight:800;color:#fff}
+  .result-section-label{display:flex;align-items:baseline;gap:9px;font-size:15px;font-weight:800;color:var(--navy);margin:22px 2px 10px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+  .result-section-label span{font-size:12px;font-weight:600;color:var(--muted)}
 
   /* ===== 실제 사례 (가이드 + 진단) ===== */
   .case-block{margin-top:12px;border-left:3px solid var(--red);background:#FBF3F1;border-radius:0 10px 10px 0;padding:11px 14px;font-size:13px;line-height:1.65}
@@ -871,8 +878,7 @@
 
     <!-- 진단 대상 문서 선택 -->
     <div class="diag-seg" id="diagSeg">
-      <button class="active" onclick="switchDiagTab('deung')"><span class="seg-ic">📄</span>등기부등본</button>
-      <button onclick="switchDiagTab('ledger')"><span class="seg-ic">🏢</span>건축물대장</button>
+      <button class="active" onclick="switchDiagTab('docs')"><span class="seg-ic">📄</span>등기부·건축물대장 진단</button>
       <button onclick="switchDiagTab('contract')"><span class="seg-ic">📝</span>계약서 체크</button>
     </div>
 
@@ -910,8 +916,25 @@
               <div class="check-row"><input type="checkbox" id="dRecentOwner"><span>소유권 이전이 최근 3개월 내에 있었다</span></div>
             </div>
           </div>
-          <button class="btn btn-accent" style="width:100%;margin-top:18px" onclick="runDiagnosis()">✦ AI 위험도 진단하기</button>
         </div>
+
+        <div class="card diag-form">
+          <h3>건축물대장 점검 <span style="font-size:12.5px;color:var(--muted);font-weight:600">· 건물이 합법인가</span></h3>
+          <p class="sub">등기부가 <b>임대인(사람)</b> 정보라면, 건축물대장은 <b>건물 자체</b>의 합법성이에요. 정부24 → '건축물대장 등초본 발급'에서 무료로 떼어 아래를 대조하세요.</p>
+          <div class="form-grid">
+            <div class="field full">
+              <label>합법성 · 안전 체크사항</label>
+              <div class="check-row"><input type="checkbox" id="lViolation"><span>제목 옆에 <b style="color:var(--red)">'위반건축물'</b> 노란 딱지 표시가 있다</span></div>
+              <div class="check-row"><input type="checkbox" id="lUsageResi" checked><span>주용도가 <b>단독주택·공동주택(다세대·아파트 등)</b> 주거용이다</span></div>
+              <div class="check-row"><input type="checkbox" id="lUsageMatch" checked><span>실제 사는 형태와 대장상 용도가 일치한다 (근생·사무실을 주거로 쓰는 게 아니다)</span></div>
+              <div class="check-row"><input type="checkbox" id="lAreaMatch" checked><span>계약할 호수·면적이 대장에 그대로 나온다 (등기부 면적과도 일치)</span></div>
+              <div class="check-row"><input type="checkbox" id="lOwnerMatch" checked><span>대장상 소유자가 등기부·계약서 임대인과 같다</span></div>
+              <div class="check-row"><input type="checkbox" id="lIllegalUnit"><span>옥탑·근생을 방으로 불법 개조했거나, 무허가 증축이 의심된다</span></div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-accent" style="width:100%;margin:2px 0 6px;padding:15px" onclick="runFullDiagnosis()">✦ AI 통합 진단하기 — 등기부 + 건축물대장</button>
 
         <div class="card doc-preview" id="docPreview" style="display:none">
           <h3>등기부등본 원문 대조 뷰</h3>
@@ -942,6 +965,17 @@
           </div>
         </div>
 
+        <div class="card diag-guide" id="ledgerGuide">
+          <h4>건축물대장 어디를 보나요?</h4>
+          <div class="sample-doc">
+            <div class="sd-title">일반건축물대장 (샘플)</div>
+            <div class="sd-row"><span>상단 우측</span> <mark class="m3">위반건축물</mark> <span class="num-chip">1</span> <span>→ 이 노란 표시가 있으면 HUG 보증보험 가입 불가</span></div>
+            <div class="sd-row"><span>주용도 ·</span> <mark class="m1">다세대주택 / 제2종근린생활시설</mark> <span class="num-chip">2</span> <span>→ '근린생활시설'인데 산다면 사실상 불법(주거 아님)</span></div>
+            <div class="sd-row"><span>연면적 · 층별 현황 ·</span> <mark class="m2">전용면적 · 호수</mark> <span class="num-chip">3</span> <span>→ 등기부·계약서 면적과 같은지 대조</span></div>
+            <div class="sd-row" style="border-bottom:none"><span>소유자 현황의 이름이 <b>등기부 갑구 소유자</b>와 같은지도 확인해요</span></div>
+          </div>
+        </div>
+
       <div id="diagResult" style="display:none">
         <div class="score-card">
           <div class="score-main">
@@ -953,10 +987,14 @@
             <div class="num"><b id="scoreNum">0</b><span>/ 100</span></div>
           </div>
           <div class="score-desc">
-            <div class="grade-label">종합 안전도</div>
+            <div class="grade-label">통합 안전도</div>
             <h3 id="scoreGrade">-</h3>
             <p id="scoreDesc">-</p>
           </div>
+          </div>
+          <div class="subscore-row" id="subScoreRow">
+            <div class="subscore"><span>📄 등기부 안전도</span><b id="subDeung">-</b></div>
+            <div class="subscore"><span>🏢 건축물 합법성</span><b id="subLedger">-</b></div>
           </div>
           <div class="score-dots">
             <span><i class="dot" style="background:#4FA97E"></i>안전 <b id="cntSafe">0</b></span>
@@ -964,6 +1002,7 @@
             <span><i class="dot" style="background:#D4685C"></i>위험 <b id="cntDanger">0</b></span>
           </div>
         </div>
+        <div class="result-section-label">📄 등기부등본 관련 <span>임대인·권리관계 위험</span></div>
 
         <div class="card calc-card" id="calcCard" style="display:none">
           <h4>경매로 넘어가면, 내 돈은 얼마나 돌아올까요?</h4>
@@ -993,6 +1032,13 @@
           <div id="clauseList"></div>
         </div>
 
+        <div class="result-section-label">🏢 건축물대장 관련 <span>건물 합법성</span></div>
+        <div class="mini-score" id="ledgerScore"></div>
+        <div class="card findings">
+          <h4>건축물대장 점검 결과</h4>
+          <div id="ledgerFindingList"></div>
+        </div>
+
         <div class="rv-attach-card">
           <b>이 계약, 중개인은 어땠나요?</b>
           <p>진단을 통과한 계약이라면 리뷰를 남겨 담당 중개인의 <b>검증 배지</b>를 올려줄 수 있어요. 정직한 중개인이 보상받는 구조예요.</p>
@@ -1003,53 +1049,7 @@
     </div>
     </div><!-- /dpDeung -->
 
-    <!-- ===== 패널 ②: 건축물대장 ===== -->
-    <div class="diag-panel" id="dpLedger">
-      <div class="panel-intro">
-        <b>건축물대장은 '이 건물이 합법인가'를 확인하는 서류예요.</b> 등기부등본이 <b>임대인(사람)</b>에 대한 정보라면, 건축물대장은 <b>건물 그 자체</b>의 정보예요. 위반건축물·불법 용도변경은 전세보증보험(HUG) 가입을 막고, 최악의 경우 이행강제금·강제 퇴거로 이어질 수 있어요. 정부24에서 무료로 열람할 수 있어요.
-      </div>
-      <div class="diag-grid">
-        <div>
-          <div class="card diag-form">
-            <h3>건축물대장 점검</h3>
-            <p class="sub">정부24 → '건축물대장 등초본 발급'에서 무료로 떼어, 아래 항목을 하나씩 대조해 보세요.</p>
-            <div class="form-grid">
-              <div class="field full">
-                <label>합법성 · 안전 체크사항</label>
-                <div class="check-row"><input type="checkbox" id="lViolation"><span>제목 옆에 <b style="color:var(--red)">'위반건축물'</b> 노란 딱지 표시가 있다</span></div>
-                <div class="check-row"><input type="checkbox" id="lUsageResi" checked><span>주용도가 <b>단독주택·공동주택(다세대·아파트 등)</b> 주거용이다</span></div>
-                <div class="check-row"><input type="checkbox" id="lUsageMatch" checked><span>실제 사는 형태와 대장상 용도가 일치한다 (근생·사무실을 주거로 쓰는 게 아니다)</span></div>
-                <div class="check-row"><input type="checkbox" id="lAreaMatch" checked><span>계약할 호수·면적이 대장에 그대로 나온다 (등기부 면적과도 일치)</span></div>
-                <div class="check-row"><input type="checkbox" id="lOwnerMatch" checked><span>대장상 소유자가 등기부·계약서 임대인과 같다</span></div>
-                <div class="check-row"><input type="checkbox" id="lIllegalUnit"><span>옥탑·근생을 방으로 불법 개조했거나, 무허가 증축이 의심된다</span></div>
-              </div>
-            </div>
-            <button class="btn btn-accent" style="width:100%;margin-top:18px" onclick="runLedgerCheck()">✦ 건축물대장 점검하기</button>
-          </div>
-        </div>
-        <div class="diag-right">
-          <div class="card diag-guide">
-            <h4>건축물대장 어디를 보나요?</h4>
-            <div class="sample-doc">
-              <div class="sd-title">일반건축물대장 (샘플)</div>
-              <div class="sd-row"><span>상단 우측</span> <mark class="m3">위반건축물</mark> <span class="num-chip">1</span> <span>→ 이 노란 표시가 있으면 HUG 보증보험 가입 불가</span></div>
-              <div class="sd-row"><span>주용도 ·</span> <mark class="m1">다세대주택 / 제2종근린생활시설</mark> <span class="num-chip">2</span> <span>→ '근린생활시설'인데 산다면 사실상 불법(주거 아님)</span></div>
-              <div class="sd-row"><span>연면적 · 층별 현황 ·</span> <mark class="m2">전용면적 · 호수</mark> <span class="num-chip">3</span> <span>→ 등기부·계약서 면적과 같은지 대조</span></div>
-              <div class="sd-row" style="border-bottom:none"><span>소유자 현황의 이름이 <b>등기부 갑구 소유자</b>와 같은지도 확인해요</span></div>
-            </div>
-          </div>
-          <div id="ledgerResult" style="display:none">
-            <div class="mini-score" id="ledgerScore"></div>
-            <div class="card findings">
-              <h4>건축물대장 점검 결과</h4>
-              <div id="ledgerFindingList"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div><!-- /dpLedger -->
-
-    <!-- ===== 패널 ③: 계약서 필수 체크리스트 ===== -->
+    <!-- ===== 패널 ②: 계약서 필수 체크리스트 ===== -->
     <div class="diag-panel" id="dpContract">
       <div class="panel-intro">
         <b>계약서는 도장 찍기 전 딱 몇 분이면 확인할 수 있어요.</b> AI 진단을 돌릴 시간이 없어도, 아래 항목만 계약서·특약란에서 눈으로 확인하면 대부분의 사고를 막을 수 있어요. 하나라도 빠지면 <b>도장을 찍기 전에</b> 공인중개사에게 요청하세요.
@@ -1073,7 +1073,7 @@
               등기부·건축물대장이 '집이 안전한가'를 본다면, 계약서는 <b style="color:var(--text)">'그 안전이 계약서에 글자로 남았는가'</b>를 봐요.<br><br>
               말로 "근저당 말소해 드릴게요" 약속해도, <b style="color:var(--text)">특약에 안 적혀 있으면 법적 효력이 없어요.</b> 분쟁이 생기면 결국 계약서에 적힌 글자만 증거가 돼요.<br><br>
               특히 <b style="color:var(--text)">특약사항란</b>은 세입자가 요구해서 넣는 칸이에요. 비어 있으면 그만큼 보호받을 장치가 없다는 뜻이에요.
-              <div style="margin-top:14px"><button class="btn btn-primary btn-sm" onclick="switchDiagTab('deung')">등기부 진단으로 특약 문구 받기 →</button></div>
+              <div style="margin-top:14px"><button class="btn btn-primary btn-sm" onclick="switchDiagTab('docs')">통합 진단으로 특약 문구 받기 →</button></div>
             </div>
           </div>
         </div>
@@ -1440,8 +1440,11 @@ function renderAll(){
   renderDashboard();
   renderSupport();
   document.getElementById('diagDate').textContent = todayStr().replace(/-/g,'.');
-  document.getElementById('diagTitle').textContent = u.address || '등기부등본 AI 진단';
-  if(state.diag) paintDiagnosis(state.diag);
+  document.getElementById('diagTitle').textContent = '등기부·건축물대장 통합 AI 진단';
+  if(state.diag){
+    paintDiagnosis(state.diag);
+    if(state.ledger){ restoreLedger(state.ledger); paintCombined(state.diag, state.ledger); }
+  }
   renderContractChecklist();
 }
 
@@ -1630,7 +1633,11 @@ function loadSampleDiag(){
   document.getElementById('dMortgage').value = 12000;
   document.getElementById('dOwnerMatch').checked = true;
   ['dSeizure','dTrust','dIllegal','dRecentOwner'].forEach(id=>document.getElementById(id).checked=false);
-  toast('예시 데이터를 불러왔어요 — 진단하기를 눌러보세요');
+  // 건축물대장 예시(합법 건물 기본값)
+  document.getElementById('lViolation').checked = false;
+  ['lUsageResi','lUsageMatch','lAreaMatch','lOwnerMatch'].forEach(id=>document.getElementById(id).checked=true);
+  document.getElementById('lIllegalUnit').checked = false;
+  toast('예시 데이터를 불러왔어요 — 통합 진단하기를 눌러보세요');
 }
 
 function runDiagnosis(){
@@ -1735,12 +1742,50 @@ function runDiagnosis(){
   // mark AI diagnosis todo done
   const t1 = state.todos.find(t=>t.id==='t1');
   if(t1 && !t1.done){ t1.done = true; save(); renderDashboard(); }
+  return state.diag;
+}
+
+/* 등기부 + 건축물대장 통합 진단 */
+function runFullDiagnosis(){
+  const price = Number(document.getElementById('dPrice').value);
+  const deposit = Number(document.getElementById('dDeposit').value);
+  if(!price || !deposit){ toast('주택 가액과 보증금을 입력해 주세요'); return; }
+  const d = runDiagnosis();       // 등기부 (findings·특약·사례·시뮬 렌더)
+  const l = runLedgerCheck();     // 건축물대장 (mini-score·findings 렌더)
+  paintCombined(d, l);            // 통합 점수(메인) + 서브 점수 2개
   document.getElementById('diagResult').scrollIntoView({behavior:'smooth', block:'start'});
-  toast('AI 진단이 완료됐어요');
+  toast('통합 AI 진단이 완료됐어요 — 등기부·건축물대장 결과를 확인하세요');
+}
+
+function paintCombined(d, l){
+  // 통합 점수 = 등기부 65% + 건축물 35% 가중
+  const combined = Math.round(d.score*0.65 + l.score*0.35);
+  const arc = document.getElementById('gaugeArc'), C = 295.3;
+  arc.style.strokeDashoffset = C * (1 - combined/100);
+  const color = combined>=80?'#4FA97E':combined>=55?'#D9A441':'#D4685C';
+  arc.style.stroke = color;
+  document.getElementById('scoreNum').textContent = combined;
+  const grade = combined>=80?['안전 — 진행 가능','등기부·건축물 모두 큰 문제가 없어요. 기본 확인 사항만 지키면 안전해요.']
+    : combined>=55?['주의 — 조건부 진행','근저당 말소·보증보험·건축물 확인이 확보되면 안전 등급으로 올라가요.']
+    : ['위험 — 재검토 권장','등기부 또는 건물에 보증금 손실 위험이 있어요. 계약 전 전문가 상담을 권해요.'];
+  document.getElementById('scoreGrade').textContent = grade[0];
+  document.getElementById('scoreGrade').style.color = color;
+  document.getElementById('scoreDesc').textContent = grade[1];
+  // 서브 점수
+  const sc = v => v>=80?'#7FE0B4':v>=55?'#F0C879':'#F0A59B';
+  const sd = document.getElementById('subDeung'), sl = document.getElementById('subLedger');
+  sd.textContent = d.score+'점'; sd.style.color = sc(d.score);
+  sl.textContent = l.score+'점'; sl.style.color = sc(l.score);
+  document.getElementById('subScoreRow').style.display='flex';
+  // 통합 항목 카운트
+  document.getElementById('cntSafe').textContent = d.cnt.safe + l.cnt.safe;
+  document.getElementById('cntWarn').textContent = d.cnt.warn + l.cnt.warn;
+  document.getElementById('cntDanger').textContent = d.cnt.danger + l.cnt.danger;
 }
 
 function paintDiagnosis(d){
   document.getElementById('diagResult').style.display='block';
+  document.getElementById('subScoreRow').style.display='none';   // 통합 진단(paintCombined) 시에만 노출
   renderCalc();
   // gauge
   const arc = document.getElementById('gaugeArc');
@@ -1813,16 +1858,16 @@ function shareReport(){
    진단 탭 전환 (등기부 / 건축물대장 / 계약서 체크)
    ========================================================= */
 function switchDiagTab(tab){
-  const map = {deung:'dpDeung', ledger:'dpLedger', contract:'dpContract'};
+  const map = {docs:'dpDeung', contract:'dpContract'};
   Object.values(map).forEach(id=>document.getElementById(id).classList.remove('active'));
   document.getElementById(map[tab]).classList.add('active');
   const btns = document.querySelectorAll('#diagSeg button');
-  btns.forEach((b,i)=>b.classList.toggle('active', ['deung','ledger','contract'][i]===tab));
-  const crumb = {deung:'등기부등본', ledger:'건축물대장', contract:'계약서 필수 체크리스트'}[tab];
+  btns.forEach((b,i)=>b.classList.toggle('active', ['docs','contract'][i]===tab));
+  const crumb = {docs:'등기부등본 · 건축물대장', contract:'계약서 필수 체크리스트'}[tab];
   document.querySelector('#view-diagnosis .crumb').innerHTML = `AI 진단 · ${crumb} · <span id="diagDate">${todayStr().replace(/-/g,'.')}</span> 분석`;
-  document.getElementById('diagTitle').textContent = {deung:(state.user.address||'등기부등본 AI 진단'), ledger:'건축물대장 합법성 점검', contract:'계약서 필수 체크리스트'}[tab];
-  // 등기부 탭에서만 예시/공유 버튼 노출
-  document.getElementById('diagHeadBtns').style.display = tab==='deung' ? 'flex' : 'none';
+  document.getElementById('diagTitle').textContent = {docs:'등기부·건축물대장 통합 AI 진단', contract:'계약서 필수 체크리스트'}[tab];
+  // 통합 진단 탭에서만 예시/공유 버튼 노출
+  document.getElementById('diagHeadBtns').style.display = tab==='docs' ? 'flex' : 'none';
   if(tab==='contract') renderContractChecklist();
 }
 
@@ -1894,13 +1939,22 @@ function runLedgerCheck(){
   document.getElementById('ledgerScore').innerHTML =
     `<div class="ms-num">${score}<span>/100</span></div><div class="ms-txt"><b style="color:${grade[2]}">건물 합법성 ${grade[0]}</b><p>${grade[1]}</p></div>`;
   const order = {danger:0, warn:1, safe:2};
-  document.getElementById('ledgerFindingList').innerHTML = [...f].sort((a,b)=>order[a.lv]-order[b.lv]).map(x=>{
+  const findingHTML = [...f].sort((a,b)=>order[a.lv]-order[b.lv]).map(x=>{
     const badge = x.lv==='danger'?'<span class="badge red">위험</span>':x.lv==='warn'?'<span class="badge amber">주의</span>':'<span class="badge green">안전</span>';
     return `<div class="finding">${badge}<div><b>${x.t}</b><p>${x.d}</p></div></div>`;
   }).join('');
-  document.getElementById('ledgerResult').style.display='block';
-  document.getElementById('ledgerResult').scrollIntoView({behavior:'smooth', block:'nearest'});
-  toast('건축물대장 점검이 완료됐어요');
+  document.getElementById('ledgerFindingList').innerHTML = findingHTML;
+  const cnt = {safe:0, warn:0, danger:0};
+  f.forEach(x=>cnt[x.lv]++);
+  const scoreHTML = document.getElementById('ledgerScore').innerHTML;
+  state.ledger = { score, cnt, scoreHTML, findingHTML };
+  save();
+  return { score, cnt };
+}
+// 새로고침 시 저장된 건축물대장 결과 복원
+function restoreLedger(l){
+  document.getElementById('ledgerScore').innerHTML = l.scoreHTML;
+  document.getElementById('ledgerFindingList').innerHTML = l.findingHTML;
 }
 
 /* =========================================================
