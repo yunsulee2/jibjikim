@@ -3,3 +3,4 @@
 .omc/
 *.pdf
 docs/
+!assets/samples/*.pdf

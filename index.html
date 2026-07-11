@@ -874,8 +874,10 @@
         <div class="crumb">AI 진단 · 등기부등본 · <span id="diagDate"></span> 분석</div>
         <h2 id="diagTitle">등기부등본 AI 진단</h2>
       </div>
-      <div style="display:flex;gap:9px" id="diagHeadBtns">
+      <div style="display:flex;gap:9px;flex-wrap:wrap" id="diagHeadBtns">
         <button class="btn btn-ghost btn-sm" onclick="loadSampleDiag()">예시 데이터 불러오기</button>
+        <a class="btn btn-ghost btn-sm" href="assets/samples/등기부등본-안전.pdf" download="등기부등본-안전.pdf" style="text-decoration:none"><span style="color:var(--green);font-weight:800">↓</span>&nbsp;안전 예시 PDF</a>
+        <a class="btn btn-ghost btn-sm" href="assets/samples/등기부등본-위험.pdf" download="등기부등본-위험.pdf" style="text-decoration:none"><span style="color:var(--red);font-weight:800">↓</span>&nbsp;위험 예시 PDF</a>
         <button class="btn btn-primary btn-sm" onclick="shareReport()">리포트 공유</button>
       </div>
     </div>
