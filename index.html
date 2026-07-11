@@ -547,6 +547,131 @@
 
   .settings-link{color:var(--muted);font-size:12px;cursor:pointer;margin-left:4px}
   .settings-link:hover{color:var(--navy);text-decoration:underline}
+
+  /* ===== AI 진단 세그먼트 탭 ===== */
+  .diag-seg{display:flex;gap:4px;background:#E4EAF5;padding:4px;border-radius:12px;margin-bottom:22px;max-width:640px}
+  .diag-seg button{flex:1;font-size:13.5px;font-weight:600;padding:10px 4px;border-radius:9px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px;line-height:1.2}
+  .diag-seg button.active{background:#fff;color:var(--navy);font-weight:700;box-shadow:0 1px 3px rgba(15,34,71,.1)}
+  .diag-seg button .seg-ic{font-size:15px}
+  @media(max-width:560px){.diag-seg button{font-size:12px;flex-direction:column;gap:2px}}
+  .diag-panel{display:none}
+  .diag-panel.active{display:block}
+  .panel-intro{background:var(--blue-light);border-radius:12px;padding:16px 18px;font-size:13.5px;color:var(--text);line-height:1.65;margin-bottom:18px}
+  .panel-intro b{color:var(--navy)}
+
+  /* ===== 실제 사례 (가이드 + 진단) ===== */
+  .case-block{margin-top:12px;border-left:3px solid var(--red);background:#FBF3F1;border-radius:0 10px 10px 0;padding:11px 14px;font-size:13px;line-height:1.65}
+  .case-block .case-tag{display:inline-block;font-size:11px;font-weight:800;color:#fff;background:var(--red);padding:2px 8px;border-radius:5px;margin-bottom:6px;letter-spacing:.3px}
+  .case-block b{color:var(--red)}
+  .case-lesson{margin-top:6px;color:var(--text)}
+  .case-card{background:linear-gradient(180deg,#2A1113,#3a1a1d);border-radius:16px;padding:22px;color:#fff;margin-bottom:16px}
+  .case-card h4{font-size:16px;margin-bottom:4px;color:#fff}
+  .case-card .cc-sub{font-size:12.5px;color:#F0C9C3;margin-bottom:14px}
+  .case-match{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+  .case-match .cm-head{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;margin-bottom:5px}
+  .case-match .cm-badge{font-size:10.5px;font-weight:800;background:var(--gold);color:#3a1a1d;padding:2px 7px;border-radius:5px}
+  .case-match .cm-why{font-size:12.5px;color:#FBE3DF;line-height:1.6;margin-bottom:7px}
+  .case-match .cm-story{font-size:12.5px;color:#EED4CF;line-height:1.6;border-top:1px dashed rgba(255,255,255,.18);padding-top:7px}
+  .case-match .cm-story b{color:#fff}
+
+  /* ===== 건축물대장 결과 ===== */
+  .mini-score{display:flex;align-items:center;gap:16px;background:var(--navy);border-radius:16px;padding:18px 22px;color:#fff;margin-bottom:16px}
+  .mini-score .ms-num{font-size:34px;font-weight:800;line-height:1}
+  .mini-score .ms-num span{font-size:15px;font-weight:600;color:#B9C4DC}
+  .mini-score .ms-txt b{font-size:15px;display:block;margin-bottom:2px}
+  .mini-score .ms-txt p{font-size:12.5px;color:#C3CDE1;line-height:1.5}
+
+  /* ===== 계약서 체크리스트 ===== */
+  .cl-progress{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px}
+  .cl-progress .clp-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+  .cl-progress .clp-top b{font-size:15px;color:var(--navy)}
+  .cl-progress .clp-top span{font-size:13px;color:var(--muted);font-weight:600}
+  .cl-bar{height:9px;background:#E4EAF5;border-radius:6px;overflow:hidden}
+  .cl-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),#4FA97E);border-radius:6px;transition:width .4s ease;width:0}
+  .cl-group{margin-bottom:14px}
+  .cl-group > h5{font-size:13px;font-weight:700;color:var(--muted);margin:0 0 4px;padding-left:2px;text-transform:none}
+  .cl-item{display:flex;gap:11px;padding:12px 14px;border:1px solid var(--line);border-radius:11px;margin-bottom:8px;background:#fff;cursor:pointer;transition:.15s;align-items:flex-start}
+  .cl-item:hover{border-color:#c3cee0}
+  .cl-item.done{background:#F1F7F3;border-color:#CDE5D8}
+  .cl-item input{margin-top:2px;width:18px;height:18px;flex-shrink:0;accent-color:var(--blue)}
+  .cl-item .cli-body b{font-size:14px;color:var(--text);display:block;margin-bottom:2px}
+  .cl-item.done .cli-body b{color:var(--green)}
+  .cl-item .cli-body p{font-size:12.5px;color:var(--muted);line-height:1.55}
+  .cl-item .cli-must{font-size:10.5px;font-weight:800;color:var(--red);margin-left:6px}
+
+  /* ===== 리뷰 · 검증 중개인 ===== */
+  .rv-intro{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;word-break:keep-all}
+  .rv-badge{display:inline-flex;align-items:center;font-size:12px;font-weight:800;padding:2px 8px;border-radius:6px;white-space:nowrap}
+  .b-bronze{background:#F3E7DA;color:#9A5B23}
+  .b-silver{background:#E7EBF0;color:#5B6675}
+  .b-gold{background:#F7ECC9;color:#9A7A16}
+  .b-none{background:#EEF1F5;color:var(--muted-2)}
+  .rv-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .rv-filters button{font-size:13px;font-weight:600;padding:8px 15px;border-radius:20px;border:1px solid var(--line);background:#fff;color:var(--muted)}
+  .rv-filters button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .rv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:26px}
+  @media(max-width:640px){.rv-grid{grid-template-columns:1fr}}
+  .rv-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;cursor:pointer;transition:.16s;box-shadow:var(--shadow)}
+  .rv-card:hover{border-color:#c3cee0;transform:translateY(-2px);box-shadow:0 6px 18px rgba(15,34,71,.08)}
+  .rv-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+  .rv-card-id{display:flex;align-items:center;gap:11px;min-width:0}
+  .rv-card-name b{font-size:16px;color:var(--navy);display:block}
+  .rv-card-name span{font-size:12.5px;color:var(--muted)}
+  .rv-avatar{border-radius:50%;object-fit:cover;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center}
+  .rv-avatar-txt{color:#fff;font-weight:800;line-height:1}
+  .rv-dh-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+  .rv-dh-top .rv-avatar{border:2px solid rgba(255,255,255,.3)}
+  .rv-photo-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,.14)}
+  .rv-photo-hint{font-size:12px;color:#B9C4DC;flex:1;min-width:150px}
+  .rv-photo-btn{font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:8px;background:var(--gold);color:#0F2247}
+  .rv-photo-btn.ghost{background:rgba(255,255,255,.12);color:#fff}
+  .rv-verify{font-size:12px;color:var(--muted);margin:6px 0 10px}
+  .rv-verify b{color:var(--blue)}
+  .rv-stars{color:#D9A441;font-size:13.5px;letter-spacing:1px}
+  .rv-stars .rv-count{color:var(--muted);font-size:12.5px;margin-left:4px;letter-spacing:0}
+  .rv-quote{font-size:13px;color:var(--text);background:#F7F9FC;border-radius:9px;padding:9px 12px;margin-top:10px;line-height:1.55;word-break:keep-all}
+  .rv-quote.empty{color:var(--muted-2)}
+  /* 상세 */
+  .rv-back{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;color:var(--blue);font-weight:600;cursor:pointer;margin-bottom:14px}
+  .rv-detail-head{background:var(--navy);border-radius:18px;padding:22px 24px;color:#fff;margin-bottom:16px}
+  .rv-detail-head .rv-dh-name{font-size:20px;font-weight:800}
+  .rv-detail-head .rv-dh-sub{font-size:13px;color:#C3CDE1;margin:3px 0 12px}
+  .rv-detail-head .rv-dh-stats{display:flex;gap:22px;flex-wrap:wrap;font-size:13px;color:#C3CDE1}
+  .rv-detail-head .rv-dh-stats b{color:#fff;font-size:18px;display:block}
+  .rv-review{border-top:1px solid var(--line);padding:15px 2px}
+  .rv-review:first-child{border-top:none}
+  .rv-review-top{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:5px}
+  .rv-review .rv-r-stars{color:#D9A441;letter-spacing:1px}
+  .rv-review p{font-size:14px;color:var(--text);line-height:1.6;word-break:keep-all}
+  .rv-verified-chip{font-size:10.5px;font-weight:800;color:var(--green);background:var(--green-bg);padding:2px 7px;border-radius:5px;margin-left:6px}
+  .rv-reply{margin:9px 0 2px 14px;padding:10px 13px;background:var(--blue-light);border-radius:0 10px 10px 10px;font-size:13px;color:var(--text);line-height:1.55}
+  .rv-reply b{color:var(--navy)}
+  /* 가입 CTA */
+  .rv-cta{padding:26px 24px;background:linear-gradient(180deg,#0F2247,#1B3060);color:#fff;border:none}
+  .rv-cta-tag{display:inline-block;font-size:11.5px;font-weight:800;background:var(--gold);color:#0F2247;padding:3px 10px;border-radius:6px;margin-bottom:10px}
+  .rv-cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+  .rv-cta-lead{font-size:13.5px;color:#C3CDE1;line-height:1.7;margin-bottom:16px;word-break:keep-all}
+  .rv-cta-lead b{color:#fff}
+  .rv-cta-feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+  .rv-feat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:12px;padding:14px 15px}
+  .rv-feat b{font-size:14px;color:#fff;display:block;margin-bottom:5px}
+  .rv-feat p{font-size:12.5px;color:#C3CDE1;line-height:1.55;word-break:keep-all}
+  .rv-concern{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:12.5px}
+  .rv-concern th,.rv-concern td{text-align:left;padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top;line-height:1.5;word-break:keep-all}
+  .rv-concern th{font-size:12px;color:var(--gold);font-weight:700}
+  .rv-concern td{color:#DCE3EF}
+  .rv-concern td b{color:#fff}
+  .rv-cta-core{font-size:13.5px;line-height:1.7;color:#fff;background:rgba(217,164,65,.14);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:13px 15px;margin-bottom:18px;word-break:keep-all}
+  .rv-cta-core b{color:var(--gold)}
+  /* 리뷰 작성 모달 */
+  .rv-write textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;resize:vertical;box-sizing:border-box}
+  .rv-star-input{font-size:30px;letter-spacing:4px;cursor:pointer;color:#D9A441}
+  .rv-star-input span{opacity:.32;transition:.1s}
+  .rv-star-input span.on{opacity:1}
+  /* 진단 결과 → 리뷰 연동 */
+  .rv-attach-card{background:#F7F9FC;border:1px dashed #cdd5e1;border-radius:12px;padding:15px 17px;margin-top:14px}
+  .rv-attach-card b{font-size:14px;color:var(--navy)}
+  .rv-attach-card p{font-size:12.5px;color:var(--muted);margin:4px 0 10px;line-height:1.55}
 </style>
 </head>
 <body>
@@ -559,6 +684,7 @@
       <button data-view="diagnosis">AI 진단</button>
       <button data-view="support">지원 제도</button>
       <button data-view="guide">가이드</button>
+      <button data-view="review">리뷰</button>
     </nav>
     <button class="bell-btn" onclick="toggleNotif(event)" aria-label="알림 센터" title="알림 센터">
       <svg class="ic-svg" viewBox="0 0 24 24" style="width:21px;height:21px"><path d="M18 9.6a6 6 0 10-12 0c0 4.8-2 6.2-2 6.2h16s-2-1.4-2-6.2M13.7 19.2a1.95 1.95 0 01-3.4 0"/></svg>
@@ -737,12 +863,21 @@
         <div class="crumb">AI 진단 · 등기부등본 · <span id="diagDate"></span> 분석</div>
         <h2 id="diagTitle">등기부등본 AI 진단</h2>
       </div>
-      <div style="display:flex;gap:9px">
+      <div style="display:flex;gap:9px" id="diagHeadBtns">
         <button class="btn btn-ghost btn-sm" onclick="loadSampleDiag()">예시 데이터 불러오기</button>
         <button class="btn btn-primary btn-sm" onclick="shareReport()">리포트 공유</button>
       </div>
     </div>
 
+    <!-- 진단 대상 문서 선택 -->
+    <div class="diag-seg" id="diagSeg">
+      <button class="active" onclick="switchDiagTab('deung')"><span class="seg-ic">📄</span>등기부등본</button>
+      <button onclick="switchDiagTab('ledger')"><span class="seg-ic">🏢</span>건축물대장</button>
+      <button onclick="switchDiagTab('contract')"><span class="seg-ic">📝</span>계약서 체크</button>
+    </div>
+
+    <!-- ===== 패널 ①: 등기부등본 ===== -->
+    <div class="diag-panel active" id="dpDeung">
     <div class="diag-grid">
       <div>
         <div class="card diag-form">
@@ -846,14 +981,104 @@
           <div id="findingList"></div>
         </div>
 
+        <div class="case-card" id="caseCard" style="display:none">
+          <h4>⚠️ 이 매물과 닮은 전세사기 유형</h4>
+          <div class="cc-sub">진단 결과가 아래 실제 사건들과 비슷한 특징을 보여요. '나는 아니겠지' 하고 넘기지 마세요.</div>
+          <div id="caseMatchList"></div>
+        </div>
+
         <div class="card clause-card" id="clauseCard" style="display:none">
           <h4>AI 추천 특약 문구</h4>
           <p class="sub">계약서에 바로 쓸 수 있는 문구예요. 공인중개사에게 전달해 특약란에 넣으세요.</p>
           <div id="clauseList"></div>
         </div>
+
+        <div class="rv-attach-card">
+          <b>이 계약, 중개인은 어땠나요?</b>
+          <p>진단을 통과한 계약이라면 리뷰를 남겨 담당 중개인의 <b>검증 배지</b>를 올려줄 수 있어요. 정직한 중개인이 보상받는 구조예요.</p>
+          <button class="btn btn-primary btn-sm" onclick="switchView('review')">검증 중개인에게 리뷰 남기기 →</button>
+        </div>
       </div>
       </div>
     </div>
+    </div><!-- /dpDeung -->
+
+    <!-- ===== 패널 ②: 건축물대장 ===== -->
+    <div class="diag-panel" id="dpLedger">
+      <div class="panel-intro">
+        <b>건축물대장은 '이 건물이 합법인가'를 확인하는 서류예요.</b> 등기부등본이 <b>임대인(사람)</b>에 대한 정보라면, 건축물대장은 <b>건물 그 자체</b>의 정보예요. 위반건축물·불법 용도변경은 전세보증보험(HUG) 가입을 막고, 최악의 경우 이행강제금·강제 퇴거로 이어질 수 있어요. 정부24에서 무료로 열람할 수 있어요.
+      </div>
+      <div class="diag-grid">
+        <div>
+          <div class="card diag-form">
+            <h3>건축물대장 점검</h3>
+            <p class="sub">정부24 → '건축물대장 등초본 발급'에서 무료로 떼어, 아래 항목을 하나씩 대조해 보세요.</p>
+            <div class="form-grid">
+              <div class="field full">
+                <label>합법성 · 안전 체크사항</label>
+                <div class="check-row"><input type="checkbox" id="lViolation"><span>제목 옆에 <b style="color:var(--red)">'위반건축물'</b> 노란 딱지 표시가 있다</span></div>
+                <div class="check-row"><input type="checkbox" id="lUsageResi" checked><span>주용도가 <b>단독주택·공동주택(다세대·아파트 등)</b> 주거용이다</span></div>
+                <div class="check-row"><input type="checkbox" id="lUsageMatch" checked><span>실제 사는 형태와 대장상 용도가 일치한다 (근생·사무실을 주거로 쓰는 게 아니다)</span></div>
+                <div class="check-row"><input type="checkbox" id="lAreaMatch" checked><span>계약할 호수·면적이 대장에 그대로 나온다 (등기부 면적과도 일치)</span></div>
+                <div class="check-row"><input type="checkbox" id="lOwnerMatch" checked><span>대장상 소유자가 등기부·계약서 임대인과 같다</span></div>
+                <div class="check-row"><input type="checkbox" id="lIllegalUnit"><span>옥탑·근생을 방으로 불법 개조했거나, 무허가 증축이 의심된다</span></div>
+              </div>
+            </div>
+            <button class="btn btn-accent" style="width:100%;margin-top:18px" onclick="runLedgerCheck()">✦ 건축물대장 점검하기</button>
+          </div>
+        </div>
+        <div class="diag-right">
+          <div class="card diag-guide">
+            <h4>건축물대장 어디를 보나요?</h4>
+            <div class="sample-doc">
+              <div class="sd-title">일반건축물대장 (샘플)</div>
+              <div class="sd-row"><span>상단 우측</span> <mark class="m3">위반건축물</mark> <span class="num-chip">1</span> <span>→ 이 노란 표시가 있으면 HUG 보증보험 가입 불가</span></div>
+              <div class="sd-row"><span>주용도 ·</span> <mark class="m1">다세대주택 / 제2종근린생활시설</mark> <span class="num-chip">2</span> <span>→ '근린생활시설'인데 산다면 사실상 불법(주거 아님)</span></div>
+              <div class="sd-row"><span>연면적 · 층별 현황 ·</span> <mark class="m2">전용면적 · 호수</mark> <span class="num-chip">3</span> <span>→ 등기부·계약서 면적과 같은지 대조</span></div>
+              <div class="sd-row" style="border-bottom:none"><span>소유자 현황의 이름이 <b>등기부 갑구 소유자</b>와 같은지도 확인해요</span></div>
+            </div>
+          </div>
+          <div id="ledgerResult" style="display:none">
+            <div class="mini-score" id="ledgerScore"></div>
+            <div class="card findings">
+              <h4>건축물대장 점검 결과</h4>
+              <div id="ledgerFindingList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /dpLedger -->
+
+    <!-- ===== 패널 ③: 계약서 필수 체크리스트 ===== -->
+    <div class="diag-panel" id="dpContract">
+      <div class="panel-intro">
+        <b>계약서는 도장 찍기 전 딱 몇 분이면 확인할 수 있어요.</b> AI 진단을 돌릴 시간이 없어도, 아래 항목만 계약서·특약란에서 눈으로 확인하면 대부분의 사고를 막을 수 있어요. 하나라도 빠지면 <b>도장을 찍기 전에</b> 공인중개사에게 요청하세요.
+      </div>
+      <div class="diag-grid">
+        <div>
+          <div class="cl-progress">
+            <div class="clp-top"><b>계약서 필수 항목 점검</b><span id="clCount">0 / 0 확인</span></div>
+            <div class="cl-bar"><i id="clBar"></i></div>
+          </div>
+          <div id="contractChecklist"></div>
+          <div style="display:flex;gap:9px;margin-top:6px">
+            <button class="btn btn-primary btn-sm" onclick="copyContractSummary()">체크 결과 복사</button>
+            <button class="btn btn-ghost btn-sm" onclick="resetContractChecklist()">초기화</button>
+          </div>
+        </div>
+        <div class="diag-right">
+          <div class="card diag-guide">
+            <h4>왜 계약서 확인이 먼저인가요?</h4>
+            <div class="acc-body" style="padding:0;font-size:13.5px;color:var(--muted);line-height:1.75">
+              등기부·건축물대장이 '집이 안전한가'를 본다면, 계약서는 <b style="color:var(--text)">'그 안전이 계약서에 글자로 남았는가'</b>를 봐요.<br><br>
+              말로 "근저당 말소해 드릴게요" 약속해도, <b style="color:var(--text)">특약에 안 적혀 있으면 법적 효력이 없어요.</b> 분쟁이 생기면 결국 계약서에 적힌 글자만 증거가 돼요.<br><br>
+              특히 <b style="color:var(--text)">특약사항란</b>은 세입자가 요구해서 넣는 칸이에요. 비어 있으면 그만큼 보호받을 장치가 없다는 뜻이에요.
+              <div style="margin-top:14px"><button class="btn btn-primary btn-sm" onclick="switchDiagTab('deung')">등기부 진단으로 특약 문구 받기 →</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /dpContract -->
   </section>
 
   <!-- ============ SUPPORT ============ -->
@@ -886,11 +1111,16 @@
       <div class="guide-col">
         <div class="card guide-card">
           <h3>전세사기 대표 유형 5가지</h3>
-          <details class="acc"><summary>깡통전세 <span class="badge red">최다 발생</span></summary><div class="acc-body">보증금 + 선순위 대출이 집값의 <b>80%를 넘는 집</b>이에요. 집이 경매로 넘어가면 보증금을 다 돌려받지 못해요.<br><b>예방:</b> (보증금+채권최고액) ÷ 시세가 70% 이하인지 확인하세요. 집집 AI 진단이 자동으로 계산해 드려요.</div></details>
-          <details class="acc"><summary>이중계약 · 가짜 임대인</summary><div class="acc-body">건물 관리인이나 사칭범이 집주인 행세를 하며 계약금을 가로채는 수법이에요.<br><b>예방:</b> 등기부등본의 <b>소유자 이름·주민번호 앞자리</b>와 임대인 신분증을 반드시 대조하고, 계약금은 소유자 명의 계좌로만 보내세요.</div></details>
-          <details class="acc"><summary>신탁등기 사기</summary><div class="acc-body">집이 신탁회사에 맡겨져 있으면 <b>집주인이 아니라 신탁회사에게 임대 권한</b>이 있어요. 집주인과만 계약하면 무효가 될 수 있어요.<br><b>예방:</b> 등기부 갑구에 '신탁' 표시가 있으면 신탁원부를 발급받아 임대 동의 여부를 확인하세요.</div></details>
-          <details class="acc"><summary>잔금일 대출 실행 (동시진행)</summary><div class="acc-body">내가 잔금을 치르는 <b>같은 날 집주인이 몰래 대출</b>을 받으면, 내 전입신고 효력(다음 날 0시)보다 은행 근저당이 앞서게 돼요.<br><b>예방:</b> 잔금일 아침 등기부를 재열람하고, "잔금일 다음 날까지 담보권 설정 금지" 특약을 넣으세요.</div></details>
-          <details class="acc"><summary>깜깜이 선순위 보증금 (다가구주택)</summary><div class="acc-body">다가구주택은 먼저 들어온 세입자들의 보증금이 등기부에 안 보여요. 건물이 경매되면 <b>먼저 들어온 순서대로</b> 배당받아요.<br><b>예방:</b> 임대인 동의를 받아 주민센터에서 '확정일자 부여 현황'을 열람해 선순위 보증금 총액을 확인하세요.</div></details>
+          <details class="acc"><summary>깡통전세 <span class="badge red">최다 발생</span></summary><div class="acc-body">보증금 + 선순위 대출이 집값의 <b>80%를 넘는 집</b>이에요. 집이 경매로 넘어가면 보증금을 다 돌려받지 못해요.<br><b>예방:</b> (보증금+채권최고액) ÷ 시세가 70% 이하인지 확인하세요. 집집 AI 진단이 자동으로 계산해 드려요.
+            <div class="case-block"><span class="case-tag">실제 사례</span><b>인천 미추홀구 '건축왕' 사건</b> — 한 건축업자가 시세를 부풀린 신축 빌라 <b>2,700여 채</b>를 무자본 갭투자로 사들여 전세를 놓았어요. 대출 이자를 못 갚아 건물이 무더기로 경매에 넘어갔고, 보증금 대부분이 근저당보다 후순위라 청년·신혼부부 세입자들이 수천만~억 단위 보증금을 잃었어요.<div class="case-lesson">💡 시세보다 전세가가 비정상적으로 높고 근저당이 많은 신축 빌라는 <b>깡통전세 1순위</b> 신호예요.</div></div></div></details>
+          <details class="acc"><summary>이중계약 · 가짜 임대인</summary><div class="acc-body">건물 관리인이나 사칭범이 집주인 행세를 하며 계약금을 가로채는 수법이에요.<br><b>예방:</b> 등기부등본의 <b>소유자 이름·주민번호 앞자리</b>와 임대인 신분증을 반드시 대조하고, 계약금은 소유자 명의 계좌로만 보내세요.
+            <div class="case-block"><span class="case-tag">실제 사례</span><b>오피스텔 관리인 이중계약</b> — 집주인에게 '월세 관리'만 위임받은 건물 관리인이, 집주인 몰래 세입자와 <b>전세계약</b>을 맺고 보증금을 가로챈 사건이 반복됐어요. 세입자는 등기부상 소유자가 아닌 사람에게 돈을 보내 대항력조차 인정받지 못했어요.<div class="case-lesson">💡 계약·송금 상대가 <b>등기부상 소유자 본인</b>인지, 대리인이면 위임장·인감증명서가 있는지 반드시 확인하세요.</div></div></div></details>
+          <details class="acc"><summary>신탁등기 사기</summary><div class="acc-body">집이 신탁회사에 맡겨져 있으면 <b>집주인이 아니라 신탁회사에게 임대 권한</b>이 있어요. 집주인과만 계약하면 무효가 될 수 있어요.<br><b>예방:</b> 등기부 갑구에 '신탁' 표시가 있으면 신탁원부를 발급받아 임대 동의 여부를 확인하세요.
+            <div class="case-block"><span class="case-tag">실제 사례</span><b>신탁 부동산 무단 임대</b> — 신탁회사에 소유권이 넘어간 건물인데도, 원래 집주인(위탁자)이 신탁회사 동의 없이 세입자를 받았어요. 세입자는 <b>무단 점유자</b>가 되어 보증금을 돌려받지도, 계속 살지도 못하고 명도소송을 당했어요.<div class="case-lesson">💡 갑구에 '신탁' 글자가 보이면 <b>신탁원부의 임대 동의 조항</b>을 확인하기 전엔 절대 계약하지 마세요.</div></div></div></details>
+          <details class="acc"><summary>잔금일 대출 실행 (동시진행)</summary><div class="acc-body">내가 잔금을 치르는 <b>같은 날 집주인이 몰래 대출</b>을 받으면, 내 전입신고 효력(다음 날 0시)보다 은행 근저당이 앞서게 돼요.<br><b>예방:</b> 잔금일 아침 등기부를 재열람하고, "잔금일 다음 날까지 담보권 설정 금지" 특약을 넣으세요.
+            <div class="case-block"><span class="case-tag">실제 사례</span><b>'세 모녀 전세사기'형 동시진행</b> — 무자본 갭투자자가 잔금 받는 날 그 돈으로 집을 사면서 <b>같은 날 근저당</b>까지 설정했어요. 세입자의 대항력은 전입 다음 날 0시에 생기는 탓에 은행이 한발 앞선 선순위가 되어, 경매 배당에서 세입자가 밀려났어요.<div class="case-lesson">💡 대항력은 <b>전입 다음 날 0시</b> 발생 — 잔금일과 그 다음 날 사이의 '하루 공백'을 특약으로 막아야 해요.</div></div></div></details>
+          <details class="acc"><summary>깜깜이 선순위 보증금 (다가구주택)</summary><div class="acc-body">다가구주택은 먼저 들어온 세입자들의 보증금이 등기부에 안 보여요. 건물이 경매되면 <b>먼저 들어온 순서대로</b> 배당받아요.<br><b>예방:</b> 임대인 동의를 받아 주민센터에서 '확정일자 부여 현황'을 열람해 선순위 보증금 총액을 확인하세요.
+            <div class="case-block"><span class="case-tag">실제 사례</span><b>다가구 원룸 후순위 세입자</b> — 방이 여러 개인 다가구주택에 늦게 입주한 세입자들은, 앞서 들어온 세입자들의 보증금 합계가 이미 시세를 넘긴 사실을 몰랐어요. 건물이 경매되자 <b>선순위 세입자들이 배당을 먼저 가져가</b> 뒤늦게 들어온 사람은 한 푼도 못 받았어요.<div class="case-lesson">💡 다가구(단독주택)라면 계약 전 <b>'확정일자 부여 현황'과 전입세대 열람</b>으로 선순위 보증금 총액을 꼭 확인하세요.</div></div></div></details>
         </div>
         <div class="card guide-card">
           <h3>계약 절차 한눈에 보기</h3>
@@ -926,7 +1156,71 @@
       </div>
     </div>
   </section>
+
+  <!-- ============ REVIEW (검증 중개인 찾기) ============ -->
+  <section class="view" id="view-review">
+    <div class="diag-head">
+      <div>
+        <div class="crumb">전세사기 이후, 믿을 수 있는 중개인 찾기</div>
+        <h2 id="rvTitle">검증된 중개인 찾기</h2>
+      </div>
+    </div>
+
+    <!-- 목록 뷰 -->
+    <div id="rvListView">
+      <p class="rv-intro"><b>AI 서류 검증을 통과한 계약 이력</b>이 쌓인 중개인만 모았어요. 배지는 검증 통과 건수로 등급이 오릅니다 — <span class="rv-badge b-bronze">🥉 브론즈</span> <span class="rv-badge b-silver">🥈 실버</span> <span class="rv-badge b-gold">🥇 골드</span>.</p>
+      <div class="rv-filters" id="rvFilters">
+        <button data-sort="badge" class="active" onclick="setReviewSort('badge',this)">배지순</button>
+        <button data-sort="reviews" onclick="setReviewSort('reviews',this)">리뷰 많은순</button>
+        <button data-sort="rating" onclick="setReviewSort('rating',this)">평점순</button>
+      </div>
+      <div class="rv-grid" id="rvGrid"></div>
+
+      <!-- 중개인 가입 유인 CTA -->
+      <div class="card rv-cta">
+        <span class="rv-cta-tag">중개인이신가요?</span>
+        <h3>검증받지 못하는 걸 두려워해야 할 때</h3>
+        <p class="rv-cta-lead">전세사기 이후 임차인은 중개인 전체를 의심합니다. 정직한 중개인일수록 <b>"나는 다르다"를 증명할 수단</b>이 필요해요. 검증에 가입하면 —</p>
+        <div class="rv-cta-feats">
+          <div class="rv-feat"><b>🛡️ 검증 배지</b><p>계약이 AI 서류 검증을 통과할수록 등급이 누적. 배지 없는 경쟁자와 자동 차별화되는 가장 저렴한 마케팅.</p></div>
+          <div class="rv-feat"><b>🎯 리드 연결</b><p>"지금 계약하려는" 초고순도 임차인을 검증 중개인에게 우선 연결. 광고비 없는 고객 확보 채널.</p></div>
+          <div class="rv-feat"><b>📁 분쟁 방어 기록</b><p>서류 검증·고지 이력이 플랫폼에 보존. 분쟁 시 "정상 고지했다"는 증거 = 손해배상 리스크 보험.</p></div>
+        </div>
+        <table class="rv-concern">
+          <thead><tr><th>이런 게 걱정되시나요?</th><th>이렇게 막았어요</th></tr></thead>
+          <tbody>
+            <tr><td>악성 리뷰로 평판 훼손</td><td>실계약 완료자만 작성 가능 + 객관 지표(검증 통과 횟수) 중심 표시</td></tr>
+            <tr><td>낮은 평점을 지울 수 없음</td><td>삭제권 대신 <b>공개 답글권</b> 부여 — 반론 기회 보장</td></tr>
+            <tr><td>감시당하는 느낌</td><td>'감시'가 아니라 '검증 이력 증명' — 미가입 시 <b>미검증 상태로 남아 고객을 뺏김</b></td></tr>
+          </tbody>
+        </table>
+        <p class="rv-cta-core">검증을 두려워하게 만드는 게 아니라, <b>검증받지 못하는 걸 두려워하게</b> 만든다 — 정직한 중개인부터 가입할수록, 나머지는 가입하지 않는 것 자체가 영업 손실이 됩니다.</p>
+        <button class="btn btn-primary" onclick="applyBroker()">검증 신청하기</button>
+      </div>
+    </div>
+
+    <!-- 상세 뷰 -->
+    <div id="rvDetailView" style="display:none"></div>
+  </section>
 </main>
+
+<!-- ============ 리뷰 작성 모달 ============ -->
+<div class="overlay" id="rvWriteOverlay" style="display:none">
+  <div class="onboard rv-write">
+    <button class="onboard-close" onclick="closeReviewForm()">✕</button>
+    <h1 style="font-size:22px">리뷰 작성</h1>
+    <p class="sub" id="rvWriteFor">중개인</p>
+    <div class="field"><label>이 중개인과의 계약, 별점은?</label>
+      <div class="rv-star-input" id="rvStarInput"></div>
+    </div>
+    <div class="field full"><label>어떤 점이 좋았나요? (또는 아쉬웠나요?)</label>
+      <textarea id="rvText" rows="4" placeholder="예: 등기부 근저당을 먼저 짚어주고 말소 특약까지 챙겨주셨어요."></textarea>
+    </div>
+    <div class="check-row"><input type="checkbox" id="rvVerified" checked><span>이 중개인을 통해 AI 진단을 통과한 계약이에요 (검증 통과 +1)</span></div>
+    <button class="btn btn-primary" onclick="submitReview()">리뷰 등록</button>
+    <p style="text-align:center;margin-top:12px;font-size:12.5px;color:var(--muted-2)">실계약 완료자만 작성할 수 있어요 · 등록 후엔 중개인이 공개 답글로 반론할 수 있어요</p>
+  </div>
+</div>
 
 <!-- ============ ONBOARDING ============ -->
 <div class="overlay" id="onboardOverlay" style="display:none">
@@ -990,6 +1284,7 @@
   <button data-view="diagnosis"><span class="ic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M12 3l7 2.8v5.1c0 4.4-2.9 7.3-7 9.1-4.1-1.8-7-4.7-7-9.1V5.8L12 3z"/><path d="M9 11.8l2.1 2.1 3.9-4.2"/></svg></span>AI 진단</button>
   <button data-view="support"><span class="ic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M4 8.7h16v4H4zM5.6 12.7V20h12.8v-7.3M12 8.7V20"/><path d="M12 8.5c-3.8 0-4.6-3.6-2.4-4.3 1.6-.5 2.4 1.8 2.4 4.3zm0 0c3.8 0 4.6-3.6 2.4-4.3-1.6-.5-2.4 1.8-2.4 4.3z"/></svg></span>지원 제도</button>
   <button data-view="guide"><span class="ic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15.5H6.5A2.5 2.5 0 004 21V5.5z"/><path d="M20 18.5H6.5A2.5 2.5 0 004 21"/></svg></span>가이드</button>
+  <button data-view="review"><span class="ic"><svg class="ic-svg" viewBox="0 0 24 24"><path d="M12 4.5l2.1 4.6 5 .5-3.8 3.4 1.1 4.9L12 15.9 7.6 18.4l1.1-4.9L4.9 9.6l5-.5z"/></svg></span>리뷰</button>
 </div>
 <button id="chatFab" onclick="openChat()" aria-label="계약 비서 열기"><svg viewBox="0 0 36 36" width="30" height="30"><circle cx="18" cy="18" r="15" fill="#fff"/><circle cx="12.6" cy="16.5" r="1.8" fill="var(--navy)"/><circle cx="23.4" cy="16.5" r="1.8" fill="var(--navy)"/><path d="M12.6 22c2.4 2.2 8.4 2.2 10.8 0" fill="none" stroke="var(--navy)" stroke-width="2" stroke-linecap="round"/></svg><span class="fab-label">비서</span></button>
 
@@ -1147,6 +1442,7 @@ function renderAll(){
   document.getElementById('diagDate').textContent = todayStr().replace(/-/g,'.');
   document.getElementById('diagTitle').textContent = u.address || '등기부등본 AI 진단';
   if(state.diag) paintDiagnosis(state.diag);
+  renderContractChecklist();
 }
 
 function renderDashboard(){
@@ -1480,6 +1776,7 @@ function paintDiagnosis(d){
        </div>`).join('');
   } else cc.style.display='none';
 
+  paintCaseCard(d);
   paintDocPreview(d);
 }
 
@@ -1511,6 +1808,390 @@ function shareReport(){
   const txt = `[집집 AI 진단 리포트]\n${state.user.address}\n종합 안전도 ${d.score}/100\n안전 ${d.cnt.safe} · 주의 ${d.cnt.warn} · 위험 ${d.cnt.danger}\n(보증금+선순위)/시세 = ${d.ratio}%`;
   navigator.clipboard.writeText(txt).then(()=>toast('리포트 요약이 복사됐어요 — 가족·친구에게 공유하세요'));
 }
+
+/* =========================================================
+   진단 탭 전환 (등기부 / 건축물대장 / 계약서 체크)
+   ========================================================= */
+function switchDiagTab(tab){
+  const map = {deung:'dpDeung', ledger:'dpLedger', contract:'dpContract'};
+  Object.values(map).forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById(map[tab]).classList.add('active');
+  const btns = document.querySelectorAll('#diagSeg button');
+  btns.forEach((b,i)=>b.classList.toggle('active', ['deung','ledger','contract'][i]===tab));
+  const crumb = {deung:'등기부등본', ledger:'건축물대장', contract:'계약서 필수 체크리스트'}[tab];
+  document.querySelector('#view-diagnosis .crumb').innerHTML = `AI 진단 · ${crumb} · <span id="diagDate">${todayStr().replace(/-/g,'.')}</span> 분석`;
+  document.getElementById('diagTitle').textContent = {deung:(state.user.address||'등기부등본 AI 진단'), ledger:'건축물대장 합법성 점검', contract:'계약서 필수 체크리스트'}[tab];
+  // 등기부 탭에서만 예시/공유 버튼 노출
+  document.getElementById('diagHeadBtns').style.display = tab==='deung' ? 'flex' : 'none';
+  if(tab==='contract') renderContractChecklist();
+}
+
+/* =========================================================
+   실제 전세사기 사례 매칭 (진단 결과 → 닮은 유형)
+   ========================================================= */
+const FRAUD_CASES = [
+  {
+    key:'kkangtong', type:'깡통전세', badge:'최다 발생',
+    match:d=> d.ratio > 70,
+    why:d=> `이 매물은 (보증금+선순위 채권)이 시세의 <b>${d.ratio}%</b>예요. ${d.ratio>90?'경매로 넘어가면 보증금을 거의 못 건질 수 있는 전형적인 깡통 구조':'80%에 근접·초과하면 깡통전세로 분류되는 위험 구간'}이에요.`,
+    story:`인천 미추홀구 '건축왕' 사건에서 한 업자가 시세를 부풀린 신축 빌라 <b>2,700여 채</b>를 무자본 갭투자로 사들여 전세를 놓았고, 대출 이자를 못 갚아 무더기 경매로 청년·신혼부부들이 보증금을 잃었어요.`
+  },
+  {
+    key:'fake', type:'이중계약·가짜 임대인', badge:'신원 위조',
+    match:d=> !d.flags.ownerMatch,
+    why:d=> `등기부상 소유자와 임대인이 <b>일치하지 않는다</b>고 체크됐어요. 소유자가 아닌 사람과 맺는 계약·송금은 대항력조차 인정받기 어려워요.`,
+    story:`집주인에게 '월세 관리'만 맡은 건물 관리인이 집주인 몰래 전세계약을 맺고 보증금을 가로챈 사건이 반복됐어요. 세입자는 소유자가 아닌 사람에게 돈을 보내 보호받지 못했어요.`
+  },
+  {
+    key:'trust', type:'신탁등기 사기', badge:'권한 없는 임대',
+    match:d=> d.flags.trust,
+    why:d=> `이 매물은 <b>신탁등기 상태</b>예요. 임대 권한이 집주인이 아니라 신탁회사에 있어, 동의 없이 맺은 계약은 무효가 될 수 있어요.`,
+    story:`신탁회사에 소유권이 넘어간 건물인데 원래 집주인이 동의 없이 세입자를 받아, 세입자가 무단 점유자가 되어 보증금도 못 받고 명도소송을 당한 사례가 있어요.`
+  },
+  {
+    key:'sametime', type:'잔금일 대출 실행(동시진행)', badge:'하루 공백',
+    match:d=> d.mortgage > 0 || d.flags.recentOwner,
+    why:d=> d.flags.recentOwner
+      ? `<b>최근 3개월 내 소유권 이전</b>이 있어, 잔금 받은 돈으로 집을 사며 같은 날 대출까지 받는 '동시진행'일 수 있어요.`
+      : `선순위 채권(근저당)이 있어요. 잔금일에 새 대출이 겹치면 내 대항력(다음 날 0시)보다 은행이 앞서게 돼요.`,
+    story:`무자본 갭투자자가 잔금 받는 날 그 돈으로 집을 사며 같은 날 근저당까지 설정한 '세 모녀 전세사기'형 수법에서, 세입자의 대항력이 은행보다 하루 늦어 경매 배당에서 밀려났어요.`
+  },
+];
+
+function paintCaseCard(d){
+  const matched = FRAUD_CASES.filter(c=>{ try{ return c.match(d); }catch(e){ return false; } });
+  const card = document.getElementById('caseCard');
+  if(!matched.length){ card.style.display='none'; return; }
+  card.style.display='block';
+  document.getElementById('caseMatchList').innerHTML = matched.map(c=>`
+    <div class="case-match">
+      <div class="cm-head"><span class="cm-badge">${c.badge}</span>${c.type} 유형과 유사</div>
+      <div class="cm-why">${c.why(d)}</div>
+      <div class="cm-story"><b>실제로는…</b> ${c.story}</div>
+    </div>`).join('');
+}
+
+/* =========================================================
+   건축물대장 점검
+   ========================================================= */
+function runLedgerCheck(){
+  const g = id => document.getElementById(id).checked;
+  const violation = g('lViolation'), usageResi = g('lUsageResi'), usageMatch = g('lUsageMatch'),
+        areaMatch = g('lAreaMatch'), ownerMatch = g('lOwnerMatch'), illegalUnit = g('lIllegalUnit');
+  let score = 100; const f = [];
+  if(violation){ score-=35; f.push({lv:'danger', t:'위반건축물 등재', d:'대장에 위반건축물로 등재되면 전세보증보험(HUG) 가입이 거절되고, 매년 이행강제금이 부과될 수 있어요. 전세라면 다른 집을 강하게 권해요.'}); }
+  else f.push({lv:'safe', t:'위반건축물 표시 없음', d:'합법 건축물로 등재돼 있어요.'});
+  if(!usageResi){ score-=25; f.push({lv:'danger', t:'주용도가 주거용이 아님', d:'근린생활시설·업무시설 등을 주거로 쓰면 불법이에요. 전입신고·보증보험이 막히고 단속 시 강제 퇴거될 수 있어요.'}); }
+  else f.push({lv:'safe', t:'주거용 용도 확인', d:'단독·공동주택 등 주거용으로 등재돼 있어요.'});
+  if(!usageMatch){ score-=20; f.push({lv:'warn', t:'대장 용도와 실제 사용 불일치', d:'서류상 용도와 실제 거주 형태가 다르면 이른바 근생빌라·불법 개조일 수 있어요. 반드시 확인하세요.'}); }
+  if(!areaMatch){ score-=12; f.push({lv:'warn', t:'면적·호수 불일치', d:'계약할 호수·면적이 대장에 없거나 등기부와 다르면, 실제와 다른 집을 계약하는 것일 수 있어요.'}); }
+  if(!ownerMatch){ score-=15; f.push({lv:'danger', t:'대장 소유자와 임대인 불일치', d:'건축물대장 소유자가 등기부·계약서 임대인과 다르면 권리관계를 다시 확인해야 해요.'}); }
+  if(illegalUnit){ score-=18; f.push({lv:'warn', t:'무허가 증축·불법 개조 의심', d:'옥탑·근생을 방으로 개조하거나 무허가 증축한 부분은 위반건축물로 적발되면 보증보험·대출이 막혀요.'}); }
+  if(!violation && usageResi && usageMatch && areaMatch && ownerMatch && !illegalUnit)
+    f.push({lv:'safe', t:'건물 합법성 이상 없음', d:'용도·면적·소유자·증축 모두 문제가 없어요. 안심하고 다음 단계로 진행하세요.'});
+  score = Math.max(5, Math.min(100, score));
+  const grade = score>=85?['안전','합법 건축물이에요','#4FA97E'] : score>=60?['주의','확인이 필요한 항목이 있어요','#D9A441'] : ['위험','계약 전 반드시 해결하세요','#D4685C'];
+  document.getElementById('ledgerScore').innerHTML =
+    `<div class="ms-num">${score}<span>/100</span></div><div class="ms-txt"><b style="color:${grade[2]}">건물 합법성 ${grade[0]}</b><p>${grade[1]}</p></div>`;
+  const order = {danger:0, warn:1, safe:2};
+  document.getElementById('ledgerFindingList').innerHTML = [...f].sort((a,b)=>order[a.lv]-order[b.lv]).map(x=>{
+    const badge = x.lv==='danger'?'<span class="badge red">위험</span>':x.lv==='warn'?'<span class="badge amber">주의</span>':'<span class="badge green">안전</span>';
+    return `<div class="finding">${badge}<div><b>${x.t}</b><p>${x.d}</p></div></div>`;
+  }).join('');
+  document.getElementById('ledgerResult').style.display='block';
+  document.getElementById('ledgerResult').scrollIntoView({behavior:'smooth', block:'nearest'});
+  toast('건축물대장 점검이 완료됐어요');
+}
+
+/* =========================================================
+   계약서 필수 체크리스트
+   ========================================================= */
+const CONTRACT_CHECKLIST = [
+  {group:'임대인·집 확인', items:[
+    {id:'c_owner', must:true, t:'계약·송금 상대가 등기부상 소유자 본인', d:'대리인이면 위임장+인감증명서를 확인하고, 계약금·잔금은 소유자 명의 계좌로만 보내요.'},
+    {id:'c_reg', must:true, t:'계약 직전 발급한 등기부등본으로 재확인', d:'며칠 전 서류가 아니라 계약 당일 아침에 뗀 등기부로 근저당·압류 변동을 확인해요.'},
+    {id:'c_acct', must:true, t:'입금 계좌 예금주 = 임대인 이름', d:'예금주가 다르면 절대 송금하지 마세요. 가짜 임대인·이중계약의 핵심 신호예요.'},
+  ]},
+  {group:'금액·목적물·기간', items:[
+    {id:'c_amount', must:false, t:'보증금·월세·계약기간이 정확히 기재', d:'숫자와 한글 금액이 같은지, 계약 시작·종료일이 맞는지 확인해요.'},
+    {id:'c_target', must:false, t:'주소·동·호수가 등기부·건축물대장과 일치', d:'실제 사는 호수와 서류상 목적물이 정확히 같아야 대항력이 인정돼요.'},
+    {id:'c_fee', must:false, t:'관리비 항목·금액 명시', d:'관리비에 무엇이 포함되는지, 별도 정산 항목이 있는지 적어둬요.'},
+  ]},
+  {group:'특약사항 (가장 중요)', items:[
+    {id:'c_clear', must:true, t:'선순위 근저당 말소 특약 (근저당이 있다면)', d:'"임대인은 잔금과 동시에 근저당권을 말소한다" — 말이 아니라 글자로 남겨야 효력이 있어요.'},
+    {id:'c_nonew', must:true, t:'"잔금 다음 날까지 새 담보권 설정 금지" 특약', d:'동시진행 사기를 막는 핵심 특약이에요. 대항력 공백(하루)을 메워줘요.'},
+    {id:'c_keep', must:false, t:'전입신고·확정일자 유지 및 임대인 협조 특약', d:'계약 기간 중 세대주 변경·담보 제공 금지 등을 넣으면 더 안전해요.'},
+    {id:'c_hug', must:false, t:'전세보증보험 가입 협조 특약 (전세)', d:'"임대인 사유로 보증보험 가입이 거절되면 계약을 해제하고 보증금을 즉시 반환한다"를 넣어요.'},
+  ]},
+  {group:'서류·중개', items:[
+    {id:'c_explain', must:false, t:'중개대상물 확인·설명서 수령', d:'공인중개사가 권리관계·시설을 설명하고 서명한 서류를 꼭 받아요.'},
+    {id:'c_deposit', must:false, t:'공인중개사 공제증서(손해배상) 확인', d:'중개사고 시 배상받을 수 있는 공제 가입 여부와 유효기간을 확인해요.'},
+    {id:'c_sign', must:false, t:'계약서에 개업공인중개사 서명·날인', d:'등록된 중개사무소인지, 대표자 서명·직인이 있는지 확인해요.'},
+  ]},
+];
+
+function renderContractChecklist(){
+  const wrap = document.getElementById('contractChecklist');
+  if(!wrap) return;
+  state.checklist = state.checklist || {};
+  wrap.innerHTML = CONTRACT_CHECKLIST.map(g=>`
+    <div class="cl-group"><h5>${g.group}</h5>${g.items.map(it=>{
+      const done = !!state.checklist[it.id];
+      return `<label class="cl-item ${done?'done':''}" data-id="${it.id}">
+        <input type="checkbox" ${done?'checked':''} onchange="toggleContractItem('${it.id}', this.checked)">
+        <div class="cli-body"><b>${it.t}${it.must?'<span class="cli-must">필수</span>':''}</b><p>${it.d}</p></div>
+      </label>`;
+    }).join('')}</div>`).join('');
+  updateContractProgress();
+}
+function toggleContractItem(id, on){
+  state.checklist = state.checklist || {};
+  state.checklist[id] = on;
+  save();
+  const el = document.querySelector(`.cl-item[data-id="${id}"]`);
+  if(el) el.classList.toggle('done', on);
+  updateContractProgress();
+}
+function updateContractProgress(){
+  const all = CONTRACT_CHECKLIST.flatMap(g=>g.items);
+  const done = all.filter(it=>state.checklist && state.checklist[it.id]).length;
+  const pct = Math.round(done/all.length*100);
+  const bar = document.getElementById('clBar'), cnt = document.getElementById('clCount');
+  if(bar) bar.style.width = pct+'%';
+  if(cnt) cnt.textContent = `${done} / ${all.length} 확인`;
+}
+function resetContractChecklist(){
+  state.checklist = {}; save(); renderContractChecklist();
+  toast('체크리스트를 초기화했어요');
+}
+function copyContractSummary(){
+  const all = CONTRACT_CHECKLIST.flatMap(g=>g.items);
+  const missing = all.filter(it=>!(state.checklist && state.checklist[it.id]));
+  const mustMissing = missing.filter(it=>it.must);
+  let txt = `[집집 · 계약서 체크리스트]\n확인 ${all.length-missing.length}/${all.length}\n`;
+  if(!missing.length) txt += '\n✅ 모든 필수 항목을 확인했어요!';
+  else {
+    if(mustMissing.length) txt += `\n⚠️ 아직 확인 못 한 필수 항목:\n${mustMissing.map(it=>'· '+it.t).join('\n')}`;
+    const rest = missing.filter(it=>!it.must);
+    if(rest.length) txt += `\n\n남은 확인 항목:\n${rest.map(it=>'· '+it.t).join('\n')}`;
+  }
+  navigator.clipboard.writeText(txt).then(()=>toast('체크 결과가 복사됐어요 — 계약 전 다시 확인하세요'))
+    .catch(()=>toast('복사에 실패했어요'));
+}
+
+/* =========================================================
+   리뷰 · 검증 중개인 찾기
+   ========================================================= */
+const BROKERS = [
+  {id:'b1', name:'믿음직한공인중개사', office:'서울 관악구 · 신림동', base:17, since:'2018', seed:[
+    {rating:5, by:'김○영', date:'2026.05.22', verified:true, text:'등기부 근저당을 먼저 짚어주고 "잔금 동시 말소" 특약까지 챙겨주셨어요. 처음이라 불안했는데 하나하나 설명해주셔서 안심됐습니다.', reply:'감사합니다! 확정일자·전입신고까지 꼭 챙기세요.'},
+    {rating:5, by:'이○준', date:'2026.04.03', verified:true, text:'깡통전세 걱정된다니까 시세랑 선순위를 같이 계산해서 보여주셨어요. 검증 통과한 매물만 소개해주셔서 믿음이 갔습니다.'},
+    {rating:4, by:'박○서', date:'2026.02.18', verified:true, text:'꼼꼼하세요. 다만 매물이 많지는 않아서 선택지가 좁았어요.'},
+  ]},
+  {id:'b2', name:'청년안심부동산', office:'서울 마포구 · 망원동', base:9, since:'2020', seed:[
+    {rating:5, by:'정○민', date:'2026.06.01', verified:true, text:'사회초년생이라 아무것도 몰랐는데 건축물대장까지 같이 떼서 위반건축물 아닌지 확인해주셨어요. 보증보험 가입도 도와주심.', reply:'무사히 입주하셔서 다행이에요 :)'},
+    {rating:4, by:'최○아', date:'2026.03.29', verified:true, text:'설명이 친절하고 서류를 투명하게 보여주세요. 연락이 가끔 늦는 편.'},
+  ]},
+  {id:'b3', name:'정직한집공인중개사', office:'경기 성남시 · 수정구', base:23, since:'2015', seed:[
+    {rating:5, by:'한○지', date:'2026.05.09', verified:true, text:'베테랑답게 신탁등기 매물을 걸러주시고 왜 위험한지 이유까지 알려주셨어요. 골드 배지가 괜히 있는 게 아니네요.', reply:'신탁·다가구는 늘 조심하셔야 해요. 감사합니다.'},
+    {rating:5, by:'오○훈', date:'2026.04.15', verified:true, text:'선순위 보증금 현황까지 열람 동의받아 확인해주셨습니다. 이렇게까지 해주는 곳 처음이에요.'},
+    {rating:4, by:'서○원', date:'2026.01.30', verified:true, text:'신뢰감 있습니다. 지역 매물 위주라 다른 동네는 어려워요.'},
+  ]},
+  {id:'b4', name:'우리동네공인중개사', office:'인천 미추홀구 · 주안동', base:3, since:'2022', seed:[
+    {rating:4, by:'윤○빈', date:'2026.05.28', verified:true, text:'미추홀구는 전세사기로 다들 예민한데, 등기부 재열람을 잔금일 아침에 같이 해주셨어요. 신입이지만 성실합니다.'},
+  ]},
+  {id:'b5', name:'햇살공인중개사', office:'부산 부산진구 · 전포동', base:6, since:'2019', seed:[
+    {rating:5, by:'강○름', date:'2026.06.05', verified:true, text:'특약 문구를 계약서에 그대로 넣어주시고 왜 필요한지 설명해주셨어요. 검증 이력이 쌓인 이유가 있네요.'},
+    {rating:5, by:'노○재', date:'2026.03.12', verified:true, text:'월세 계약이었는데도 대항력·확정일자를 꼼꼼히 챙겨주셨습니다.'},
+  ]},
+  {id:'b6', name:'믿을만한부동산', office:'대전 유성구 · 봉명동', base:0, since:'2024', seed:[]},
+];
+let rvSort = 'badge';
+
+function ensureReviews(){ if(!state.reviews) state.reviews = []; }
+function ensurePhotos(){ if(!state.brokerPhotos) state.brokerPhotos = {}; }
+const AVATAR_COLORS = ['#2D50B5','#1B7A52','#B4720F','#8155C6','#B3382E','#0F7C8C'];
+function brokerAvatar(b, size){
+  ensurePhotos();
+  const px = size||44;
+  const photo = state.brokerPhotos[b.id];
+  if(photo) return `<img class="rv-avatar" src="${photo}" alt="${b.name}" style="width:${px}px;height:${px}px">`;
+  const color = AVATAR_COLORS[b.id.charCodeAt(1) % AVATAR_COLORS.length];
+  const ch = b.name.slice(0,1);
+  return `<span class="rv-avatar rv-avatar-txt" style="width:${px}px;height:${px}px;background:${color};font-size:${Math.round(px*0.42)}px">${ch}</span>`;
+}
+// 파일 → 정사각 썸네일 dataURL (localStorage 용량 절약)
+function resizeToDataURL(file, size, cb){
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const s = size||200, c = document.createElement('canvas');
+      c.width = s; c.height = s;
+      const ctx = c.getContext('2d');
+      const m = Math.min(img.width, img.height);
+      const sx = (img.width-m)/2, sy = (img.height-m)/2;
+      ctx.drawImage(img, sx, sy, m, m, 0, 0, s, s);
+      cb(c.toDataURL('image/jpeg', 0.82));
+    };
+    img.onerror = ()=>cb(null);
+    img.src = e.target.result;
+  };
+  reader.onerror = ()=>cb(null);
+  reader.readAsDataURL(file);
+}
+function uploadBrokerPhoto(brokerId, input){
+  const file = input.files && input.files[0];
+  if(!file) return;
+  if(!/^image\//.test(file.type)){ toast('이미지 파일만 업로드할 수 있어요'); return; }
+  resizeToDataURL(file, 200, dataUrl=>{
+    if(!dataUrl){ toast('이미지를 불러오지 못했어요'); return; }
+    ensurePhotos();
+    state.brokerPhotos[brokerId] = dataUrl;
+    save();
+    openBroker(brokerId);
+    toast('프로필 사진이 등록됐어요 — 신뢰도가 올라가요');
+  });
+}
+function removeBrokerPhoto(brokerId){
+  ensurePhotos();
+  delete state.brokerPhotos[brokerId];
+  save();
+  openBroker(brokerId);
+  toast('프로필 사진을 삭제했어요');
+}
+function userReviews(bid){ ensureReviews(); return state.reviews.filter(r=>r.brokerId===bid); }
+function allReviews(b){ return [...userReviews(b.id).map(r=>({...r})), ...b.seed]; }
+function brokerBadge(count){
+  if(count>=15) return {label:'🥇 골드', cls:'b-gold'};
+  if(count>=5)  return {label:'🥈 실버', cls:'b-silver'};
+  if(count>=1)  return {label:'🥉 브론즈', cls:'b-bronze'};
+  return {label:'⚪ 미검증', cls:'b-none'};
+}
+function brokerStats(b){
+  const uv = userReviews(b.id).filter(r=>r.verified).length;
+  const verified = b.base + uv;
+  const revs = allReviews(b);
+  const avg = revs.length ? (revs.reduce((a,r)=>a+r.rating,0)/revs.length) : 0;
+  return { verified, badge:brokerBadge(verified), avg, count:revs.length, revs };
+}
+function stars(n){ const f=Math.round(n); return '★★★★★'.slice(0,f)+'☆☆☆☆☆'.slice(0,5-f); }
+
+function renderReviewList(){
+  const grid = document.getElementById('rvGrid');
+  if(!grid) return;
+  const rows = BROKERS.map(b=>({b, s:brokerStats(b)}));
+  rows.sort((x,y)=>{
+    if(rvSort==='badge') return y.s.verified - x.s.verified;
+    if(rvSort==='reviews') return y.s.count - x.s.count;
+    return y.s.avg - x.s.avg;
+  });
+  grid.innerHTML = rows.map(({b,s})=>{
+    const top = s.revs[0];
+    return `<div class="rv-card" onclick="openBroker('${b.id}')">
+      <div class="rv-card-top">
+        <div class="rv-card-id">${brokerAvatar(b,44)}<div class="rv-card-name"><b>${b.name}</b><span>${b.office}</span></div></div>
+        <span class="rv-badge ${s.badge.cls}">${s.badge.label}</span>
+      </div>
+      <div class="rv-verify">AI 서류 검증 통과 <b>${s.verified}건</b> · ${b.since}년~</div>
+      <div class="rv-stars">${stars(s.avg)} <span class="rv-count">${s.avg?s.avg.toFixed(1):'-'} · 리뷰 ${s.count}</span></div>
+      <div class="rv-quote${top?'':' empty'}">${top? '"'+top.text.slice(0,64)+(top.text.length>64?'…':'')+'"' : '아직 리뷰가 없어요 — 첫 리뷰의 주인공이 되어보세요'}</div>
+    </div>`;
+  }).join('');
+}
+function setReviewSort(s, el){
+  rvSort = s;
+  document.querySelectorAll('#rvFilters button').forEach(b=>b.classList.toggle('active', b===el));
+  renderReviewList();
+}
+function backToBrokerList(){
+  document.getElementById('rvDetailView').style.display='none';
+  document.getElementById('rvListView').style.display='block';
+  document.getElementById('rvTitle').textContent='검증된 중개인 찾기';
+  renderReviewList();
+}
+function openBroker(id){
+  const b = BROKERS.find(x=>x.id===id); if(!b) return;
+  const s = brokerStats(b);
+  document.getElementById('rvListView').style.display='none';
+  document.getElementById('rvTitle').textContent = b.name;
+  const rev = s.revs.map(r=>`
+    <div class="rv-review">
+      <div class="rv-review-top"><span class="rv-r-stars">${stars(r.rating)}</span><span>${r.by} · ${r.date}${r.verified?'<span class="rv-verified-chip">검증 계약</span>':''}</span></div>
+      <p>${r.text}</p>
+      ${r.reply?`<div class="rv-reply"><b>${b.name} 답글</b><br>${r.reply}</div>`:''}
+    </div>`).join('') || '<p style="color:var(--muted);font-size:14px;padding:14px 0">아직 등록된 리뷰가 없어요.</p>';
+  document.getElementById('rvDetailView').innerHTML = `
+    <div class="rv-back" onclick="backToBrokerList()">← 목록으로</div>
+    <div class="rv-detail-head">
+      <div class="rv-dh-top">
+        ${brokerAvatar(b,64)}
+        <div>
+          <div class="rv-dh-name">${b.name} <span class="rv-badge ${s.badge.cls}" style="vertical-align:middle">${s.badge.label}</span></div>
+          <div class="rv-dh-sub">${b.office} · ${b.since}년 개업${state.brokerPhotos&&state.brokerPhotos[b.id]?' · <span style="color:#7FE0B4">📷 실사진 공개</span>':''}</div>
+        </div>
+      </div>
+      <div class="rv-dh-stats">
+        <span><b>${s.verified}건</b>AI 검증 통과</span>
+        <span><b>${s.avg?s.avg.toFixed(1):'-'}</b>평균 평점</span>
+        <span><b>${s.count}</b>리뷰</span>
+      </div>
+      <div class="rv-photo-row">
+        ${(state.brokerPhotos&&state.brokerPhotos[b.id])
+          ? `<span class="rv-photo-hint">본인 프로필 사진이 공개돼 있어요</span><button class="rv-photo-btn ghost" onclick="removeBrokerPhoto('${b.id}')">사진 삭제</button><button class="rv-photo-btn" onclick="document.getElementById('brokerPhotoInput').click()">사진 변경</button>`
+          : `<span class="rv-photo-hint">본인이세요? 얼굴 사진을 올리면 임차인 신뢰도가 높아져요 (선택)</span><button class="rv-photo-btn" onclick="document.getElementById('brokerPhotoInput').click()">＋ 프로필 사진 등록</button>`}
+        <input type="file" id="brokerPhotoInput" accept="image/*" hidden onchange="uploadBrokerPhoto('${b.id}', this)">
+      </div>
+    </div>
+    <div class="card" style="padding:6px 20px 14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0 6px">
+        <h4 style="font-size:15px">리뷰</h4>
+        <button class="btn btn-primary btn-sm" onclick="openReviewForm('${b.id}')">리뷰 작성</button>
+      </div>
+      ${rev}
+    </div>`;
+  document.getElementById('rvDetailView').style.display='block';
+  window.scrollTo({top:0});
+}
+
+/* ---- 리뷰 작성 (실계약=진단 완료자만) ---- */
+let rvForm = { brokerId:null, rating:5 };
+function openReviewForm(brokerId){
+  if(!state.diag){
+    toast('AI 진단을 먼저 완료해야 리뷰를 남길 수 있어요');
+    switchView('diagnosis');
+    return;
+  }
+  const b = BROKERS.find(x=>x.id===brokerId); if(!b) return;
+  rvForm = { brokerId, rating:5 };
+  document.getElementById('rvWriteFor').textContent = `${b.name} · ${b.office}`;
+  document.getElementById('rvText').value = '';
+  document.getElementById('rvVerified').checked = true;
+  renderStarInput();
+  document.getElementById('rvWriteOverlay').style.display='flex';
+}
+function renderStarInput(){
+  const el = document.getElementById('rvStarInput');
+  el.innerHTML = [1,2,3,4,5].map(i=>`<span class="${i<=rvForm.rating?'on':''}" onclick="rvForm.rating=${i};renderStarInput()">★</span>`).join('');
+}
+function submitReview(){
+  const text = document.getElementById('rvText').value.trim();
+  if(text.length < 5){ toast('리뷰 내용을 조금만 더 적어주세요'); return; }
+  ensureReviews();
+  const nm = (state.user && state.user.name && !isGuest()) ? state.user.name.slice(0,1)+'○○' : '익명';
+  state.reviews.push({
+    brokerId: rvForm.brokerId, rating: rvForm.rating, text,
+    by: nm, date: todayStr().replace(/-/g,'.'),
+    verified: document.getElementById('rvVerified').checked,
+  });
+  save();
+  closeReviewForm();
+  const s = brokerStats(BROKERS.find(x=>x.id===rvForm.brokerId));
+  openBroker(rvForm.brokerId);
+  toast(`리뷰가 등록됐어요 — 이 중개인은 이제 ${s.badge.label} (${s.verified}건)`);
+}
+function closeReviewForm(){ document.getElementById('rvWriteOverlay').style.display='none'; }
+function applyBroker(){ toast('검증 신청이 접수됐어요 — 담당자가 곧 연락드려요 (프로토타입)'); }
 
 /* =========================================================
    AI CHAT (rule-based, context-aware)
@@ -2144,6 +2825,7 @@ function switchView(v){
   document.getElementById('view-'+v).classList.add('active');
   document.querySelectorAll('nav button, .tabbar button').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
   document.body.classList.remove('chat-open');
+  if(v==='review'){ backToBrokerList(); }
   window.scrollTo({top:0});
 }
 document.querySelector('nav').addEventListener('click', e=>{
